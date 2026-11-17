@@ -1,9 +1,11 @@
 ---
 import Base from '../../layouts/Base.astro';
-import PageHead from '../../components/PageHead.astro';
 import Icon from '../../components/Icon.astro';
+import Mark from '../../components/Mark.astro';
 import QuoteForm from '../../components/QuoteForm.astro';
-import { SERVICES, SERVICE_BY_SLUG, AREAS, CATEGORIES, SITE } from '../../data/site';
+import Faq from '../../components/Faq.astro';
+import { SERVICES, SERVICE_BY_SLUG, CATEGORIES, SITE } from '../../data/site';
+import { POP } from '../../scene/director';
 import { breadcrumbSchema, faqSchema, serviceSchema } from '../../lib/schema';
 
 export function getStaticPaths() {
@@ -16,7 +18,7 @@ const path = `/services/${s.slug}/`;
 ---
 
 <Base
-  title={`${s.name} in Kozhikode, Kerala`}
+  title={`${s.name} in Kerala`}
   description={s.description}
   path={path}
   schema={[
@@ -29,48 +31,52 @@ const path = `/services/${s.slug}/`;
     ]),
   ]}
 >
-  <PageHead
-    title={s.title}
-    eyebrow={cat.name}
-    lead={s.intro}
-    crumbs={[{ name: 'Services', href: '/services/' }, { name: s.name }]}
-  >
-    <div class="btn-row">
-      <a class="btn btn--lime" href="#quote">Get a free quote <Icon name="arrow" /></a>
-      <a class="btn btn--ghost" href={`tel:${SITE.phoneRaw}`}>Call {SITE.phone}</a>
+  <section class="shero">
+    <div class="container">
+      <nav class="crumbs" aria-label="Breadcrumb" style="margin-bottom:24px">
+        <ol>
+          <li><a href="/">Home</a></li>
+          <li><a href="/services/">Services</a></li>
+          <li><span aria-current="page">{s.name}</span></li>
+        </ol>
+      </nav>
+      <div class="shero__grid">
+        <div class="shero__copy" style={`--pop:${POP[s.slug]}`}>
+          <p class="eyebrow">{cat.name}</p>
+          <h1 class="h1">{s.title}</h1>
+          <p class="lead">{s.intro}</p>
+          <ul class="shero__facts">
+            {s.idealFor.map((i) => <li>{i}</li>)}
+          </ul>
+          <div class="btn-row">
+            <a class="btn" href="#quote">Get a free quote <Icon name="arrow" /></a>
+            <a class="btn btn--line" href={`tel:${SITE.phoneRaw}`}>Call {SITE.phone}</a>
+          </div>
+        </div>
+        <div class="shero__view" data-part={s.slug} style={`--pop:${POP[s.slug]}`} aria-hidden="true">
+          <Mark class="mark" />
+          <canvas></canvas>
+        </div>
+      </div>
     </div>
-  </PageHead>
+  </section>
 
   <section class="section">
     <div class="container split">
-      <div>
-        <h2 class="h2 reveal" style="font-size:clamp(1.75rem,3.4vw,2.5rem)">What is included</h2>
-        <ul class="checklist reveal" style="margin-top:20px">
-          {s.includes.map((i) => <li>{i}</li>)}
-        </ul>
-
-        <h2 class="h2 reveal" style="font-size:clamp(1.75rem,3.4vw,2.5rem);margin-top:56px">Who it is for</h2>
-        <div class="chips reveal" style="margin-top:20px">
-          {s.idealFor.map((i) => <span class="chip" style="pointer-events:none">{i}</span>)}
+      <div style="display:grid;gap:clamp(40px,5vw,64px)">
+        <div class="reveal">
+          <h2 class="h2" style="margin-bottom:24px">What is included</h2>
+          <ul class="checklist">
+            {s.includes.map((i) => <li>{i}</li>)}
+          </ul>
         </div>
-
-        <h2 class="h2 reveal" style="font-size:clamp(1.75rem,3.4vw,2.5rem);margin-top:56px">Common questions</h2>
-        <div class="faq reveal" style="margin-top:20px">
-          {s.faqs.map((f) => (
-            <details>
-              <summary>{f.q}</summary>
-              <div class="faq__a"><p>{f.a}</p></div>
-            </details>
-          ))}
-        </div>
-      </div>
-
-      <aside class="sticky" style="display:grid;gap:20px">
-        <div class="note reveal on-dark">
-          <p class="eyebrow">Built for Kerala</p>
+        <div class="note reveal">
+          <p class="eyebrow" style="color:var(--lime)">Built for Kerala</p>
           <p>{s.keralaNote}</p>
         </div>
-        <div class="panel reveal" id="quote">
+      </div>
+      <aside class="sticky">
+        <div class="panel reveal" id="quote" style="background:var(--tile)">
           <h2 class="h3">Get a free quote</h2>
           <QuoteForm service={s.slug} />
         </div>
@@ -78,11 +84,13 @@ const path = `/services/${s.slug}/`;
     </div>
   </section>
 
-  <section class="section section--white">
+  <Faq items={s.faqs} title={`${s.name}: your questions`} />
+
+  <section class="section section--tile">
     <div class="container">
       <div class="section-head reveal">
         <p class="eyebrow">Often combined with</p>
-        <h2 class="h2" style="font-size:clamp(1.75rem,3.4vw,2.75rem)">Finish the whole circle.</h2>
+        <h2 class="h2">Finish the whole circle.</h2>
         <p class="lead">Every service can be booked on its own, or planned together under one quotation and one schedule.</p>
       </div>
       <div class="grid grid--3">
@@ -94,12 +102,6 @@ const path = `/services/${s.slug}/`;
             <span class="card__more">Learn more <Icon name="arrow" /></span>
           </a>
         ))}
-      </div>
-      <div style="margin-top:56px" class="reveal">
-        <p class="eyebrow">Available in</p>
-        <div class="chips" style="margin-top:16px">
-          {AREAS.map((a) => <a class="chip" href={`/areas/${a.slug}/`}>{a.name}</a>)}
-        </div>
       </div>
     </div>
   </section>

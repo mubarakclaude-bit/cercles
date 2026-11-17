@@ -12,11 +12,17 @@ const contactPage = {
   name: 'Contact Cercles',
   about: { '@id': 'https://cercles.in/#organization' },
 };
+const ways = [
+  { icon: 'whatsapp', title: 'WhatsApp', text: SITE.phone, href: waLink('Hi Cercles, I would like a quotation.'), ext: true },
+  { icon: 'phone', title: 'Call', text: SITE.phone, href: `tel:${SITE.phoneRaw}` },
+  { icon: 'mail', title: 'Email', text: SITE.email, href: `mailto:${SITE.email}` },
+  { icon: 'instagram', title: 'Instagram', text: '@cercles.in', href: SITE.instagram, ext: true },
+];
 ---
 
 <Base
-  title="Contact Cercles: Free Quote in Kozhikode & Kerala"
-  description="Call or WhatsApp +91 75599 42708 for a free site visit and quotation. Cercles serves Kozhikode, Kerala, Coimbatore and Bangalore."
+  title="Contact Cercles: Free Quote and Site Visit"
+  description="Call or WhatsApp +91 75599 42708 for a free site visit and quotation. One team for interiors, electrical, plumbing, exteriors and gardens across Kerala."
   path="/contact/"
   noFab
   schema={[contactPage, breadcrumbSchema([{ name: 'Home', path: '/' }, { name: 'Contact', path: '/contact/' }])]}
@@ -33,32 +39,14 @@ const contactPage = {
         <h2 class="h3">Request a free quote</h2>
         <QuoteForm />
       </div>
-      <aside class="sticky" style="display:grid;gap:16px">
-        <a class="card reveal" href={waLink('Hi Cercles, I would like a quotation.')} target="_blank" rel="noopener">
-          <span class="card__icon"><Icon name="whatsapp" /></span>
-          <h2 class="h3">WhatsApp</h2>
-          <p>{SITE.phone}</p>
-        </a>
-        <a class="card reveal" style="--d:1" href={`tel:${SITE.phoneRaw}`}>
-          <span class="card__icon"><Icon name="phone" /></span>
-          <h2 class="h3">Call</h2>
-          <p>{SITE.phone}</p>
-        </a>
-        <a class="card reveal" style="--d:2" href={`mailto:${SITE.email}`}>
-          <span class="card__icon"><Icon name="mail" /></span>
-          <h2 class="h3">Email</h2>
-          <p>{SITE.email}</p>
-        </a>
-        <a class="card reveal" style="--d:3" href={SITE.instagram} target="_blank" rel="noopener me">
-          <span class="card__icon"><Icon name="instagram" /></span>
-          <h2 class="h3">Instagram</h2>
-          <p>@cercles.in</p>
-        </a>
-        <div class="card reveal" style="--d:4">
-          <span class="card__icon"><Icon name="pin" /></span>
-          <h2 class="h3">Based in Kozhikode</h2>
-          <p>Serving Kerala, Coimbatore and Bangalore.</p>
-        </div>
+      <aside class="sticky" style="display:grid;gap:12px">
+        {ways.map((w, i) => (
+          <a class="card reveal" style={`--d:${i}`} href={w.href} target={w.ext ? '_blank' : undefined} rel={w.ext ? 'noopener' : undefined}>
+            <span class="card__icon"><Icon name={w.icon} /></span>
+            <h2 class="h3">{w.title}</h2>
+            <p>{w.text}</p>
+          </a>
+        ))}
       </aside>
     </div>
   </section>

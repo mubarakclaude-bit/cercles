@@ -9,7 +9,8 @@ export interface Pose {
   upperLift?: number; // upper floor floats up too, opening the ground floor from above
   cut?: number; // front and right walls drop low, like a dollhouse cutaway
   xray?: number; // walls turn to glass
-  util?: number; // wires and pipes
+  elec?: number; // electrical: wires, switches, lit bulbs
+  plumb?: number; // plumbing: supply and drain pipes, taps, tank
   spr?: number; // sprinklers
   ring?: number; // circles on the lawn
   paint?: number; // 1 = the whole home in colour
@@ -52,27 +53,27 @@ export const CHAPTER: Record<string, string> = {
 };
 
 export const POSES: Pose[] = [
-  { slug: '', az: 45, el: 32, zoom: 0.8, t: [0.5, 2.8, 0.5], spr: 0.7, ring: 0.4, fx: 0.33 },
+  { slug: '', az: 45, el: 32, zoom: 0.72, t: [0.5, 2.6, 0.5], spr: 0, ring: 0.35, fx: 0.28 },
   // Exteriors
-  { slug: 'roofing', az: 40, el: 30, zoom: 2.0, t: [-1.2, 8.4, 0.3], spr: 0.2, fx: -0.24 },
-  { slug: 'aluminium-gutters', az: 30, el: 26, zoom: 2.4, t: [-3.4, 6.4, 4.2], spr: 0.2, fx: 0.24 },
-  { slug: 'acp-facade', az: 36, el: 28, zoom: 2.1, t: [-3.2, 5.6, 3.6], spr: 0.2, fx: -0.24 },
-  { slug: 'aluminium-fabrication', az: 50, el: 28, zoom: 2.3, t: [0.8, 4.8, 4.6], spr: 0.2, fx: 0.24 },
+  { slug: 'roofing', az: 40, el: 30, zoom: 2.0, t: [-1.2, 8.4, 0.3], spr: 0, fx: -0.24 },
+  { slug: 'aluminium-gutters', az: 30, el: 26, zoom: 2.4, t: [-3.4, 6.4, 4.2], spr: 0, fx: 0.24 },
+  { slug: 'acp-facade', az: 36, el: 28, zoom: 2.1, t: [-3.2, 5.6, 3.6], spr: 0, fx: -0.24 },
+  { slug: 'aluminium-fabrication', az: 50, el: 28, zoom: 2.3, t: [0.8, 4.8, 4.6], spr: 0, fx: 0.24 },
   // Interiors: the roof lifts, then the upper floor, and the home opens up
   { slug: 'interior-works', az: 52, el: 42, zoom: 1.4, t: [-2.2, 1.0, 0], roofLift: 1, upperLift: 1, cut: 1, spr: 0, fx: -0.17 },
   { slug: 'curtains', az: 36, el: 28, zoom: 2.2, t: [-2.6, 2.0, 3.0], roofLift: 1, upperLift: 1, xray: 0.5, spr: 0, fx: 0.2 },
   { slug: 'sofa-making', az: 54, el: 40, zoom: 2.2, t: [-3.0, 0.8, -1.6], roofLift: 1, upperLift: 1, cut: 1, spr: 0, fx: -0.2 },
   { slug: 'furniture-works', az: 58, el: 36, zoom: 1.9, t: [-3.4, 4.6, -1.0], roofLift: 1, cut: 1, spr: 0, fx: 0.24 },
   // Behind the walls
-  { slug: 'electrical', az: 24, el: 31, zoom: 1.5, t: [-1.0, 3.4, 0.5], roofLift: 1, xray: 1, util: 1, spr: 0, fx: -0.24 },
-  { slug: 'plumbing', az: 68, el: 30, zoom: 1.6, t: [4.0, 2.6, -1.6], roofLift: 1, xray: 1, util: 1, spr: 0, fx: 0.24 },
+  { slug: 'electrical', az: 24, el: 31, zoom: 1.5, t: [-2.2, 3.4, 0.5], roofLift: 1, xray: 1, elec: 1, spr: 0, fx: -0.24 },
+  { slug: 'plumbing', az: 66, el: 31, zoom: 1.55, t: [3.6, 3.2, -1.8], roofLift: 1, xray: 1, plumb: 1, spr: 0, fx: 0.24 },
   // Outdoors
   { slug: 'landscaping', az: 48, el: 28, zoom: 1.5, t: [-7.4, 1.4, 1.6], spr: 0.6, fx: -0.24 },
   { slug: 'irrigation', az: 40, el: 30, zoom: 1.9, t: [-3.2, 0.6, 6.4], spr: 1, fx: 0.24 },
   // The finishing touch: everything you saw, now in colour
-  { slug: 'painting-texturing', az: 46, el: 33, zoom: 1.1, t: [0.5, 2.8, 0.8], spr: 0.8, paint: 1, ring: 0.5, fx: -0.24 },
+  { slug: 'painting-texturing', az: 46, el: 33, zoom: 1.1, t: [0.5, 2.8, 0.8], spr: 0.25, paint: 1, ring: 0.5, fx: -0.24 },
   // The circle closes
-  { slug: '', az: 46 + 360, el: 36, zoom: 0.95, t: [0.5, 2.8, 0.8], spr: 0.8, ring: 1, paint: 1, fx: 0, fy: 0.16 },
+  { slug: '', az: 46 + 360, el: 36, zoom: 0.95, t: [0.5, 2.8, 0.8], spr: 0.2, ring: 1, paint: 1, fx: 0, fy: 0.16 },
 ];
 
 export interface State {
@@ -86,7 +87,8 @@ export interface State {
   upperLift: number;
   cut: number;
   xray: number;
-  util: number;
+  elec: number;
+  plumb: number;
   spr: number;
   ring: number;
   paint: number;
@@ -105,7 +107,8 @@ const base = (p: Pose): State => ({
   upperLift: p.upperLift ?? 0,
   cut: p.cut ?? 0,
   xray: p.xray ?? 0,
-  util: p.util ?? 0,
+  elec: p.elec ?? 0,
+  plumb: p.plumb ?? 0,
   spr: p.spr ?? 0.4,
   ring: p.ring ?? 0.1,
   paint: p.paint ?? 0,
@@ -142,3 +145,9 @@ export function eased(f: number) {
 
 /** 0..1: how much pose i is "the current one" at eased position e. */
 export const weight = (e: number, i: number) => Math.max(0, 1 - Math.abs(e - i) * 1.7);
+
+/** Position of each service's pose in POSES. */
+export const POSE_INDEX: Record<string, number> = {};
+POSES.forEach((p, i) => {
+  if (p.slug) POSE_INDEX[p.slug] = i;
+});

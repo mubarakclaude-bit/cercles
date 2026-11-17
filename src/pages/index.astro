@@ -2,7 +2,9 @@
 import Base from '../layouts/Base.astro';
 import Icon from '../components/Icon.astro';
 import Journey from '../components/Journey.astro';
-import { SITE, AREAS, PROCESS, HOME_FAQS } from '../data/site';
+import HowWeWork from '../components/HowWeWork.astro';
+import Faq from '../components/Faq.astro';
+import { SITE, HOME_FAQS } from '../data/site';
 import { faqSchema } from '../lib/schema';
 
 
@@ -16,23 +18,23 @@ const compare = [
 ---
 
 <Base
-  title="Cercles | One-Stop Home Solutions in Kozhikode, Kerala"
-  description="Interiors, curtains, electrical, plumbing, roofing, facades, landscaping and irrigation from one team in Kozhikode and across Kerala. Roof to Garden. One Call."
+  title="Cercles | One-Stop Home Solutions in Kerala"
+  description="Interiors, curtains, electrical, plumbing, roofing, facades, landscaping and irrigation from one accountable team across Kerala. Roof to Garden. One Call."
   path="/"
   schema={[faqSchema(HOME_FAQS)]}
 >
   <Journey />
 
   <!-- ============ WHY ============ -->
-  <section class="section section--white" aria-labelledby="why-title">
-    <div class="container split split--rev">
-      <div class="reveal sticky">
-        <p class="eyebrow">Why Cercles</p>
-        <h2 class="h2" id="why-title" style="margin-top:18px">Stop chasing. Start finishing.</h2>
-        <p class="lead" style="margin-top:20px">
-          Home projects go wrong in the gaps between trades. Cercles takes the gaps away with one team that owns the result from start to finish.
-        </p>
-        <div class="btn-row" style="margin-top:28px"><a class="btn" href="/about/">About Cercles <Icon name="arrow" /></a></div>
+  <section class="section section--tile" aria-labelledby="why-title">
+    <div class="container split split--even">
+      <div class="sticky reveal">
+        <div class="section-head" style="margin-bottom:28px">
+          <p class="eyebrow">Why Cercles</p>
+          <h2 class="h2" id="why-title">Stop chasing. Start finishing.</h2>
+          <p class="lead">Home projects go wrong in the gaps between trades. Cercles takes the gaps away with one team that owns the result from start to finish.</p>
+        </div>
+        <a class="btn btn--text" href="/about/">About Cercles <Icon name="arrow" /></a>
       </div>
       <div class="compare">
         {compare.map(([bad, good], i) => (
@@ -45,30 +47,10 @@ const compare = [
     </div>
   </section>
 
-  <!-- ============ PROCESS ============ -->
-  <section class="section" aria-labelledby="process-title">
-    <div class="container">
-      <div class="section-head reveal">
-        <p class="eyebrow">How we work</p>
-        <h2 class="h2" id="process-title">Five clear steps, from first call to handover.</h2>
-      </div>
-      <ol class="process">
-        <span class="process__line" aria-hidden="true"></span>
-        {PROCESS.map((p) => (
-          <li class="pstep">
-            <span class="pstep__n">{p.n}</span>
-            <div>
-              <h3 class="h3">{p.title}</h3>
-              <p>{p.text}</p>
-            </div>
-          </li>
-        ))}
-      </ol>
-    </div>
-  </section>
+  <HowWeWork />
 
   <!-- ============ TWO WAYS ============ -->
-  <section class="section section--white" aria-labelledby="ways-title">
+  <section class="section section--tile" aria-labelledby="ways-title">
     <div class="container">
       <div class="section-head reveal">
         <p class="eyebrow">Two ways to work with us</p>
@@ -77,7 +59,7 @@ const compare = [
       <div class="ways">
         <div class="way way--full on-dark reveal">
           <p class="eyebrow">Full-Circle Project</p>
-          <h3 class="h2" style="font-size:clamp(1.75rem,3.4vw,2.5rem)">One plan across every trade.</h3>
+          <h3 class="h2" style="font-size:clamp(1.5rem,2.4vw,2rem)">One plan across every trade.</h3>
           <ul>
             <li>Best for renovations, new homes and complete fit-outs</li>
             <li>Any combination of our 13 services under one plan</li>
@@ -86,9 +68,9 @@ const compare = [
           </ul>
           <div class="btn-row"><a class="btn btn--lime" href="/full-circle-projects/">See Full-Circle Projects <Icon name="arrow" /></a></div>
         </div>
-        <div class="way way--single reveal" style="--d:1">
+        <div class="way reveal" style="--d:1;background:#fff">
           <p class="eyebrow">Single Service</p>
-          <h3 class="h2" style="font-size:clamp(1.75rem,3.4vw,2.5rem)">One room, one repair, one upgrade.</h3>
+          <h3 class="h2" style="font-size:clamp(1.5rem,2.4vw,2rem)">One room, one repair, one upgrade.</h3>
           <ul>
             <li>Any one service, booked on its own</li>
             <li>One focused quotation</li>
@@ -100,50 +82,18 @@ const compare = [
     </div>
   </section>
 
-  <!-- ============ AREAS ============ -->
-  <section class="section section--navy on-dark" aria-labelledby="areas-title">
-    <div class="container">
-      <div class="section-head reveal">
-        <p class="eyebrow">Where we work</p>
-        <h2 class="h2" id="areas-title">Based in Kozhikode. Working across Kerala and beyond.</h2>
-        <p class="lead">From the Malabar coast to the hills of Wayanad, and across the border in Coimbatore and Bangalore.</p>
-      </div>
-      <div class="chips reveal">
-        {AREAS.map((a) => (
-          <a class="chip" href={`/areas/${a.slug}/`}>{a.name} <small>{a.state}</small></a>
-        ))}
-      </div>
-    </div>
-  </section>
-
-  <!-- ============ FAQ ============ -->
-  <section class="section" aria-labelledby="faq-title">
-    <div class="container">
-      <div class="section-head reveal">
-        <p class="eyebrow">Questions</p>
-        <h2 class="h2" id="faq-title">Good to know before you call.</h2>
-      </div>
-      <div class="faq reveal">
-        {HOME_FAQS.map((f) => (
-          <details>
-            <summary>{f.q}</summary>
-            <div class="faq__a"><p>{f.a}</p></div>
-          </details>
-        ))}
-      </div>
-    </div>
-  </section>
+  <Faq items={HOME_FAQS} />
 
   <!-- ============ CTA ============ -->
   <section class="section" style="padding-top:0">
     <div class="container">
       <div class="cta on-dark reveal">
         <p class="eyebrow">Ready when you are</p>
-        <h2 class="h2" style="max-width:16ch">Complete the circle of your home.</h2>
-        <p class="lead" style="max-width:48ch">One call to start. One plan for every trade. One finish you are proud of.</p>
+        <h2 class="h2">Complete the circle of your home.</h2>
+        <p class="lead">One call to start. One plan for every trade. One finish you are proud of.</p>
         <div class="btn-row">
           <a class="btn btn--lime" href="/contact/">Get a free quote <Icon name="arrow" /></a>
-          <a class="btn btn--ghost" href={`tel:${SITE.phoneRaw}`}>Call {SITE.phone}</a>
+          <a class="btn btn--line" href={`tel:${SITE.phoneRaw}`}>Call {SITE.phone}</a>
         </div>
       </div>
     </div>

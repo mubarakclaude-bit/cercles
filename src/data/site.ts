@@ -23,7 +23,7 @@ export const SITE = {
   foundingYear: null as null | number,
   mapUrl: null as null | string,
   description:
-    'Cercles is a one-stop home solutions company in Kozhikode, Kerala. Interiors, curtains, electrical, plumbing, roofing, facades, aluminium work, landscaping and irrigation under one quotation, one schedule and one accountable team.',
+    'Cercles is a one-stop home solutions company in Kerala. Interiors, curtains, electrical, plumbing, roofing, facades, aluminium work, landscaping and irrigation under one quotation, one schedule and one accountable team.',
 } as const;
 
 export type CategoryId = 'interiors' | 'utilities' | 'exteriors' | 'outdoors';
@@ -88,9 +88,9 @@ export const SERVICES: Service[] = [
     name: 'Curtain Works',
     label: 'Curtains',
     category: 'interiors',
-    title: 'Curtains & Motorised Curtains in Kozhikode and Kerala',
+    title: 'Curtains & Motorised Curtains in Kerala',
     description:
-      'Made-to-measure curtains, blinds and motorised, automated curtains in Kozhikode and across Kerala. Site measurement, clear quotation, neat installation.',
+      'Made-to-measure curtains, blinds and motorised, automated curtains across Kerala. Site measurement, clear quotation, neat installation.',
     summary: 'Made-to-measure curtains, blinds and motorised automation.',
     intro:
       'Curtains change how a room feels more than almost anything else, and they only work when they are measured, stitched and hung properly. Cercles handles the full job: site measurement, fabric guidance, stitching and installation, including motorised curtains that open and close from a phone, a remote or a schedule.',
@@ -127,9 +127,9 @@ export const SERVICES: Service[] = [
     name: 'Sofa Making',
     label: 'Sofas',
     category: 'interiors',
-    title: 'Custom Sofa Making in Kozhikode and Kerala',
+    title: 'Custom Sofa Making in Kerala',
     description:
-      'Custom-built sofas made to your space and taste in Kozhikode. Choose size, frame, foam and fabric. Clear quotation and delivery on schedule.',
+      'Custom-built sofas made to your space and taste across Kerala. Choose size, frame, foam and fabric. Clear quotation and delivery on schedule.',
     summary: 'Custom-built sofas, sized to your room and your taste.',
     intro:
       'A ready-made sofa rarely fits the room it lands in. Cercles builds sofas to your space: the right size for the wall, the right seat depth for the way you sit, and a frame, foam and fabric you have actually chosen.',
@@ -162,9 +162,9 @@ export const SERVICES: Service[] = [
     name: 'Interior Works',
     label: 'Interior fit-out',
     category: 'interiors',
-    title: 'Complete Interior Design & Fit-Out in Kozhikode and Kerala',
+    title: 'Complete Interior Design & Fit-Out in Kerala',
     description:
-      'Full home interior fit-out and finishing in Kozhikode and Kerala: false ceilings, wardrobes, kitchens, panelling and more under one quotation.',
+      'Full home interior fit-out and finishing in Kerala: false ceilings, wardrobes, kitchens, panelling and more under one quotation.',
     summary: 'Full interior fit-out and finishing, one plan across every trade.',
     intro:
       'A full interior is many trades that must arrive in the right order. Cercles runs the whole fit-out under one plan: carpentry, ceilings, electrical points, paint and finishing, with a single project lead so you are not chasing five different people.',
@@ -197,9 +197,9 @@ export const SERVICES: Service[] = [
     name: 'Furniture Works',
     label: 'Furniture',
     category: 'interiors',
-    title: 'Made-to-Measure Furniture in Kozhikode and Kerala',
+    title: 'Made-to-Measure Furniture in Kerala',
     description:
-      'Made-to-measure furniture for homes and offices in Kozhikode and Kerala: wardrobes, TV units, beds, dining and storage, built to your space.',
+      'Made-to-measure furniture for homes and offices in Kerala: wardrobes, TV units, beds, dining and storage, built to your space.',
     summary: 'Made-to-measure wardrobes, units, beds and storage.',
     intro:
       'Built-in and made-to-measure furniture uses every inch of a room properly. Cercles designs and builds furniture to your dimensions, with materials and finishes chosen for how you live.',
@@ -228,9 +228,9 @@ export const SERVICES: Service[] = [
     name: 'Painting & Texturing',
     label: 'Painting',
     category: 'interiors',
-    title: 'Painting & Decorative Texturing in Kozhikode and Kerala',
+    title: 'Painting & Decorative Texturing in Kerala',
     description:
-      'Interior and exterior painting and decorative textures in Kozhikode and Kerala. Proper surface preparation, clean finishes, clear quotation.',
+      'Interior and exterior painting and decorative textures in Kerala. Proper surface preparation, clean finishes, clear quotation.',
     summary: 'Clean finishes and decorative textures, properly prepared.',
     intro:
       'Paint only looks good over a well-prepared surface. Cercles handles preparation, putty, primer and finish coats for clean results, and offers decorative textures where you want a wall to be a feature.',
@@ -259,9 +259,9 @@ export const SERVICES: Service[] = [
     name: 'Electrical Works',
     label: 'Electrical',
     category: 'utilities',
-    title: 'Electrical Works & Lighting Design in Kozhikode and Kerala',
+    title: 'Electrical Works & Lighting Design in Kerala',
     description:
-      'End-to-end electrical work in Kozhikode and Kerala: wiring, lighting design, installation, upgrades and smart lighting for homes and small commercial spaces.',
+      'End-to-end electrical work in Kerala: wiring, lighting design, installation, upgrades and smart lighting for homes and small commercial spaces.',
     summary: 'Wiring, lighting design and installation, end to end.',
     intro:
       'Good lighting and safe wiring are planned before the walls are finished. Cercles takes care of electrical work from layout through installation, including lighting design that suits each room and, if you want it, automation.',
@@ -290,9 +290,9 @@ export const SERVICES: Service[] = [
     name: 'Plumbing Works',
     label: 'Plumbing',
     category: 'utilities',
-    title: 'Plumbing Works in Kozhikode and Kerala',
+    title: 'Plumbing Works in Kerala',
     description:
-      'New plumbing installation, repairs and upgrades for homes in Kozhikode and Kerala. Leak fixing, bathroom and kitchen plumbing, tidy workmanship.',
+      'New plumbing installation, repairs and upgrades for homes in Kerala. Leak fixing, bathroom and kitchen plumbing, tidy workmanship.',
     summary: 'New installations, repairs and upgrades, done tidily.',
     intro:
       'Plumbing problems get expensive when they are hidden behind finished walls. Cercles installs, repairs and upgrades plumbing with care for pressure, drainage and access, so the system works and can be maintained.',
@@ -321,9 +321,9 @@ export const SERVICES: Service[] = [
     name: 'Roofing & Waterproofing',
     label: 'Roofing',
     category: 'exteriors',
-    title: 'Roofing, Repairs & Waterproofing in Kozhikode and Kerala',
+    title: 'Roofing, Repairs & Waterproofing in Kerala',
     description:
-      'New roofs, roof repairs and waterproofing in Kozhikode and Kerala, built for heavy monsoon rain. Inspection, clear scope and quality-checked work.',
+      'New roofs, roof repairs and waterproofing in Kerala, built for heavy monsoon rain. Inspection, clear scope and quality-checked work.',
     summary: 'New roofs, repairs and waterproofing built for the monsoon.',
     intro:
       'In Kerala a roof is tested every year by months of heavy rain. Cercles installs and repairs roofs and treats terraces and slabs against leaks, with the drainage, slope and joints planned properly.',
@@ -352,9 +352,9 @@ export const SERVICES: Service[] = [
     name: 'ACP Facade Works',
     label: 'ACP facade',
     category: 'exteriors',
-    title: 'ACP Facade & Cladding Works in Kozhikode and Kerala',
+    title: 'ACP Facade & Cladding Works in Kerala',
     description:
-      'Modern aluminium composite panel (ACP) facade and cladding in Kozhikode and Kerala for homes, shops and offices. Design, fabrication, installation.',
+      'Modern aluminium composite panel (ACP) facade and cladding in Kerala for homes, shops and offices. Design, fabrication, installation.',
     summary: 'Modern aluminium composite panel cladding for facades.',
     intro:
       'ACP cladding gives a building a clean, modern face and protects the structure behind it. Cercles designs, fabricates and installs ACP facades for homes, shops and offices, with the framing and sealing done for long-term performance.',
@@ -383,9 +383,9 @@ export const SERVICES: Service[] = [
     name: 'Aluminium Fabrication',
     label: 'Aluminium work',
     category: 'exteriors',
-    title: 'Aluminium Fabrication: Windows, Partitions & Railings in Kozhikode',
+    title: 'Aluminium Fabrication: Windows, Partitions & Railings in Kerala',
     description:
-      'Aluminium windows, partitions, railings and custom metalwork in Kozhikode and Kerala. Precise fabrication, rust-free, neat installation.',
+      'Aluminium windows, partitions, railings and custom metalwork in Kerala. Precise fabrication, rust-free, neat installation.',
     summary: 'Windows, partitions, railings and custom metalwork.',
     intro:
       'Aluminium does not rust and suits Kerala conditions well. Cercles fabricates and installs aluminium windows, partitions, railings and custom metalwork, measured and made to fit.',
@@ -414,9 +414,9 @@ export const SERVICES: Service[] = [
     name: 'Aluminium Rainwater Gutters',
     label: 'Rainwater gutters',
     category: 'exteriors',
-    title: 'Aluminium Rainwater Gutters in Kozhikode and Kerala',
+    title: 'Aluminium Rainwater Gutters in Kerala',
     description:
-      'Seamless aluminium rainwater gutters for roofs in Kozhikode and Kerala. Durable, clean drainage that protects walls and foundations in heavy rain.',
+      'Seamless aluminium rainwater gutters for roofs in Kerala. Durable, clean drainage that protects walls and foundations in heavy rain.',
     summary: 'Durable, clean rainwater drainage for your roof.',
     intro:
       'Without a gutter, monsoon water runs down the walls and pools at the foundation. Cercles installs aluminium rainwater gutters sized for Kerala rainfall and routed to proper drainage.',
@@ -445,9 +445,9 @@ export const SERVICES: Service[] = [
     name: 'Landscaping',
     label: 'Landscaping',
     category: 'outdoors',
-    title: 'Landscaping & Garden Design in Kozhikode and Kerala',
+    title: 'Landscaping & Garden Design in Kerala',
     description:
-      'Landscaping in Kozhikode and Kerala: softscape (plants, lawns, gardens) and hardscape (paving, walkways, patios, structures) designed and built end to end.',
+      'Landscaping in Kerala: softscape (plants, lawns, gardens) and hardscape (paving, walkways, patios, structures) designed and built end to end.',
     summary: 'Gardens, lawns, paving, walkways, patios and structures.',
     intro:
       'A garden is part of the home, not an afterthought. Cercles designs and builds both softscape (plants, lawns, gardens) and hardscape (paving, walkways, patios, structures) so the outdoors is finished to the same standard as the inside.',
@@ -476,9 +476,9 @@ export const SERVICES: Service[] = [
     name: 'Irrigation',
     label: 'Irrigation',
     category: 'outdoors',
-    title: 'Automated Garden Irrigation Systems in Kozhikode and Kerala',
+    title: 'Automated Garden Irrigation Systems in Kerala',
     description:
-      'Automated irrigation systems that water on schedule for gardens and lawns in Kozhikode and Kerala. Design, installation and smart control.',
+      'Automated irrigation systems that water on schedule for gardens and lawns in Kerala. Design, installation and smart control.',
     summary: 'Automated systems that water your garden on schedule.',
     intro:
       'A garden that waters itself stays green when you are away. Cercles designs and installs irrigation systems with timers and automation, so each zone gets the right amount of water at the right time.',
@@ -511,140 +511,6 @@ export const SERVICE_BY_SLUG = Object.fromEntries(SERVICES.map((s) => [s.slug, s
 
 export const servicesIn = (cat: CategoryId) => SERVICES.filter((s) => s.category === cat);
 
-export interface Area {
-  slug: string;
-  name: string;
-  state: string;
-  tier: 'home' | 'kerala' | 'nearby-state';
-  /** Real neighbourhoods and towns, used on the page and in structured data */
-  places: string[];
-  intro: string;
-  local: string;
-  description: string;
-}
-
-export const AREAS: Area[] = [
-  {
-    slug: 'kozhikode',
-    name: 'Kozhikode',
-    state: 'Kerala',
-    tier: 'home',
-    places: ['Calicut city', 'Mavoor Road', 'Palazhi', 'Nadakkavu', 'Feroke', 'Ramanattukara', 'Kunnamangalam', 'Elathur', 'Beypore', 'Koduvally'],
-    intro:
-      'Kozhikode is home for Cercles. From interiors and curtains to roofing, facades and gardens, our team handles homes and small commercial spaces across the city and its suburbs.',
-    local:
-      'Kozhikode sits on the Malabar coast, so sea air, high humidity and heavy monsoon rain shape every material choice we make: aluminium over rusting metal, sealed joints on facades, and waterproofing planned before finishing.',
-    description:
-      'Cercles home improvement in Kozhikode (Calicut): interiors, curtains, electrical, plumbing, roofing, ACP facades, aluminium work, landscaping and irrigation.',
-  },
-  {
-    slug: 'malappuram',
-    name: 'Malappuram',
-    state: 'Kerala',
-    tier: 'kerala',
-    places: ['Malappuram town', 'Manjeri', 'Perinthalmanna', 'Tirur', 'Kondotty', 'Ponnani', 'Valanchery', 'Nilambur'],
-    intro:
-      'Cercles serves homeowners across Malappuram district, from new villas to renovations and small commercial spaces.',
-    local:
-      'Large family homes and Gulf-returnee villas are common here, which makes complete fit-outs, motorised curtains and landscaped compounds popular requests.',
-    description:
-      'Home interiors, curtains, electrical, roofing, facade and landscaping services in Malappuram district from Cercles. One team, one quotation.',
-  },
-  {
-    slug: 'kannur',
-    name: 'Kannur',
-    state: 'Kerala',
-    tier: 'kerala',
-    places: ['Kannur city', 'Thalassery', 'Taliparamba', 'Payyannur', 'Mattannur', 'Iritty', 'Kuthuparamba'],
-    intro:
-      'Cercles takes on projects in Kannur and across north Malabar, as a complete project or as a single service.',
-    local:
-      'The coast and the hills both lie within the district. Salt air near the sea and strong rain inland both affect finishes, so we match materials to the exact site.',
-    description:
-      'Cercles home improvement in Kannur: interiors, curtains, electrical, plumbing, roofing, facades, landscaping and irrigation from one team.',
-  },
-  {
-    slug: 'wayanad',
-    name: 'Wayanad',
-    state: 'Kerala',
-    tier: 'kerala',
-    places: ['Kalpetta', 'Sulthan Bathery', 'Mananthavady', 'Meppadi', 'Vythiri', 'Pulpally'],
-    intro:
-      'Wayanad has many homes, homestays and resorts where the garden and the view matter as much as the interior. Cercles handles both.',
-    local:
-      'Hill rainfall is heavy and the air stays damp, so roofing, waterproofing, rainwater gutters and moisture-resistant finishes come first. Landscaping and irrigation suit homestays and resort grounds.',
-    description:
-      'Cercles in Wayanad: roofing, waterproofing, landscaping, irrigation, interiors and more for homes, homestays and resorts.',
-  },
-  {
-    slug: 'palakkad',
-    name: 'Palakkad',
-    state: 'Kerala',
-    tier: 'kerala',
-    places: ['Palakkad town', 'Ottapalam', 'Shoranur', 'Mannarkkad', 'Chittur', 'Alathur'],
-    intro:
-      'Cercles serves Palakkad, the gateway between Kerala and Coimbatore, for home improvement, fit-outs and outdoor work.',
-    local:
-      'Palakkad runs hotter and drier than the coast, so heat control, solar-facing windows and curtains, and irrigation for gardens matter more here.',
-    description:
-      'Cercles in Palakkad: curtains, interiors, electrical, roofing, aluminium work, landscaping and irrigation under one quotation.',
-  },
-  {
-    slug: 'thrissur',
-    name: 'Thrissur',
-    state: 'Kerala',
-    tier: 'kerala',
-    places: ['Thrissur city', 'Guruvayur', 'Irinjalakuda', 'Chalakudy', 'Kunnamkulam', 'Kodungallur'],
-    intro:
-      'Cercles takes on Thrissur projects, from city apartments to large traditional-style homes with gardens.',
-    local:
-      'Thrissur has a strong tradition of well-finished family homes, so interior quality, furniture and landscaped compounds are usually the priority.',
-    description:
-      'Cercles in Thrissur: complete interiors, furniture, curtains, facades, landscaping and irrigation from one accountable team.',
-  },
-  {
-    slug: 'kochi',
-    name: 'Kochi (Ernakulam)',
-    state: 'Kerala',
-    tier: 'kerala',
-    places: ['Kochi city', 'Edappally', 'Kakkanad', 'Aluva', 'Angamaly', 'Perumbavoor', 'Tripunithura', 'Muvattupuzha'],
-    intro:
-      'Cercles serves Kochi and Ernakulam district, including apartment fit-outs and villa projects.',
-    local:
-      'Apartments in Kochi often need compact interiors, made-to-measure furniture and automated curtains, while waterfront and coastal sites need corrosion-resistant materials.',
-    description:
-      'Cercles in Kochi and Ernakulam: apartment and villa interiors, curtains, furniture, electrical, facades and landscaping.',
-  },
-  {
-    slug: 'coimbatore',
-    name: 'Coimbatore',
-    state: 'Tamil Nadu',
-    tier: 'nearby-state',
-    places: ['Coimbatore city', 'RS Puram', 'Saravanampatti', 'Peelamedu', 'Singanallur', 'Pollachi', 'Mettupalayam'],
-    intro:
-      'Cercles takes on projects in Coimbatore for homeowners who want one team for the whole job.',
-    local:
-      'Coimbatore is drier and sunnier than coastal Kerala, so heat and glare control, curtains and irrigation for gardens are common priorities.',
-    description:
-      'Cercles in Coimbatore: curtains, interiors, electrical, roofing, landscaping and irrigation under one quotation.',
-  },
-  {
-    slug: 'bangalore',
-    name: 'Bangalore (Bengaluru)',
-    state: 'Karnataka',
-    tier: 'nearby-state',
-    places: ['Whitefield', 'Sarjapur Road', 'Electronic City', 'HSR Layout', 'Yelahanka', 'Hebbal', 'Kanakapura Road', 'Bannerghatta Road'],
-    intro:
-      'Cercles takes on projects in Bangalore, especially for owners of new apartments and villas who want a single team for the complete fit-out.',
-    local:
-      'Bangalore projects are often apartment and gated-community interiors, where made-to-measure furniture, motorised curtains, lighting design and fast, coordinated execution matter most.',
-    description:
-      'Cercles in Bangalore: apartment and villa interiors, motorised curtains, furniture, electrical and landscaping from one team.',
-  },
-];
-
-export const AREA_BY_SLUG = Object.fromEntries(AREAS.map((a) => [a.slug, a])) as Record<string, Area>;
-
 export const PROCESS = [
   { n: '01', title: 'Enquiry and site visit', text: 'Tell us what you need. We visit and understand the space.' },
   { n: '02', title: 'Plan and quotation', text: 'A clear scope, timeline and price, for one service or the whole project.' },
@@ -656,15 +522,11 @@ export const PROCESS = [
 export const HOME_FAQS = [
   {
     q: 'What does Cercles do?',
-    a: 'Cercles is a one-stop home solutions company in Kozhikode, Kerala. We design, build and finish every part of a home, inside and out: curtains, sofas, interiors, furniture, painting, electrical, plumbing, roofing, ACP facades, aluminium work, rainwater gutters, landscaping and irrigation.',
+    a: 'Cercles is a one-stop home solutions company in Kerala. We design, build and finish every part of a home, inside and out: curtains, sofas, interiors, furniture, painting, electrical, plumbing, roofing, ACP facades, aluminium work, rainwater gutters, landscaping and irrigation.',
   },
   {
     q: 'Do I have to book the whole home, or can I book a single service?',
     a: 'Either. Every service can be booked on its own, or combined into one complete Full-Circle project with one quotation and one schedule.',
-  },
-  {
-    q: 'Which areas do you serve?',
-    a: 'We are based in Kozhikode and work across Kerala, including Malappuram, Kannur, Wayanad, Palakkad, Thrissur and Kochi. We also take projects in Coimbatore and Bangalore.',
   },
   {
     q: 'How does the quotation work?',

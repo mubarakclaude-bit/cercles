@@ -1,0 +1,33 @@
+---
+import Icon from './Icon.astro';
+import { SITE, waLink } from '../data/site';
+interface Props {
+  items: { q: string; a: string }[];
+  title?: string;
+  eyebrow?: string;
+}
+const { items, title = 'Good to know before you call.', eyebrow = 'Questions' } = Astro.props;
+---
+
+<section class="section" aria-labelledby="faq-title">
+  <div class="container faqs">
+    <div class="faqs__intro reveal">
+      <p class="eyebrow">{eyebrow}</p>
+      <h2 class="h2" id="faq-title">{title}</h2>
+      <p class="lead">Can't find what you need? Message us and we will answer the same day.</p>
+      <div class="btn-row">
+        <a class="btn btn--line" href={waLink('Hi Cercles, I have a question.')} target="_blank" rel="noopener">Ask on WhatsApp <Icon name="arrow" /></a>
+      </div>
+    </div>
+    <div class="faq reveal">
+      {
+        items.map((f) => (
+          <details>
+            <summary>{f.q}</summary>
+            <div class="faq__a"><p>{f.a}</p></div>
+          </details>
+        ))
+      }
+    </div>
+  </div>
+</section>

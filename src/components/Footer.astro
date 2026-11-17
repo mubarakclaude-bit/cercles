@@ -1,49 +1,56 @@
 ---
 import Logo from './Logo.astro';
 import Icon from './Icon.astro';
-import { SITE, SERVICES, AREAS } from '../data/site';
+import { SITE, SERVICES } from '../data/site';
 const year = new Date().getFullYear();
+const half = Math.ceil(SERVICES.length / 2);
+const addr = SITE.address;
 ---
 
 <footer class="footer on-dark">
   <div class="container">
     <div class="footer__grid">
-      <div class="footer__about">
+      <div class="footer__brand">
         <a class="logo" href="/" aria-label="Cercles, home"><Logo /></a>
-        <p>{SITE.description}</p>
-        <p>
-          <a href={`tel:${SITE.phoneRaw}`}>{SITE.phone}</a><br />
-          <a href={`mailto:${SITE.email}`}>{SITE.email}</a>
-        </p>
-        <p>
-          <a href={SITE.instagram} rel="noopener me" target="_blank" aria-label="Cercles on Instagram"
-            ><span style="display:inline-flex;gap:8px;align-items:center"><span style="width:22px;height:22px;display:inline-block"><Icon name="instagram" /></span> @cercles.in</span></a
-          >
-        </p>
+        <p>One-stop home solutions. Interiors, exteriors, electrical, plumbing and gardens from one accountable team.</p>
       </div>
+
       <div>
         <p class="footer__h">Services</p>
-        <ul>
-          {SERVICES.map((s) => <li><a href={`/services/${s.slug}/`}>{s.name}</a></li>)}
-        </ul>
+        <div class="footer__cols">
+          <ul>{SERVICES.slice(0, half).map((s) => <li><a href={`/services/${s.slug}/`}>{s.label}</a></li>)}</ul>
+          <ul>{SERVICES.slice(half).map((s) => <li><a href={`/services/${s.slug}/`}>{s.label}</a></li>)}</ul>
+        </div>
       </div>
+
       <div>
-        <p class="footer__h">Areas we serve</p>
-        <ul>
-          {AREAS.map((a) => <li><a href={`/areas/${a.slug}/`}>{a.name}</a></li>)}
-        </ul>
-      </div>
-      <div>
-        <p class="footer__h">Cercles</p>
+        <p class="footer__h">Company</p>
         <ul>
           <li><a href="/full-circle-projects/">Full-Circle Projects</a></li>
           <li><a href="/about/">About</a></li>
           <li><a href="/contact/">Contact</a></li>
-          <li><a href="/sitemap-index.xml">Sitemap</a></li>
         </ul>
       </div>
+
+      <div>
+        <p class="footer__h">Contact</p>
+        <address>
+          <a href={`tel:${SITE.phoneRaw}`}>{SITE.phone}</a><br />
+          <a href={`mailto:${SITE.email}`}>{SITE.email}</a><br />
+          <a href={SITE.instagram} target="_blank" rel="noopener me">Instagram @cercles.in</a>
+          {
+            addr ? (
+              <p style="margin-top:12px">
+                {addr.street}<br />
+                {addr.locality}, {addr.region} {addr.postalCode}
+              </p>
+            ) : (
+              <p style="margin-top:12px">Kerala, India</p>
+            )
+          }
+        </address>
+      </div>
     </div>
-    <div class="footer__word" aria-hidden="true">cercles</div>
     <div class="footer__bar">
       <span>&copy; {year} Cercles. All rights reserved.</span>
       <span>Roof to Garden. One Call.</span>

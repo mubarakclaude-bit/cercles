@@ -1,7 +1,6 @@
 // Small, dependency-free behaviour layer. Everything degrades gracefully without it.
 const doc = document.documentElement;
 const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-const finePointer = matchMedia('(hover: hover) and (pointer: fine)').matches;
 
 /* ---------- Header: solid on scroll, hide on scroll down ---------- */
 const header = document.getElementById('header');
@@ -84,26 +83,6 @@ if (jsteps.length) {
   }
 }
 
-/* ---------- Pointer-aware surfaces (cards spotlight, button sheen) ---------- */
-if (finePointer && !reduce) {
-  document.addEventListener(
-    'pointermove',
-    (e) => {
-      const t = (e.target as HTMLElement).closest<HTMLElement>('.card, .btn');
-      if (!t) return;
-      const r = t.getBoundingClientRect();
-      if (t.classList.contains('card')) {
-        t.style.setProperty('--sx', `${e.clientX - r.left}px`);
-        t.style.setProperty('--sy', `${e.clientY - r.top}px`);
-      } else {
-        t.style.setProperty('--bx', `${e.clientX - r.left}px`);
-        t.style.setProperty('--by', `${e.clientY - r.top}px`);
-      }
-    },
-    { passive: true },
-  );
-}
-
 /* ---------- The 3D home that travels with the page (loaded after first paint) ---------- */
 const journey = document.querySelector<HTMLElement>('.journey');
 if (journey) {
@@ -122,6 +101,22 @@ if (journey) {
         .catch(() => flat());
     const idle = (window as Window & { requestIdleCallback?: (cb: () => void, o?: { timeout: number }) => number }).requestIdleCallback;
     const go = () => (idle ? idle(boot, { timeout: 1200 }) : setTimeout(boot, 250));
+    document.readyState === 'complete' ? go() : addEventListener('load', go, { once: true });
+  }
+}
+
+/* ---------- Service pages: the same 3D home, held still on this service ---------- */
+const partView = document.querySelector<HTMLElement>('.shero__view[data-part]');
+if (partView) {
+  const canvas = partView.querySelector<HTMLCanvasElement>('canvas');
+  const saver = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData;
+  if (canvas && !saver) {
+    const boot = () =>
+      import('../scene/part')
+        .then((m) => m.initPart({ view: partView, canvas, slug: partView.dataset.part!, still: reduce }))
+        .catch(() => undefined);
+    const idle = (window as Window & { requestIdleCallback?: (cb: () => void, o?: { timeout: number }) => number }).requestIdleCallback;
+    const go = () => (idle ? idle(boot, { timeout: 1500 }) : setTimeout(boot, 300));
     document.readyState === 'complete' ? go() : addEventListener('load', go, { once: true });
   }
 }

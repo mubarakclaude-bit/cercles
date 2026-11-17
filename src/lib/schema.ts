@@ -1,4 +1,4 @@
-import { SITE, SERVICES, AREAS, type Service, type Area } from '../data/site';
+import { SITE, SERVICES, type Service } from '../data/site';
 
 const abs = (path: string) => new URL(path, SITE.url).href;
 const ORG_ID = `${SITE.url}/#organization`;
@@ -19,10 +19,7 @@ export function organizationSchema() {
     telephone: SITE.phoneRaw,
     email: SITE.email,
     sameAs: [SITE.instagram],
-    areaServed: AREAS.map((a) => ({
-      '@type': a.tier === 'nearby-state' ? 'City' : 'AdministrativeArea',
-      name: a.name,
-    })),
+    areaServed: { '@type': 'AdministrativeArea', name: 'Kerala' },
     knowsAbout: SERVICES.map((s) => s.name),
     contactPoint: [
       {
@@ -103,18 +100,7 @@ export function serviceSchema(s: Service) {
     description: s.description,
     url: abs(`/services/${s.slug}/`),
     provider: { '@id': ORG_ID },
-    areaServed: AREAS.map((a) => ({ '@type': a.tier === 'nearby-state' ? 'City' : 'AdministrativeArea', name: a.name })),
-  };
-}
-
-export function areaPageSchema(a: Area) {
-  return {
-    '@type': 'WebPage',
-    '@id': abs(`/areas/${a.slug}/`) + '#page',
-    url: abs(`/areas/${a.slug}/`),
-    name: `Home improvement in ${a.name}`,
-    about: { '@id': ORG_ID },
-    mainEntity: { '@type': 'Place', name: a.name, containedInPlace: { '@type': 'AdministrativeArea', name: a.state } },
+    areaServed: { '@type': 'AdministrativeArea', name: 'Kerala' },
   };
 }
 

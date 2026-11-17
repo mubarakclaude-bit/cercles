@@ -2,8 +2,10 @@
 import Base from '../layouts/Base.astro';
 import PageHead from '../components/PageHead.astro';
 import Icon from '../components/Icon.astro';
-import { CATEGORIES, servicesIn, PROCESS } from '../data/site';
-import { breadcrumbSchema } from '../lib/schema';
+import HowWeWork from '../components/HowWeWork.astro';
+import Faq from '../components/Faq.astro';
+import { CATEGORIES, servicesIn } from '../data/site';
+import { breadcrumbSchema, faqSchema } from '../lib/schema';
 
 const faqs = [
   { q: 'What is a Full-Circle project?', a: 'A Full-Circle project combines any of our 13 services under one plan, one quotation and one schedule, with a single project lead as your point of contact.' },
@@ -16,7 +18,7 @@ const faqs = [
   title="Full-Circle Home Renovation & Fit-Out in Kerala"
   description="One plan, one quotation and one schedule across every trade. Cercles Full-Circle projects cover interiors, electrical, plumbing, exteriors and landscaping."
   path="/full-circle-projects/"
-  schema={[breadcrumbSchema([{ name: 'Home', path: '/' }, { name: 'Full-Circle Projects', path: '/full-circle-projects/' }])]}
+  schema={[faqSchema(faqs), breadcrumbSchema([{ name: 'Home', path: '/' }, { name: 'Full-Circle Projects', path: '/full-circle-projects/' }])]}
 >
   <PageHead
     title="One plan across every trade."
@@ -24,7 +26,7 @@ const faqs = [
     lead="A complete, end-to-end home transformation covering interiors, exteriors, utilities and outdoors, delivered by one accountable team."
     crumbs={[{ name: 'Full-Circle Projects' }]}
   >
-    <div class="btn-row"><a class="btn btn--lime" href="/contact/">Plan my project <Icon name="arrow" /></a></div>
+    <div class="btn-row"><a class="btn" href="/contact/">Plan my project <Icon name="arrow" /></a></div>
   </PageHead>
 
   <section class="section">
@@ -37,8 +39,8 @@ const faqs = [
         {CATEGORIES.map((c, i) => (
           <div class="panel reveal" style={`--d:${i % 2}`}>
             <h3 class="h3">{c.name}</h3>
-            <p class="hint" style="font-size:1rem">{c.blurb}</p>
-            <ul class="checklist">
+            <p class="muted" style="font-size:0.9375rem">{c.blurb}</p>
+            <ul class="checklist" style="margin-top:8px">
               {servicesIn(c.id).map((s) => <li><a href={`/services/${s.slug}/`}>{s.name}</a></li>)}
             </ul>
           </div>
@@ -47,30 +49,6 @@ const faqs = [
     </div>
   </section>
 
-  <section class="section section--white">
-    <div class="container">
-      <div class="section-head reveal">
-        <p class="eyebrow">How it runs</p>
-        <h2 class="h2">From first call to handover.</h2>
-      </div>
-      <ol class="process">
-        <span class="process__line" aria-hidden="true"></span>
-        {PROCESS.map((p) => (
-          <li class="pstep">
-            <span class="pstep__n">{p.n}</span>
-            <div><h3 class="h3">{p.title}</h3><p>{p.text}</p></div>
-          </li>
-        ))}
-      </ol>
-    </div>
-  </section>
-
-  <section class="section">
-    <div class="container">
-      <div class="section-head reveal"><p class="eyebrow">Questions</p><h2 class="h2">Full-Circle, explained.</h2></div>
-      <div class="faq reveal">
-        {faqs.map((f) => <details><summary>{f.q}</summary><div class="faq__a"><p>{f.a}</p></div></details>)}
-      </div>
-    </div>
-  </section>
+  <HowWeWork />
+  <Faq items={faqs} title="Full-Circle, explained." />
 </Base>

@@ -1,0 +1,26 @@
+---
+import { PROCESS } from '../data/site';
+---
+
+<section class="section" aria-labelledby="how-title">
+  <div class="container">
+    <div class="section-head reveal">
+      <p class="eyebrow">How we work</p>
+      <h2 class="h2" id="how-title">Five clear steps, from the first call to handover.</h2>
+    </div>
+    <ol class="process">
+      <span class="process__line" aria-hidden="true"></span>
+      {
+        PROCESS.map((p) => (
+          <li class="pstep">
+            <span class="pstep__n" aria-hidden="true">{p.n}</span>
+            <div>
+              <h3 class="h3">{p.title}</h3>
+              <p>{p.text}</p>
+            </div>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>

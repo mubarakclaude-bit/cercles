@@ -21,8 +21,8 @@ const serve = [
 ---
 
 <Base
-  title="About Cercles: One-Stop Home Solutions, Kozhikode"
-  description="Cercles is a one-stop home solutions company in Kozhikode. One team, one plan and one point of contact from roof to garden."
+  title="About Cercles: One-Stop Home Solutions"
+  description="Cercles is a one-stop home solutions company. One team, one plan and one point of contact from roof to garden."
   path="/about/"
   schema={[breadcrumbSchema([{ name: 'Home', path: '/' }, { name: 'About', path: '/about/' }])]}
 >
@@ -36,19 +36,19 @@ const serve = [
   <section class="section">
     <div class="container split">
       <div class="prose reveal">
-        <h2 class="h2" style="font-size:clamp(1.75rem,3.4vw,2.5rem);margin-bottom:20px">What we do</h2>
-        <p>
-          Cercles is a one-stop home solutions company based in Kozhikode, Kerala. We design, build and finish every part of a home, inside and out, and deliver it either as a complete project or as a single service. One quotation. One schedule. One standard of quality.
+        <h2 class="h2" style="margin-bottom:20px">What we do</h2>
+        <p class="lead" style="max-width:none">
+          Cercles is a one-stop home solutions company. We design, build and finish every part of a home, inside and out, and deliver it either as a complete project or as a single service. One quotation. One schedule. One standard of quality.
         </p>
-        <p>
+        <p class="muted">
           Our service brand is <strong>{SITE.brand}</strong>: a complete, end-to-end home transformation service covering interiors, exteriors, utilities and outdoors, delivered by one accountable team.
         </p>
-        <h2 class="h2" style="font-size:clamp(1.75rem,3.4vw,2.5rem);margin:48px 0 20px">Vision</h2>
-        <p>To be the most trusted name in home improvement, where every home is complete, comfortable and cared for.</p>
-        <h2 class="h2" style="font-size:clamp(1.75rem,3.4vw,2.5rem);margin:48px 0 20px">Mission</h2>
-        <p>To give every homeowner one reliable partner for every part of their home, with quality craftsmanship, clear pricing and smart, modern solutions.</p>
+        <h2 class="h3" style="margin:40px 0 10px">Vision</h2>
+        <p class="muted">To be the most trusted name in home improvement, where every home is complete, comfortable and cared for.</p>
+        <h2 class="h3" style="margin:32px 0 10px">Mission</h2>
+        <p class="muted">To give every homeowner one reliable partner for every part of their home, with quality craftsmanship, clear pricing and smart, modern solutions.</p>
       </div>
-      <aside class="sticky" style="display:grid;gap:20px">
+      <aside class="sticky">
         <div class="panel reveal">
           <h2 class="h3">Who we serve</h2>
           <ul class="checklist">{serve.map((s) => <li>{s}</li>)}</ul>
@@ -57,12 +57,12 @@ const serve = [
     </div>
   </section>
 
-  <section class="section section--navy on-dark">
+  <section class="section section--tile">
     <div class="container">
       <div class="section-head reveal"><p class="eyebrow">Core values</p><h2 class="h2">What we stand for.</h2></div>
       <div class="grid grid--3">
         {values.map(([t, d], i) => (
-          <div class="card card--dark reveal" style={`--d:${i % 3}`}>
+          <div class="card reveal" style={`--d:${i % 3}`}>
             <h3 class="h3">{t}</h3>
             <p>{d}</p>
           </div>
@@ -74,10 +74,10 @@ const serve = [
   <section class="section">
     <div class="container">
       <div class="cta on-dark reveal">
-        <h2 class="h2" style="max-width:18ch">One call to start your project.</h2>
+        <h2 class="h2">One call to start your project.</h2>
         <div class="btn-row">
           <a class="btn btn--lime" href="/contact/">Get a free quote <Icon name="arrow" /></a>
-          <a class="btn btn--ghost" href="/services/">Explore services</a>
+          <a class="btn btn--line" href="/services/">Explore services</a>
         </div>
       </div>
     </div>
