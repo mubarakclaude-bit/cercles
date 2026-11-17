@@ -67,22 +67,6 @@ if (reveals.length) {
   }
 }
 
-/* ---------- Journey text: appears as each part reaches the middle of the screen ---------- */
-const jsteps = document.querySelectorAll<HTMLElement>('.j-step');
-if (jsteps.length) {
-  if (reduce || !('IntersectionObserver' in window)) {
-    jsteps.forEach((el) => el.classList.add('in'));
-  } else {
-    const io2 = new IntersectionObserver(
-      (entries) => {
-        for (const en of entries) en.target.classList.toggle('in', en.isIntersecting);
-      },
-      { rootMargin: '-22% 0px -22% 0px', threshold: 0 },
-    );
-    jsteps.forEach((el) => io2.observe(el));
-  }
-}
-
 /* ---------- The 3D home that travels with the page (loaded after first paint) ---------- */
 const journey = document.querySelector<HTMLElement>('.journey');
 if (journey) {

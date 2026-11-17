@@ -14,7 +14,7 @@ export function initJourney({ wrap, canvas, still }: Options) {
   const eng = createEngine(canvas, mobile);
   const { world, cam } = eng;
   const pinsEl = wrap.querySelector<HTMLElement>('.journey__pins')!;
-  const steps = [...wrap.querySelectorAll<HTMLElement>('.j-step')].sort((a, b) => Number(a.dataset.k) - Number(b.dataset.k));
+  const steps = [...wrap.querySelectorAll<HTMLElement>('.journey__panels .j-step')].sort((a, b) => Number(a.dataset.k) - Number(b.dataset.k));
 
   // Pins: real links, sitting on the part of the house the visitor is reading about
   const base = import.meta.env.BASE_URL;
@@ -64,30 +64,46 @@ export function initJourney({ wrap, canvas, still }: Options) {
     });
   }
 
-  /* ---------- the page drives the camera ---------- */
-  let centers: number[] = [];
+  /* ---------- the page drives the camera and the text ---------- */
+  // The home stays pinned while a tall invisible track scrolls by. Position along the track
+  // decides which part of the house we are at (f = 0 for the banner, 1 for the first service, ...).
+  const track = wrap.querySelector<HTMLElement>('.journey__track')!;
+  const stage = wrap.querySelector<HTMLElement>('.journey__stage')!;
+  const N = POSES.length;
+  let trackTop = 0;
+  let stepPx = 1;
   function measure() {
-    const y0 = scrollY;
-    centers = steps.map((s) => {
-      const r = (s.querySelector('.j-card') ?? s).getBoundingClientRect();
-      return y0 + r.top + r.height / 2;
-    });
+    trackTop = track.getBoundingClientRect().top + scrollY;
+    stepPx = Math.max(1, (track.offsetHeight - 1.4 * stage.offsetHeight) / (N - 1));
   }
   let target_f = 0;
   let cur_f = 0;
   function readScroll() {
-    if (!centers.length) return;
-    const ref = scrollY + innerHeight * (W >= 900 ? 0.5 : 0.6);
-    let f = 0;
-    if (ref >= centers[centers.length - 1]) f = centers.length - 1;
-    else if (ref > centers[0]) {
-      let i = 0;
-      while (i < centers.length - 2 && ref >= centers[i + 1]) i++;
-      f = i + (ref - centers[i]) / (centers[i + 1] - centers[i] || 1);
-    }
-    target_f = f;
+    target_f = MathUtils.clamp((scrollY - trackTop) / stepPx, 0, N - 1);
   }
   addEventListener('scroll', readScroll, { passive: true });
+
+  // Text for each part: rises in from below, holds still, lifts away as the next one arrives.
+  // The fade windows never overlap, so two blocks of text are never on screen together.
+  const HOLD = 0.16;
+  const FADE = 0.3;
+  function placePanels(f: number) {
+    const lift = W >= 900 ? 56 : 44;
+    steps.forEach((el, k) => {
+      const d = f - k;
+      const a = Math.abs(d);
+      let o = a <= HOLD ? 1 : Math.max(0, 1 - (a - HOLD) / FADE);
+      o = o * o * (3 - 2 * o);
+      const on = o > 0.55;
+      el.style.setProperty('--o', o.toFixed(3));
+      el.style.setProperty('--y', `${(-d * lift).toFixed(1)}px`);
+      if (el.dataset.on !== String(on)) {
+        el.dataset.on = String(on);
+        if (on) el.removeAttribute('inert');
+        else el.setAttribute('inert', '');
+      }
+    });
+  }
 
   let visible = true;
   let running = false;
@@ -120,6 +136,7 @@ export function initJourney({ wrap, canvas, still }: Options) {
     });
     eng.applyState(s, e, time);
     placePins(e);
+    placePanels(cur_f);
     const ci = Math.round(e);
     if (ci !== curStep) {
       curStep = ci;

@@ -1,9 +1,8 @@
 ---
-// The home page, as one continuous journey. A white 3D model of a home stays with the
-// reader while ordinary page content scrolls past; each service pulls the camera to the
-// part of the house it is about, and that part pops to its own colour. All words and links
-// are plain HTML (good for search engines, and for anyone without WebGL, where it simply
-// reads as a normal page).
+// The home page, as one continuous journey. A 3D model of a home stays pinned on screen while
+// scrolling moves through the services: the text for each part rises in, holds still for a
+// moment so it can be read, then lifts away as the next one arrives. All words and links are
+// plain HTML (good for search engines, and for anyone without WebGL, where it reads as a normal page).
 import Icon from './Icon.astro';
 import { SITE, SERVICE_BY_SLUG } from '../data/site';
 import { POSES, POP, CHAPTER } from '../scene/director';
@@ -12,69 +11,76 @@ const order = POSES.map((p) => p.slug);
 const inChapter = (slug: string) => order.filter((s) => s && CHAPTER[s] === CHAPTER[slug]);
 ---
 
-<div class="journey" id="journey">
+<div class="journey" id="journey" style={`--n:${POSES.length}`}>
   <div class="journey__stage" aria-hidden="true">
     <canvas class="journey__canvas"></canvas>
+    <div class="journey__fade"></div>
   </div>
+
+  <div class="journey__panels">
+    <!-- 0 · the banner -->
+    <section class="j-step j-step--hero" data-k="0" data-side="left" data-label="" aria-labelledby="hero-title">
+      <div class="j-card j-card--hero">
+        <p class="eyebrow">Cercles Full-Circle Living</p>
+        <h1 class="j-hero-title" id="hero-title">
+          <span class="line"><span style="--i:0">Roof to Garden.</span></span>
+          <span class="line"><span class="accent-blue" style="--i:1">One Call.</span></span>
+        </h1>
+        <p class="lead">
+          One-stop home solutions across Kerala: interiors, electrical, plumbing, exteriors, landscaping and irrigation from one accountable team.
+        </p>
+        <div class="btn-row">
+          <a class="btn" href="/contact/">Get a free quote</a>
+          <a class="btn btn--text" href="/services/">All 13 services <Icon name="arrow" /></a>
+        </div>
+        <p class="j-hint"><span></span>Scroll to walk through the home</p>
+      </div>
+    </section>
+
+    <!-- 1–13 · one step per service, in the order the house is toured -->
+    {
+      order.map((slug, k) => {
+        if (!slug) return null;
+        const s = SERVICE_BY_SLUG[slug];
+        const side = (POSES[k].fx ?? 0) > 0 ? 'left' : 'right';
+        const group = inChapter(slug);
+        const eyebrow = group.length > 1 ? `${CHAPTER[slug]} · ${group.indexOf(slug) + 1} of ${group.length}` : CHAPTER[slug];
+        return (
+          <article class="j-step" data-k={k} data-side={side} data-label={s.label} id={`tour-${slug}`} aria-labelledby={`t-${slug}`} style={`--pop:${POP[slug]}`}>
+            <div class="j-card">
+              <p class="eyebrow j-eyebrow">{eyebrow}</p>
+              <h2 class="j-title" id={`t-${slug}`}>{s.name}</h2>
+              <p class="j-text">{s.intro}</p>
+              <ul class="j-points">
+                {s.includes.slice(0, 3).map((i) => <li>{i}</li>)}
+              </ul>
+              <a class="j-link" href={`/services/${slug}/`}>
+                Explore {s.label.toLowerCase()} <Icon name="arrow" />
+              </a>
+            </div>
+          </article>
+        );
+      })
+    }
+
+    <!-- 14 · the circle closes -->
+    <section class="j-step j-step--end" data-k={POSES.length - 1} data-side="center" data-label="" aria-labelledby="end-title">
+      <div class="j-card j-card--end">
+        <p class="eyebrow">One team</p>
+        <h2 class="j-title" id="end-title">The circle, closed.</h2>
+        <p class="lead">
+          One call to start. One plan across every trade. One team accountable from first visit to handover. Book the whole home, or just the one service you need.
+        </p>
+        <div class="btn-row">
+          <a class="btn" href="/contact/">Plan my project</a>
+          <a class="btn btn--text" href={`tel:${SITE.phoneRaw}`}>Call {SITE.phone} <Icon name="arrow" /></a>
+        </div>
+      </div>
+    </section>
+  </div>
+
   <div class="journey__pinlayer"><div class="journey__pins"></div></div>
 
-  <!-- 0 · the banner -->
-  <section class="j-step j-step--hero" data-k="0" data-side="left" data-label="" aria-labelledby="hero-title">
-    <div class="j-card j-card--hero">
-      <p class="eyebrow">Cercles Full-Circle Living</p>
-      <h1 class="j-hero-title" id="hero-title">
-        <span class="line"><span style="--i:0">Roof to Garden.</span></span>
-        <span class="line"><span class="accent-blue" style="--i:1">One Call.</span></span>
-      </h1>
-      <p class="lead">
-        One-stop home solutions across Kerala: interiors, electrical, plumbing, exteriors, landscaping and irrigation from one accountable team.
-      </p>
-      <div class="btn-row">
-        <a class="btn" href="/contact/">Get a free quote</a>
-        <a class="btn btn--text" href="/services/">All 13 services <Icon name="arrow" /></a>
-      </div>
-      <p class="j-hint"><span></span>Scroll to walk through the home</p>
-    </div>
-  </section>
-
-  <!-- 1–13 · one step per service, in the order the house is toured -->
-  {
-    order.map((slug, k) => {
-      if (!slug) return null;
-      const s = SERVICE_BY_SLUG[slug];
-      const side = (POSES[k].fx ?? 0) > 0 ? 'left' : 'right';
-      const group = inChapter(slug);
-      const eyebrow = group.length > 1 ? `${CHAPTER[slug]} · ${group.indexOf(slug) + 1} of ${group.length}` : CHAPTER[slug];
-      return (
-        <article class="j-step" data-k={k} data-side={side} data-label={s.label} id={`tour-${slug}`} aria-labelledby={`t-${slug}`} style={`--pop:${POP[slug]}`}>
-          <div class="j-card">
-            <p class="eyebrow j-eyebrow">{eyebrow}</p>
-            <h2 class="j-title" id={`t-${slug}`}>{s.name}</h2>
-            <p class="j-text">{s.intro}</p>
-            <ul class="j-points">
-              {s.includes.slice(0, 3).map((i) => <li>{i}</li>)}
-            </ul>
-            <a class="j-link" href={`/services/${slug}/`}>
-              Explore {s.label.toLowerCase()} <Icon name="arrow" />
-            </a>
-          </div>
-        </article>
-      );
-    })
-  }
-
-  <!-- 14 · the circle closes -->
-  <section class="j-step j-step--end" data-k={POSES.length - 1} data-side="center" data-label="" aria-labelledby="end-title">
-    <div class="j-card j-card--end">
-      <p class="eyebrow">One team</p>
-      <h2 class="j-title" id="end-title">The circle, closed.</h2>
-      <p class="lead">
-        One call to start. One plan across every trade. One team accountable from first visit to handover. Book the whole home, or just the one service you need.
-      </p>
-      <div class="btn-row" style="justify-content:center">
-        <a class="btn" href="/contact/">Plan my project</a>
-        <a class="btn btn--text" href={`tel:${SITE.phoneRaw}`}>Call {SITE.phone} <Icon name="arrow" /></a>
-      </div>
-    </div>
-  </section>
+  <!-- scroll distance: the home stays pinned while this passes -->
+  <div class="journey__track" aria-hidden="true"></div>
 </div>

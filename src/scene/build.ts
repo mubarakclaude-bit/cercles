@@ -162,6 +162,8 @@ export function build() {
   const gElec = new Group();
   const gPlumb = new Group();
   const gGarden = new Group();
+  const gProc = new Group(); // hand-built trees and beds: used until the real tree models load
+  gGarden.add(gProc);
   stage.add(gGround, gHouse, gInside, gUpper, gRoof, gElec, gPlumb, gGarden);
 
   const FH = 3.3;
@@ -667,7 +669,7 @@ export function build() {
   const roundTree = (x: number, z: number, s: number, m = leafA) => {
     const g = new Group();
     g.position.set(x, 0, z);
-    gGarden.add(g);
+    gProc.add(g);
     cylinder(g, 0.16 * s, 1.7 * s, 0, 0.85 * s, 0, trunk, true, true);
     const blobs: [number, number, number, number][] = [[0, 2.35, 0, 1.15], [0.75, 2.95, -0.2, 0.8], [-0.7, 2.9, 0.35, 0.78], [0.1, 3.6, 0.15, 0.68]];
     blobs.forEach(([bx, by, bz, r], i) => ball(g, r * s, bx * s, by * s, bz * s, i % 2 ? leafB : m));
@@ -676,7 +678,7 @@ export function build() {
   const palm = (x: number, z: number, s: number) => {
     const g = new Group();
     g.position.set(x, 0, z);
-    gGarden.add(g);
+    gProc.add(g);
     const lean = Math.sin(x * 12.9 + z * 4.1) * 0.1;
     for (let i = 0; i < 7; i++) {
       const c = cylinder(g, (0.17 - i * 0.01) * s, 0.95 * s, lean * i * s, (0.47 + i * 0.9) * s, 0, trunk, true, true);
@@ -710,14 +712,14 @@ export function build() {
   const flowerSpots: [number, number, string][] = [];
   for (let i = 0; i < 10; i++) {
     const x = -5.6 + i * 1.0;
-    ball(gGarden, 0.42, x, 0.42, 4.9, i % 2 ? leafB : leafA);
+    ball(gProc, 0.42, x, 0.42, 4.9, i % 2 ? leafB : leafA);
     if (x > -1 && x < 2.6) continue;
     flowerSpots.push([x + 0.12, 5.15, ['#ff6fa5', '#ffb020', '#8b5cf6', '#ff6a4d'][i % 4]]);
   }
   flowerSpots.forEach(([x, z, c]) => {
     const fm2 = new MeshStandardMaterial({ color: '#f6f4ee', roughness: 0.6 });
     (tints.landscaping ||= []).push({ m: fm2, base: fm2.color.clone(), to: new Color(c) });
-    ball(gGarden, 0.13, x, 0.92, z, fm2, false, sphere);
+    ball(gProc, 0.13, x, 0.92, z, fm2, false, sphere);
   });
   box(gGarden, 10, 0.55, 0.6, -1.5, 0.28, -7.6, leafB);
   box(gGarden, 0.6, 0.55, 6.4, 11.2, 0.28, -3.6, leafB);
@@ -729,6 +731,22 @@ export function build() {
     cylinder(gGarden, 0.05, 1.0, x, 0.5, z, lampPost, false, true);
     ball(gGarden, 0.16, x, 1.1, z, lampGlow, false, sphere);
   }
+
+  // where the real tree models go (same spots as the hand-built ones)
+  const treeSpots: { type: 'round' | 'palm'; x: number; z: number; s: number }[] = [
+    { type: 'palm', x: -10.2, z: -7.6, s: 1.15 },
+    { type: 'palm', x: -8.0, z: -8.6, s: 0.95 },
+    { type: 'palm', x: 10.4, z: -7.2, s: 1.05 },
+    { type: 'palm', x: 11, z: 3.5, s: 0.9 },
+    { type: 'round', x: -10.6, z: 6.4, s: 1.05 },
+    { type: 'round', x: 10.6, z: 6.6, s: 0.85 },
+    { type: 'round', x: -10.0, z: -3.8, s: 0.75 },
+    { type: 'round', x: 5.6, z: -8.4, s: 0.9 },
+    { type: 'round', x: -4.0, z: -8.6, s: 0.8 },
+  ];
+  const bedSpots: { x: number; z: number }[] = [];
+  for (let i = 0; i < 10; i++) bedSpots.push({ x: -5.6 + i * 1.0, z: 4.9 });
+  const flowerPoints = flowerSpots.map(([x, z, c]) => ({ x, z, c }));
 
   /* ---------- sprinklers and water ---------- */
   const heads: Vector3[] = [V(-8.4, 0.2, 6.5), V(-4.0, 0.2, 6.6), V(-9.6, 0.2, -3.0), V(0.4, 0.2, -6.0), V(7.2, 0.2, -5.6), V(10.2, 0.2, 5.2)];
@@ -782,6 +800,12 @@ export function build() {
   return {
     root,
     stage,
+    gGarden,
+    gProc,
+    treeSpots,
+    bedSpots,
+    flowerPoints,
+    tintsRef: tints,
     gRoof,
     gUpper,
     gElec,

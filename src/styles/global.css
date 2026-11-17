@@ -1181,13 +1181,16 @@ html.js .reveal.in {
 }
 
 /* =====================================================================
-   Home journey: a 3D home that travels with the page
+   Home journey: a 3D home pinned on screen while scrolling walks through the services.
+   Text rises in, holds still so it can be read, then lifts away as the next arrives.
    ===================================================================== */
 .journey {
+  --step: 120svh; /* scroll distance per service */
   position: relative;
   background: #fff;
 }
 .journey__stage,
+.journey__panels,
 .journey__pinlayer {
   position: sticky;
   top: 0;
@@ -1197,6 +1200,10 @@ html.js .reveal.in {
 }
 .journey__stage {
   z-index: 0;
+  overflow: hidden;
+}
+.journey__panels {
+  z-index: 2;
   overflow: hidden;
 }
 .journey__pinlayer {
@@ -1214,41 +1221,48 @@ html.js .reveal.in {
 .journey.is-live .journey__canvas {
   opacity: 1;
 }
+/* phones: a fixed soft fade under the text so it reads over the house (it never moves) */
+.journey__fade {
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 52%;
+  background: linear-gradient(to top, #fff 40%, rgb(255 255 255 / 0));
+}
 .journey__pins {
   position: absolute;
   inset: 0;
 }
-html:not(.js) .journey__stage,
-html:not(.js) .journey__pinlayer,
-.journey--flat .journey__stage,
-.journey--flat .journey__pinlayer {
-  display: none;
+.journey__track {
+  height: calc((var(--n) - 1) * var(--step) + 140svh);
 }
 
 .j-step {
-  position: relative;
-  z-index: 1;
-  min-height: 92svh;
+  position: absolute;
+  inset: 0;
   display: flex;
   align-items: flex-end;
-  padding: calc(var(--header-h) + 8px) var(--gutter) 0;
+  padding: calc(var(--header-h) + 8px) var(--gutter) max(28px, env(safe-area-inset-bottom));
+  opacity: var(--o, 0);
+  translate: 0 var(--y, 0px);
+  pointer-events: none;
+  will-change: opacity, translate;
 }
-.j-step--hero,
-.j-step--end {
-  min-height: 100svh;
+.j-step--hero {
+  --o: 1;
+}
+.j-step[data-on='true'] .j-card {
+  pointer-events: auto;
 }
 .j-card {
   position: relative;
   display: grid;
   width: 100%;
-  align-content: end;
-  margin-inline: calc(var(--gutter) * -1);
-  padding: 72px var(--gutter) 26px;
-  /* on phones the text rests on a soft white fade so it stays readable over the house */
-  background: linear-gradient(to top, #fff 60%, rgb(255 255 255 / 0));
+  max-width: 34rem;
+  text-align: left;
+  justify-items: start;
 }
 .j-eyebrow {
-  margin-bottom: 12px;
+  margin-bottom: 10px;
   color: color-mix(in srgb, var(--pop, #396db5) 62%, #000);
 }
 .j-title {
@@ -1256,24 +1270,23 @@ html:not(.js) .journey__pinlayer,
   font-weight: 600;
   line-height: 1.12;
   letter-spacing: -0.025em;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
 }
 .j-text {
   font-size: 1rem;
   line-height: 1.55;
   color: var(--muted);
-  max-width: 34rem;
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 3;
   overflow: hidden;
 }
 .j-points {
-  margin-top: 16px;
-  max-width: 34rem;
+  width: 100%;
+  margin-top: 14px;
 }
 .j-points li {
-  padding: 10px 0;
+  padding: 9px 0;
   border-top: 1px solid var(--line);
   font-size: 0.9375rem;
 }
@@ -1285,7 +1298,7 @@ html:not(.js) .journey__pinlayer,
   align-items: center;
   gap: 6px;
   min-height: 44px;
-  margin-top: 4px;
+  margin-top: 2px;
   font-size: 0.9375rem;
   font-weight: 500;
   color: color-mix(in srgb, var(--pop, #396db5) 55%, #000);
@@ -1301,9 +1314,7 @@ html:not(.js) .journey__pinlayer,
 }
 
 .j-card--hero {
-  gap: 16px;
-  padding-top: 90px;
-  padding-bottom: 32px;
+  gap: 14px;
 }
 .j-hero-title {
   font-size: clamp(2.5rem, 11vw, 3.25rem);
@@ -1369,60 +1380,64 @@ html:not(.js) .journey__pinlayer,
   }
 }
 
+/* the closing chapter is centred, on every screen */
+.j-step--end {
+  justify-content: center;
+}
 .j-card--end {
   text-align: center;
   justify-items: center;
-  gap: 16px;
+  gap: 14px;
+  max-width: 36rem;
 }
 .j-card--end .lead {
   margin-inline: auto;
 }
-
-/* Text appears rather than sitting in a box: it rises and sharpens as you reach each part */
-html.js .j-step:not(.j-step--hero) .j-card > * {
-  opacity: 0;
-  transform: translateY(22px);
-  filter: blur(6px);
-  transition:
-    opacity 0.35s ease,
-    transform 0.35s ease,
-    filter 0.35s ease;
-}
-html.js .j-step.in:not(.j-step--hero) .j-card > * {
-  opacity: 1;
-  transform: none;
-  filter: none;
-  transition:
-    opacity 0.9s var(--ease),
-    transform 1.1s var(--ease),
-    filter 0.9s var(--ease);
-}
-html.js .j-step.in .j-card > *:nth-child(2) {
-  transition-delay: 0.07s;
-}
-html.js .j-step.in .j-card > *:nth-child(3) {
-  transition-delay: 0.14s;
-}
-html.js .j-step.in .j-card > *:nth-child(4) {
-  transition-delay: 0.22s;
-}
-html.js .j-step.in .j-card > *:nth-child(5) {
-  transition-delay: 0.3s;
+.j-card--end .btn-row {
+  justify-content: center;
 }
 
+/* No 3D (or no JavaScript): the same words, as an ordinary page */
+html:not(.js) .journey__stage,
+html:not(.js) .journey__pinlayer,
+html:not(.js) .journey__track,
+.journey--flat .journey__stage,
+.journey--flat .journey__pinlayer,
+.journey--flat .journey__track {
+  display: none;
+}
+html:not(.js) .journey__panels,
+.journey--flat .journey__panels {
+  position: static;
+  height: auto;
+  margin: 0;
+  overflow: visible;
+}
 html:not(.js) .j-step,
 .journey--flat .j-step {
-  min-height: 0;
-  padding-block: 8px;
-}
-html:not(.js) .j-card,
-.journey--flat .j-card {
-  background: none;
-  padding-block: 28px;
+  position: static;
+  opacity: 1;
+  translate: none;
+  padding: 28px var(--gutter);
+  pointer-events: auto;
 }
 html:not(.js) .j-step--hero,
 .journey--flat .j-step--hero {
-  padding-top: calc(var(--header-h) + 24px);
+  padding-top: calc(var(--header-h) + 32px);
+}
+html:not(.js) .j-card,
+.journey--flat .j-card {
+  pointer-events: auto;
+}
+html:not(.js) .j-text,
+.journey--flat .j-text {
+  display: block;
+  -webkit-line-clamp: unset;
+  overflow: visible;
+}
+html:not(.js) .j-points li:nth-child(n + 3),
+.journey--flat .j-points li:nth-child(n + 3) {
+  display: block;
 }
 
 /* Pins on the house: the colour of the part being shown */
@@ -1499,17 +1514,19 @@ html:not(.js) .j-step--hero,
 }
 
 @media (min-width: 900px) {
+  .journey {
+    --step: 130svh;
+  }
+  .journey__fade {
+    display: none;
+  }
   .j-step {
-    min-height: 100svh;
     align-items: center;
     padding-block: calc(var(--header-h) + 3svh) 3svh;
     padding-inline: max(var(--gutter), calc((100vw - var(--max)) / 2));
   }
   .j-card {
     width: min(460px, 38vw);
-    margin-inline: 0;
-    padding: 0;
-    background: none;
     align-content: center;
   }
   .j-card::before {
@@ -1520,18 +1537,14 @@ html:not(.js) .j-step--hero,
     background: radial-gradient(closest-side, rgb(255 255 255 / 0.94) 55%, rgb(255 255 255 / 0));
     pointer-events: none;
   }
-  .j-step[data-side='left'] .j-card {
-    margin-right: auto;
-  }
-  .j-step[data-side='right'] .j-card {
-    margin-left: auto;
+  .j-step[data-side='right'] {
+    justify-content: flex-end;
   }
   .j-step[data-side='center'] {
     align-items: flex-end;
     padding-bottom: 8svh;
   }
   .j-step[data-side='center'] .j-card {
-    margin-inline: auto;
     width: min(640px, 70vw);
   }
   .j-title {
@@ -1553,7 +1566,6 @@ html:not(.js) .j-step--hero,
   .j-card--hero {
     width: min(560px, 44vw);
     gap: 20px;
-    padding: 0;
   }
   .j-hero-title {
     font-size: clamp(2.75rem, 4.8vw, 4.5rem);
@@ -1567,40 +1579,19 @@ html:not(.js) .j-step--hero,
 }
 
 /* =====================================================================
-   Service pages: the same 3D part, held still beside its details
+   Service pages: the same 3D home fills the first screen, held still on this part,
+   with the title beside it. Scrolling continues into the details.
    ===================================================================== */
 .shero {
-  position: relative;
-  padding: calc(var(--header-h) + clamp(28px, 4vw, 56px)) 0 clamp(40px, 5vw, 72px);
-  background: linear-gradient(var(--white), var(--tile));
-}
-.shero__grid {
-  display: grid;
-  gap: 28px;
-  align-items: center;
-}
-.shero .h1 {
-  font-size: clamp(2rem, 3.6vw, 3rem);
-  line-height: 1.08;
-}
-.shero__copy {
-  display: grid;
-  gap: 18px;
-  align-content: center;
   --pop: var(--blue);
-}
-.shero__copy .eyebrow {
-  color: color-mix(in srgb, var(--pop) 62%, #000);
+  position: relative;
+  min-height: 100svh;
+  overflow: hidden;
+  background: #fff;
 }
 .shero__view {
-  position: relative;
-  order: -1;
-  height: min(78vw, 380px);
-  border-radius: var(--r-lg);
-  background:
-    radial-gradient(70% 70% at 50% 40%, #fff, rgb(255 255 255 / 0) 70%),
-    linear-gradient(160deg, #f9fafc, #eef2f7);
-  overflow: hidden;
+  position: absolute;
+  inset: 0;
 }
 .shero__view canvas {
   position: absolute;
@@ -1608,7 +1599,7 @@ html:not(.js) .j-step--hero,
   width: 100%;
   height: 100%;
   opacity: 0;
-  transition: opacity 1.2s var(--ease);
+  transition: opacity 1.4s var(--ease);
 }
 .shero__view.is-live canvas {
   opacity: 1;
@@ -1617,12 +1608,56 @@ html:not(.js) .j-step--hero,
   position: absolute;
   inset: 0;
   margin: auto;
-  width: 38%;
+  width: 40%;
+  max-width: 320px;
   color: var(--pop);
-  opacity: 0.12;
+  opacity: 0.1;
 }
 .shero__view.is-live .mark {
   opacity: 0;
+}
+.shero__fade {
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 58%;
+  background: linear-gradient(to top, #fff 42%, rgb(255 255 255 / 0));
+  pointer-events: none;
+}
+.shero__inner {
+  position: relative;
+  z-index: 2;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding-top: calc(var(--header-h) + 16px);
+  padding-bottom: max(28px, env(safe-area-inset-bottom));
+  pointer-events: none;
+}
+.shero__inner a,
+.shero__inner button {
+  pointer-events: auto;
+}
+.shero__copy {
+  display: grid;
+  gap: 14px;
+  justify-items: start;
+  max-width: 34rem;
+}
+.shero__copy .eyebrow {
+  color: color-mix(in srgb, var(--pop) 62%, #000);
+}
+.shero__copy h1 {
+  font-size: clamp(2.25rem, 9vw, 3rem);
+  line-height: 1.06;
+  letter-spacing: -0.03em;
+}
+.shero__copy .lead {
+  font-size: 1.0625rem;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4;
+  overflow: hidden;
 }
 .shero__facts {
   display: flex;
@@ -1632,18 +1667,64 @@ html:not(.js) .j-step--hero,
 .shero__facts li {
   padding: 6px 14px;
   border-radius: var(--r-pill);
-  background: #fff;
+  background: rgb(255 255 255 / 0.9);
   box-shadow: inset 0 0 0 1px var(--line);
   font-size: 0.8125rem;
 }
+.shero__more {
+  display: none;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.shero__more svg {
+  width: 14px;
+  height: 14px;
+  transform: rotate(90deg);
+}
 @media (min-width: 900px) {
-  .shero__grid {
-    grid-template-columns: 0.95fr 1.05fr;
-    gap: clamp(32px, 5vw, 72px);
+  .shero__fade {
+    display: none;
   }
-  .shero__view {
-    order: 0;
-    height: clamp(420px, 56vh, 560px);
+  .shero__inner {
+    padding-top: calc(var(--header-h) + 24px);
+  }
+  .shero__body {
+    flex: 1;
+    display: flex;
+    align-items: center;
+  }
+  .shero__copy {
+    position: relative;
+    width: min(500px, 40vw);
+    gap: 18px;
+  }
+  .shero__copy::before {
+    content: '';
+    position: absolute;
+    z-index: -1;
+    inset: -56px -80px;
+    background: radial-gradient(closest-side, rgb(255 255 255 / 0.94) 55%, rgb(255 255 255 / 0));
+  }
+  .shero__copy h1 {
+    font-size: clamp(2.5rem, 4vw, 3.5rem);
+  }
+  .shero__copy .lead {
+    -webkit-line-clamp: unset;
+    display: block;
+    overflow: visible;
+    font-size: 1.125rem;
+  }
+  .shero__more {
+    display: inline-flex;
+  }
+}
+@media (max-width: 899px) {
+  .shero__body {
+    margin-top: auto;
   }
 }
 

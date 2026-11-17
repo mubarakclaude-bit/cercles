@@ -14,6 +14,7 @@ import {
 } from 'three';
 import { build, type World } from './build';
 import { POSE_INDEX, weight, type State } from './director';
+import { loadNature } from './nature';
 
 export interface View {
   wide: boolean; // desktop layout: shift the home sideways to make room for text
@@ -55,6 +56,9 @@ export function createEngine(canvas: HTMLCanvasElement, mobile: boolean) {
   const fill = new DirectionalLight(0xdfe8ff, 0.5);
   fill.position.set(13, 9, -7);
   scene.add(fill);
+
+  // swap in the real tree models once they have loaded (the hand-built ones stay if anything fails)
+  loadNature(world, import.meta.env.BASE_URL).catch(() => undefined);
 
   const cam = new OrthographicCamera(-10, 10, 10, -10, 0.1, 240);
   const target = new Vector3();

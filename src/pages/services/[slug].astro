@@ -31,19 +31,24 @@ const path = `/services/${s.slug}/`;
     ]),
   ]}
 >
-  <section class="shero">
-    <div class="container">
-      <nav class="crumbs" aria-label="Breadcrumb" style="margin-bottom:24px">
+  <section class="shero" style={`--pop:${POP[s.slug]}`}>
+    <div class="shero__view" data-part={s.slug} aria-hidden="true">
+      <Mark class="mark" />
+      <canvas></canvas>
+      <div class="shero__fade"></div>
+    </div>
+    <div class="container shero__inner">
+      <nav class="crumbs" aria-label="Breadcrumb">
         <ol>
           <li><a href="/">Home</a></li>
           <li><a href="/services/">Services</a></li>
           <li><span aria-current="page">{s.name}</span></li>
         </ol>
       </nav>
-      <div class="shero__grid">
-        <div class="shero__copy" style={`--pop:${POP[s.slug]}`}>
+      <div class="shero__body">
+        <div class="shero__copy">
           <p class="eyebrow">{cat.name}</p>
-          <h1 class="h1">{s.title}</h1>
+          <h1>{s.title}</h1>
           <p class="lead">{s.intro}</p>
           <ul class="shero__facts">
             {s.idealFor.map((i) => <li>{i}</li>)}
@@ -53,15 +58,12 @@ const path = `/services/${s.slug}/`;
             <a class="btn btn--line" href={`tel:${SITE.phoneRaw}`}>Call {SITE.phone}</a>
           </div>
         </div>
-        <div class="shero__view" data-part={s.slug} style={`--pop:${POP[s.slug]}`} aria-hidden="true">
-          <Mark class="mark" />
-          <canvas></canvas>
-        </div>
       </div>
+      <a class="shero__more" href="#details" style="align-self:flex-start;text-decoration:none">Details <Icon name="arrow" /></a>
     </div>
   </section>
 
-  <section class="section">
+  <section class="section" id="details">
     <div class="container split">
       <div style="display:grid;gap:clamp(40px,5vw,64px)">
         <div class="reveal">
