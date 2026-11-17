@@ -25,6 +25,6 @@ Static, SEO-first site for Cercles (cercles.in). Built with Astro, no UI framewo
 2. Project photos and a portfolio page
 3. Real customer reviews (Google Business Profile first)
 
-## Hosting (free)
+## Test copy (GitHub Pages)
 
-Cloudflare Pages: connect the Git repo, build command `npm run build`, output directory `dist`. `public/_headers` sets security and caching headers.
+Every push to `main` builds a test copy with `npm run build:demo` and publishes it with GitHub Pages (`.github/workflows/pages.yml`). The test copy lives under the repository's sub-path, is marked noindex, and has its own `robots.txt` that blocks search engines. The real site is built with plain `npm run build` and is not hosted yet.

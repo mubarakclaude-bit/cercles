@@ -64,7 +64,7 @@ export function initJourney({ wrap, canvas, still }: Options) {
     if (!p.slug || !world.pinPos[p.slug]) return null;
     const a = document.createElement('a');
     a.className = 'pin';
-    a.href = `/services/${p.slug}/`;
+    a.href = `${import.meta.env.BASE_URL}services/${p.slug}/`;
     a.tabIndex = -1;
     a.style.setProperty('--pop', POP[p.slug] ?? '#3b6db5');
     a.innerHTML = `<i></i><span>${steps[i]?.dataset.label ?? p.slug}</span>`;
