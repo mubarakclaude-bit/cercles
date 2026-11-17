@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://cercles.in/sitemap-index.xml

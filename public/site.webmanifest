@@ -1,0 +1,13 @@
+{
+  "name": "Cercles Full-Circle Living",
+  "short_name": "Cercles",
+  "description": "One-stop home solutions in Kozhikode, Kerala. Roof to Garden. One Call.",
+  "start_url": "/",
+  "display": "browser",
+  "background_color": "#0c0d2e",
+  "theme_color": "#0c0d2e",
+  "icons": [
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}

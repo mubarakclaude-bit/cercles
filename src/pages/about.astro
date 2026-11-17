@@ -1,0 +1,85 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHead from '../components/PageHead.astro';
+import Icon from '../components/Icon.astro';
+import { SITE } from '../data/site';
+import { breadcrumbSchema } from '../lib/schema';
+
+const values = [
+  ['Craftsmanship', 'Every finish is built to last and made to look good.'],
+  ['Transparency', 'Clear quotations, no surprises.'],
+  ['Reliability', 'Work delivered on schedule, as promised.'],
+  ['Accountability', 'One team that owns the result from start to finish.'],
+  ['Smart living', 'Automation built into curtains, lighting and irrigation.'],
+];
+const serve = [
+  'Homeowners renovating or upgrading',
+  'New villa and apartment owners who need a complete fit-out',
+  'Landlords and property investors',
+  'Small commercial spaces such as shops and offices',
+];
+---
+
+<Base
+  title="About Cercles: One-Stop Home Solutions, Kozhikode"
+  description="Cercles is a one-stop home solutions company in Kozhikode. One team, one plan and one point of contact from roof to garden."
+  path="/about/"
+  schema={[breadcrumbSchema([{ name: 'Home', path: '/' }, { name: 'About', path: '/about/' }])]}
+>
+  <PageHead
+    title="Complete the circle of your home."
+    eyebrow="About Cercles"
+    lead="A home is never finished in one place. The curtains need a painter, the painter needs an electrician, the electrician needs a carpenter, and somewhere in the middle, you are the one chasing everyone. Cercles closes the circle."
+    crumbs={[{ name: 'About' }]}
+  />
+
+  <section class="section">
+    <div class="container split">
+      <div class="prose reveal">
+        <h2 class="h2" style="font-size:clamp(1.75rem,3.4vw,2.5rem);margin-bottom:20px">What we do</h2>
+        <p>
+          Cercles is a one-stop home solutions company based in Kozhikode, Kerala. We design, build and finish every part of a home, inside and out, and deliver it either as a complete project or as a single service. One quotation. One schedule. One standard of quality.
+        </p>
+        <p>
+          Our service brand is <strong>{SITE.brand}</strong>: a complete, end-to-end home transformation service covering interiors, exteriors, utilities and outdoors, delivered by one accountable team.
+        </p>
+        <h2 class="h2" style="font-size:clamp(1.75rem,3.4vw,2.5rem);margin:48px 0 20px">Vision</h2>
+        <p>To be the most trusted name in home improvement, where every home is complete, comfortable and cared for.</p>
+        <h2 class="h2" style="font-size:clamp(1.75rem,3.4vw,2.5rem);margin:48px 0 20px">Mission</h2>
+        <p>To give every homeowner one reliable partner for every part of their home, with quality craftsmanship, clear pricing and smart, modern solutions.</p>
+      </div>
+      <aside class="sticky" style="display:grid;gap:20px">
+        <div class="panel reveal">
+          <h2 class="h3">Who we serve</h2>
+          <ul class="checklist">{serve.map((s) => <li>{s}</li>)}</ul>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <section class="section section--navy on-dark">
+    <div class="container">
+      <div class="section-head reveal"><p class="eyebrow">Core values</p><h2 class="h2">What we stand for.</h2></div>
+      <div class="grid grid--3">
+        {values.map(([t, d], i) => (
+          <div class="card card--dark reveal" style={`--d:${i % 3}`}>
+            <h3 class="h3">{t}</h3>
+            <p>{d}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="cta on-dark reveal">
+        <h2 class="h2" style="max-width:18ch">One call to start your project.</h2>
+        <div class="btn-row">
+          <a class="btn btn--lime" href="/contact/">Get a free quote <Icon name="arrow" /></a>
+          <a class="btn btn--ghost" href="/services/">Explore services</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>

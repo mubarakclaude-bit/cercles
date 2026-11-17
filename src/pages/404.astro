@@ -1,0 +1,14 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHead from '../components/PageHead.astro';
+import Icon from '../components/Icon.astro';
+---
+
+<Base title="Page not found" description="This page could not be found." path="/404/" noindex noFab>
+  <PageHead title="This circle is not closed." eyebrow="404" lead="The page you were looking for does not exist. Let's get you back on track." crumbs={[{ name: 'Not found' }]}>
+    <div class="btn-row">
+      <a class="btn btn--lime" href="/">Back home <Icon name="arrow" /></a>
+      <a class="btn btn--ghost" href="/services/">Browse services</a>
+    </div>
+  </PageHead>
+</Base>

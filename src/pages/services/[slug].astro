@@ -1,0 +1,106 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHead from '../../components/PageHead.astro';
+import Icon from '../../components/Icon.astro';
+import QuoteForm from '../../components/QuoteForm.astro';
+import { SERVICES, SERVICE_BY_SLUG, AREAS, CATEGORIES, SITE } from '../../data/site';
+import { breadcrumbSchema, faqSchema, serviceSchema } from '../../lib/schema';
+
+export function getStaticPaths() {
+  return SERVICES.map((s) => ({ params: { slug: s.slug }, props: { s } }));
+}
+const { s } = Astro.props;
+const cat = CATEGORIES.find((c) => c.id === s.category)!;
+const related = s.related.map((r) => SERVICE_BY_SLUG[r]).filter(Boolean);
+const path = `/services/${s.slug}/`;
+---
+
+<Base
+  title={`${s.name} in Kozhikode, Kerala`}
+  description={s.description}
+  path={path}
+  schema={[
+    serviceSchema(s),
+    faqSchema(s.faqs),
+    breadcrumbSchema([
+      { name: 'Home', path: '/' },
+      { name: 'Services', path: '/services/' },
+      { name: s.name, path },
+    ]),
+  ]}
+>
+  <PageHead
+    title={s.title}
+    eyebrow={cat.name}
+    lead={s.intro}
+    crumbs={[{ name: 'Services', href: '/services/' }, { name: s.name }]}
+  >
+    <div class="btn-row">
+      <a class="btn btn--lime" href="#quote">Get a free quote <Icon name="arrow" /></a>
+      <a class="btn btn--ghost" href={`tel:${SITE.phoneRaw}`}>Call {SITE.phone}</a>
+    </div>
+  </PageHead>
+
+  <section class="section">
+    <div class="container split">
+      <div>
+        <h2 class="h2 reveal" style="font-size:clamp(1.75rem,3.4vw,2.5rem)">What is included</h2>
+        <ul class="checklist reveal" style="margin-top:20px">
+          {s.includes.map((i) => <li>{i}</li>)}
+        </ul>
+
+        <h2 class="h2 reveal" style="font-size:clamp(1.75rem,3.4vw,2.5rem);margin-top:56px">Who it is for</h2>
+        <div class="chips reveal" style="margin-top:20px">
+          {s.idealFor.map((i) => <span class="chip" style="pointer-events:none">{i}</span>)}
+        </div>
+
+        <h2 class="h2 reveal" style="font-size:clamp(1.75rem,3.4vw,2.5rem);margin-top:56px">Common questions</h2>
+        <div class="faq reveal" style="margin-top:20px">
+          {s.faqs.map((f) => (
+            <details>
+              <summary>{f.q}</summary>
+              <div class="faq__a"><p>{f.a}</p></div>
+            </details>
+          ))}
+        </div>
+      </div>
+
+      <aside class="sticky" style="display:grid;gap:20px">
+        <div class="note reveal on-dark">
+          <p class="eyebrow">Built for Kerala</p>
+          <p>{s.keralaNote}</p>
+        </div>
+        <div class="panel reveal" id="quote">
+          <h2 class="h3">Get a free quote</h2>
+          <QuoteForm service={s.slug} />
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <section class="section section--white">
+    <div class="container">
+      <div class="section-head reveal">
+        <p class="eyebrow">Often combined with</p>
+        <h2 class="h2" style="font-size:clamp(1.75rem,3.4vw,2.75rem)">Finish the whole circle.</h2>
+        <p class="lead">Every service can be booked on its own, or planned together under one quotation and one schedule.</p>
+      </div>
+      <div class="grid grid--3">
+        {related.map((r, i) => (
+          <a class="card reveal" style={`--d:${i}`} href={`/services/${r.slug}/`}>
+            <span class="card__icon"><Icon name={r.icon} /></span>
+            <h3 class="h3">{r.name}</h3>
+            <p>{r.summary}</p>
+            <span class="card__more">Learn more <Icon name="arrow" /></span>
+          </a>
+        ))}
+      </div>
+      <div style="margin-top:56px" class="reveal">
+        <p class="eyebrow">Available in</p>
+        <div class="chips" style="margin-top:16px">
+          {AREAS.map((a) => <a class="chip" href={`/areas/${a.slug}/`}>{a.name}</a>)}
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>

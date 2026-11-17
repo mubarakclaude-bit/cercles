@@ -1,0 +1,48 @@
+---
+import { SERVICES, AREAS, SITE } from '../data/site';
+interface Props {
+  service?: string;
+  area?: string;
+}
+const { service = '', area = '' } = Astro.props;
+---
+
+<form class="form" data-whatsapp={SITE.whatsapp} novalidate>
+  <div class="form__row">
+    <div class="field">
+      <label for="q-name">Your name</label>
+      <input id="q-name" name="name" type="text" autocomplete="name" required />
+    </div>
+    <div class="field">
+      <label for="q-phone">Phone number</label>
+      <input id="q-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" required />
+    </div>
+  </div>
+  <div class="form__row">
+    <div class="field">
+      <label for="q-service">What do you need?</label>
+      <select id="q-service" name="service" required>
+        <option value="">Choose a service</option>
+        <option value="Complete Full-Circle project">Complete Full-Circle project</option>
+        {SERVICES.map((s) => <option value={s.name} selected={s.slug === service}>{s.name}</option>)}
+      </select>
+    </div>
+    <div class="field">
+      <label for="q-area">Where is the site?</label>
+      <select id="q-area" name="area" required>
+        <option value="">Choose a location</option>
+        {AREAS.map((a) => <option value={a.name} selected={a.slug === area}>{a.name}</option>)}
+        <option value="Somewhere else">Somewhere else</option>
+      </select>
+    </div>
+  </div>
+  <div class="field">
+    <label for="q-details">Tell us a little about it <span class="hint">(optional)</span></label>
+    <textarea id="q-details" name="details" rows="4"></textarea>
+  </div>
+  <div class="btn-row">
+    <button class="btn" type="submit">Send on WhatsApp</button>
+    <a class="btn btn--ghost" href={`tel:${SITE.phoneRaw}`}>Call {SITE.phone}</a>
+  </div>
+  <p class="hint">Pressing send opens WhatsApp with your details filled in. Nothing is stored on this website.</p>
+</form>

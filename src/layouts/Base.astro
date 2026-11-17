@@ -1,0 +1,98 @@
+---
+import '../styles/global.css';
+import interLatin from '@fontsource-variable/inter/files/inter-latin-opsz-normal.woff2?url';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import Icon from '../components/Icon.astro';
+import { SITE, waLink } from '../data/site';
+import { graph, organizationSchema, websiteSchema } from '../lib/schema';
+
+interface Props {
+  title: string;
+  description: string;
+  path?: string;
+  /** Extra JSON-LD nodes for this page */
+  schema?: unknown[];
+  noindex?: boolean;
+  ogImage?: string;
+  /** Hide the floating WhatsApp button on pages that already have the form */
+  noFab?: boolean;
+}
+
+const { title, description, schema = [], noindex: noindexProp = false, ogImage = '/og.png', noFab = false } = Astro.props;
+// Demo builds (PUBLIC_DEMO=1) are kept out of search engines so they never compete with the real site.
+const noindex = noindexProp || import.meta.env.PUBLIC_DEMO === '1';
+const path = Astro.props.path ?? Astro.url.pathname;
+const canonical = new URL(path, SITE.url).href;
+const fullTitle = title.includes(SITE.name) ? title : `${title} | ${SITE.name}`;
+const ld = graph(organizationSchema(), websiteSchema(), ...schema);
+---
+
+<!doctype html>
+<html lang="en-IN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta name="robots" content={noindex ? 'noindex, nofollow' : 'index, follow, max-image-preview:large, max-snippet:-1'} />
+    <meta name="theme-color" content="#0c0d2e" />
+    <meta name="color-scheme" content="light" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="geo.region" content="IN-KL" />
+    <meta name="geo.placename" content="Kozhikode" />
+
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+
+    <link rel="preload" href={interLatin} as="font" type="font/woff2" crossorigin />
+
+    <meta property="og:site_name" content={SITE.name} />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="en_IN" />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={new URL(ogImage, SITE.url).href} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Cercles: Roof to Garden. One Call." />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={new URL(ogImage, SITE.url).href} />
+
+    <script is:inline>
+      document.documentElement.classList.add('js');
+    </script>
+    <script type="application/ld+json" is:inline set:html={JSON.stringify(ld)} />
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to content</a>
+    <Header current={path} />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer />
+    {
+      !noFab && (
+        <a
+          class="fab"
+          href={waLink('Hi Cercles, I would like a quotation.')}
+          target="_blank"
+          rel="noopener"
+          aria-label="Chat with Cercles on WhatsApp"
+        >
+          <Icon name="whatsapp" />
+          <span>WhatsApp us</span>
+        </a>
+      )
+    }
+    <script>
+      import '../scripts/main';
+    </script>
+  </body>
+</html>

@@ -1,0 +1,63 @@
+---
+import Logo from './Logo.astro';
+import Icon from './Icon.astro';
+import { SITE } from '../data/site';
+
+interface Props {
+  current: string;
+}
+const { current } = Astro.props;
+
+const links = [
+  { href: '/services/', label: 'Services' },
+  { href: '/full-circle-projects/', label: 'Full-Circle Projects' },
+  { href: '/areas/', label: 'Areas' },
+  { href: '/about/', label: 'About' },
+  { href: '/contact/', label: 'Contact' },
+];
+const isCurrent = (href: string) => (href === '/' ? current === '/' : current.startsWith(href));
+---
+
+<header class="header" id="header" data-solid="false">
+  <div class="container header__inner">
+    <a class="logo" href="/" aria-label="Cercles, home"><Logo /></a>
+    <nav class="nav" aria-label="Main">
+      <ul>
+        {
+          links.map((l) => (
+            <li>
+              <a href={l.href} aria-current={isCurrent(l.href) ? 'page' : undefined}>
+                {l.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+    <a class="btn btn--sm header__cta" href="/contact/">Get a free quote</a>
+    <button class="burger" id="burger" type="button" aria-expanded="false" aria-controls="menu" aria-label="Open menu">
+      <span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<div class="menu on-dark" id="menu" data-open="false" role="dialog" aria-modal="true" aria-label="Menu">
+  <nav aria-label="Mobile">
+    <a href="/" style="--i:0">Home</a>
+    {
+      links.map((l, i) => (
+        <a href={l.href} style={`--i:${i + 1}`}>
+          {l.label}
+        </a>
+      ))
+    }
+  </nav>
+  <div class="menu__meta">
+    <p>Roof to Garden. One Call.</p>
+    <a href={`tel:${SITE.phoneRaw}`}>{SITE.phone}</a>
+    <a href={`mailto:${SITE.email}`}>{SITE.email}</a>
+  </div>
+  <div class="btn-row" style="margin-top:28px">
+    <a class="btn btn--lime" href="/contact/">Get a free quote <Icon name="arrow" /></a>
+  </div>
+</div>

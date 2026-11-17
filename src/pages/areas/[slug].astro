@@ -1,0 +1,89 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHead from '../../components/PageHead.astro';
+import Icon from '../../components/Icon.astro';
+import QuoteForm from '../../components/QuoteForm.astro';
+import { AREAS, CATEGORIES, servicesIn, SITE } from '../../data/site';
+import { areaPageSchema, breadcrumbSchema } from '../../lib/schema';
+
+export function getStaticPaths() {
+  return AREAS.map((a) => ({ params: { slug: a.slug }, props: { a } }));
+}
+const { a } = Astro.props;
+const path = `/areas/${a.slug}/`;
+const others = AREAS.filter((x) => x.slug !== a.slug);
+---
+
+<Base
+  title={`Home Improvement in ${a.name}`}
+  description={a.description}
+  path={path}
+  schema={[
+    areaPageSchema(a),
+    breadcrumbSchema([
+      { name: 'Home', path: '/' },
+      { name: 'Areas', path: '/areas/' },
+      { name: a.name, path },
+    ]),
+  ]}
+>
+  <PageHead
+    title={`One-stop home solutions in ${a.name}`}
+    eyebrow={`${a.name}, ${a.state}`}
+    lead={a.intro}
+    crumbs={[{ name: 'Areas', href: '/areas/' }, { name: a.name }]}
+  >
+    <div class="btn-row">
+      <a class="btn btn--lime" href="#quote">Get a free quote <Icon name="arrow" /></a>
+      <a class="btn btn--ghost" href={`tel:${SITE.phoneRaw}`}>Call {SITE.phone}</a>
+    </div>
+  </PageHead>
+
+  <section class="section">
+    <div class="container split">
+      <div>
+        <div class="note reveal on-dark">
+          <p class="eyebrow">Working in {a.name}</p>
+          <p>{a.local}</p>
+        </div>
+
+        <h2 class="h2 reveal" style="font-size:clamp(1.75rem,3.4vw,2.5rem);margin-top:56px">Services in {a.name}</h2>
+        {CATEGORIES.map((c) => (
+          <div class="cat reveal" style="margin-top:32px">
+            <div class="cat__head"><h3 class="h3">{c.name}</h3></div>
+            <ul class="checklist">
+              {servicesIn(c.id).map((s) => (
+                <li><a href={`/services/${s.slug}/`}><strong>{s.name}</strong></a>: {s.summary}</li>
+              ))}
+            </ul>
+          </div>
+        ))}
+
+        <h2 class="h2 reveal" style="font-size:clamp(1.75rem,3.4vw,2.5rem);margin-top:56px">Places we cover</h2>
+        <div class="chips reveal" style="margin-top:20px">
+          {a.places.map((p) => <span class="chip" style="pointer-events:none">{p}</span>)}
+        </div>
+        <p class="hint reveal" style="margin-top:14px">Not on the list? Ask us. We often travel for the right project.</p>
+      </div>
+
+      <aside class="sticky">
+        <div class="panel reveal" id="quote">
+          <h2 class="h3">Get a free quote in {a.name}</h2>
+          <QuoteForm area={a.slug} />
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <section class="section section--navy on-dark">
+    <div class="container">
+      <div class="section-head reveal">
+        <p class="eyebrow">Other areas</p>
+        <h2 class="h2" style="font-size:clamp(1.75rem,3.4vw,2.75rem)">We also work in</h2>
+      </div>
+      <div class="chips reveal">
+        {others.map((o) => <a class="chip" href={`/areas/${o.slug}/`}>{o.name}</a>)}
+      </div>
+    </div>
+  </section>
+</Base>
