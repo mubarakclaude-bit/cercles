@@ -86,14 +86,14 @@ export function initJourney({ wrap, canvas, still }: Options) {
   /* ---------- the page drives the camera and the text ---------- */
   // The home stays pinned while a tall invisible track scrolls by. Position along the track
   // decides which part of the house we are at (f = 0 for the banner, 1 for the first service, ...).
-  const track = wrap.querySelector<HTMLElement>('.journey__track')!;
-  const stage = wrap.querySelector<HTMLElement>('.journey__stage')!;
+  const pin = wrap.querySelector<HTMLElement>('.journey__pin')!;
   const N = POSES.length;
   let trackTop = 0;
   let stepPx = 1;
   function measure() {
-    trackTop = track.getBoundingClientRect().top + scrollY;
-    stepPx = Math.max(1, (track.offsetHeight - 1.4 * stage.offsetHeight) / (N - 1));
+    // journey = one pinned screen + (N - 1) steps + a short hold at the end (0.4 of a screen)
+    trackTop = wrap.getBoundingClientRect().top + scrollY;
+    stepPx = Math.max(1, (wrap.offsetHeight - 1.4 * pin.offsetHeight) / (N - 1));
   }
   let target_f = 0;
   let cur_f = 0;

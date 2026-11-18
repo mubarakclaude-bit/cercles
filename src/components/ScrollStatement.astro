@@ -1,0 +1,18 @@
+---
+// A statement that lights up word by word as you read down the page.
+interface Props {
+  text: string;
+  eyebrow?: string;
+}
+const { text, eyebrow } = Astro.props;
+const words = text.split(' ');
+---
+
+<section class="statement" data-statement style={`--n:${words.length}`}>
+  <div class="container">
+    {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+    <p class="statement__text">
+      {words.map((w, i) => <span style={`--i:${i}`}>{w} </span>)}
+    </p>
+  </div>
+</section>

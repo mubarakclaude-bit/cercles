@@ -1,0 +1,64 @@
+---
+// Full-Circle, drawn: four arcs (interiors, light and water, exteriors, outdoors) close into one circle
+// as you scroll, and the centre says what each part brings. Pure SVG and a few lines of script.
+import { CATEGORIES, servicesIn } from '../data/site';
+const arcs = [
+  { id: 'exteriors', color: '#ff6a4d' },
+  { id: 'interiors', color: '#ffb020' },
+  { id: 'utilities', color: '#1e90ff' },
+  { id: 'outdoors', color: '#2fbf5b' },
+] as const;
+const C = 2 * Math.PI * 180;
+const seg = C / 4;
+const gap = 14;
+---
+
+<section class="cstory" data-cstory style={`--n:${arcs.length + 1}`}>
+  <div class="cstory__pin">
+    <div class="container cstory__grid">
+      <div class="cstory__art" aria-hidden="true">
+        <svg viewBox="0 0 440 440">
+          <circle cx="220" cy="220" r="180" class="cstory__base" />
+          {
+            arcs.map((a, i) => (
+              <circle
+                cx="220"
+                cy="220"
+                r="180"
+                class="cstory__arc"
+                style={`--c:${a.color};--i:${i};stroke-dasharray:${seg - gap} ${C};--len:${seg - gap};transform:rotate(${-90 + i * 90 + 2}deg)`}
+              />
+            ))
+          }
+        </svg>
+        <div class="cstory__mid">
+          <p class="cstory__big">One plan</p>
+        </div>
+      </div>
+      <div class="cstory__steps">
+        {
+          arcs.map((a, i) => {
+            const c = CATEGORIES.find((x) => x.id === a.id)!;
+            return (
+              <div class="cstory__step" data-i={i} style={`--c:${a.color}`}>
+                <p class="eyebrow">{`0${i + 1} · ${c.short}`}</p>
+                <h3 class="h2">{c.name}</h3>
+                <p class="lead">{c.blurb}</p>
+                <ul class="chips">
+                  {servicesIn(c.id).map((s) => (
+                    <li><a class="chip" href={`/services/${s.slug}/`}>{s.label}</a></li>
+                  ))}
+                </ul>
+              </div>
+            );
+          })
+        }
+        <div class="cstory__step" data-i={arcs.length}>
+          <p class="eyebrow">The circle, closed</p>
+          <h3 class="h2">One quotation. One schedule. One team.</h3>
+          <p class="lead">Every trade planned together, with a single project lead from first visit to handover.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

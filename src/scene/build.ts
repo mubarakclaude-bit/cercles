@@ -34,6 +34,7 @@ import {
   SRGBColorSpace,
   Vector3,
 } from 'three';
+import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
 import { POP } from './director';
 
 type FadeMat = MeshStandardMaterial | MeshBasicMaterial;
@@ -67,6 +68,22 @@ function roundedRect(w: number, d: number, r: number) {
   s.absarc(x + r, y + r, r, Math.PI, Math.PI * 1.5, false);
   return s;
 }
+/** A curtain panel: a sheet with soft vertical folds, a little fuller towards the hem. */
+function pleatGeo(w: number, h: number, folds: number, depth: number) {
+  const g = new PlaneGeometry(w, h, Math.max(8, folds * 8), 6);
+  const pos = g.attributes.position;
+  for (let i = 0; i < pos.count; i++) {
+    const x = pos.getX(i);
+    const y = pos.getY(i);
+    const t = x / w + 0.5;
+    const full = 0.85 + 0.35 * (0.5 - y / h);
+    pos.setZ(i, Math.sin(t * folds * Math.PI * 2) * depth * full);
+    pos.setX(i, x * (1 + 0.05 * (0.5 - y / h)));
+  }
+  g.computeVertexNormals();
+  return g;
+}
+
 /** A rounded slab lying flat, top face at y = 0 and body hanging below. */
 function slabGeo(w: number, d: number, r: number, h: number) {
   const g = new ExtrudeGeometry(roundedRect(w, d, r), { depth: h, bevelEnabled: false, curveSegments: 14 });
@@ -362,17 +379,32 @@ export function build() {
     host.add(g);
     if (withCurtain) {
       const c = new Group();
-      const fw = (w * 0.3) / 5;
+      const fabric = fadeMat(fades.curt, '#ece4d6', 1, { side: DoubleSide, roughness: 0.96 });
+      const sheer = fadeMat(fades.curt, '#fbf8f2', 0.55, { side: DoubleSide, roughness: 0.9 });
+      const rod = fadeMat(fades.curt, '#b7ae9f', 1, { metalness: 0.35, roughness: 0.4 });
+      curtainMats.push(fabric, sheer, rod);
+      const pw = Math.min(1.25, w * 0.27);
+      const ph = h + 0.3;
+      // drawn-back curtains on each side, pleated
       for (const side of [-1, 1]) {
-        for (let i = 0; i < 5; i++) {
-          const mat = fadeMat(fades.curt, i % 2 ? '#f6f1ea' : '#e6dfd4');
-          curtainMats.push(mat);
-          box(c, fw * 1.05, h - 0.1, 0.12, side * (w / 2 - 0.22 - i * fw), 0, (i % 2 ? 0.06 : -0.06) - 0.45, mat, false, false);
-        }
+        const m = new Mesh(pleatGeo(pw, ph, Math.max(4, Math.round(pw * 6)), 0.075), fabric);
+        m.position.set(side * (w / 2 - pw / 2 + 0.1), -0.1, -0.42);
+        m.castShadow = true;
+        m.receiveShadow = true;
+        c.add(m);
       }
-      const rod = fadeMat(fades.curt, '#cfc8bb');
-      curtainMats.push(rod);
-      box(c, w + 0.34, 0.07, 0.07, 0, h / 2 - 0.02, -0.45, rod, false, false);
+      // a soft sheer across the glass
+      const sw = w - 2 * pw + 0.3;
+      const sh = new Mesh(pleatGeo(sw, ph - 0.06, Math.max(6, Math.round(sw * 7)), 0.03), sheer);
+      sh.position.set(0, -0.12, -0.52);
+      c.add(sh);
+      // rod with rings and finials
+      const r = new Mesh(cyl, rod);
+      r.scale.set(0.05, w + 0.6, 0.05);
+      r.rotation.z = Math.PI / 2;
+      r.position.set(0, ph / 2 - 0.05, -0.42);
+      c.add(r);
+      for (const sx of [-1, 1]) ball(c, 0.07, sx * (w / 2 + 0.3), ph / 2 - 0.05, -0.42, rod, false, sphere);
       c.position.copy(g.position);
       c.position.z -= 0.1;
       if (axis === 'x') {
@@ -438,22 +470,43 @@ export function build() {
   rug.position.set(-2.6, 0.24, 0.6);
   rug.receiveShadow = true;
   gInside.add(rug);
-  const sofa = fm('sofa-making', '#ddd8cf');
-  const cush = fm('sofa-making', '#f2eee6');
-  box(gInside, 3.4, 0.5, 1.05, -3.6, 0.5, -2.45, sofa);
-  box(gInside, 3.4, 0.9, 0.3, -3.6, 1.05, -2.95, sofa);
-  box(gInside, 0.34, 0.75, 1.05, -5.2, 0.75, -2.45, sofa);
-  box(gInside, 0.34, 0.75, 1.05, -2.0, 0.75, -2.45, sofa);
-  box(gInside, 1.05, 0.5, 1.9, -5.0, 0.5, -0.95, sofa);
-  box(gInside, 0.65, 0.5, 0.2, -4.4, 0.98, -2.7, cush);
-  box(gInside, 0.65, 0.5, 0.2, -2.8, 0.98, -2.7, cush);
+  // An upholstered L-shaped sofa: rounded seat and back cushions, rounded arms, a chaise, small legs, pillows.
+  const rb = (parent: Group, w: number, h: number, d: number, r: number, x: number, y: number, z: number, mat: Material) => {
+    const m = new Mesh(new RoundedBoxGeometry(w, h, d, 3, r), mat);
+    m.position.set(x, y, z);
+    m.castShadow = true;
+    m.receiveShadow = true;
+    parent.add(m);
+    return m;
+  };
+  const sofa = fm('sofa-making', '#d8d1c5');
+  const cush = fm('sofa-making', '#ebe5da');
+  const pillowA = fm('sofa-making', '#c8d2dc');
+  const pillowB = fm('sofa-making', '#e2d3bf');
+  const legM = fadeMat(fades.furn, '#8a7864');
+  const SZ = -2.42;
+  rb(gInside, 3.36, 0.3, 1.02, 0.09, -3.6, 0.38, SZ, sofa); // base
+  rb(gInside, 3.36, 0.66, 0.28, 0.12, -3.6, 0.86, -2.88, sofa); // back frame
+  for (let i = 0; i < 3; i++) rb(gInside, 0.98, 0.2, 0.84, 0.09, -4.68 + i * 1.04, 0.62, SZ + 0.05, cush); // seat cushions
+  for (let i = 0; i < 3; i++) rb(gInside, 0.96, 0.52, 0.24, 0.11, -4.68 + i * 1.04, 0.98, -2.66, cush).rotation.x = -0.14; // back cushions
+  rb(gInside, 0.28, 0.56, 1.02, 0.12, -5.2, 0.64, SZ, sofa); // arm
+  rb(gInside, 0.28, 0.56, 1.02, 0.12, -2.02, 0.64, SZ, sofa); // arm
+  rb(gInside, 1.0, 0.3, 1.86, 0.09, -4.82, 0.38, -1.06, sofa); // chaise base
+  rb(gInside, 0.92, 0.2, 1.78, 0.09, -4.82, 0.62, -1.06, cush); // chaise cushion
+  for (const [x, z] of [[-5.22, -2.86], [-2.0, -2.86], [-2.0, -1.96], [-5.22, -0.2], [-4.36, -0.2]] as const) cylinder(gInside, 0.04, 0.22, x, 0.11, z, legM, false, true);
+  rb(gInside, 0.44, 0.38, 0.14, 0.07, -4.86, 0.94, -2.48, pillowA).rotation.z = 0.18;
+  rb(gInside, 0.44, 0.38, 0.14, 0.07, -2.42, 0.94, -2.48, pillowB).rotation.z = -0.18;
   const wood = fm('furniture-works', '#d8cfc0');
   const woodD = fm('furniture-works', '#c7bcaa');
   const lightF = fm('furniture-works', '#f1ede5');
   box(gInside, 1.5, 0.1, 0.9, -2.6, 0.64, 0.7, woodD);
   for (const [x, z] of [[-3.25, 0.35], [-1.95, 0.35], [-3.25, 1.05], [-1.95, 1.05]] as const) box(gInside, 0.09, 0.42, 0.09, x, 0.42, z, woodD, false);
-  box(gInside, 1.0, 0.5, 1.0, -0.2, 0.45, 0.8, cush);
-  box(gInside, 1.0, 0.7, 0.22, 0.1, 0.95, 0.8, cush);
+  // armchair facing the sofa
+  rb(gInside, 0.96, 0.3, 0.92, 0.09, -0.15, 0.38, 0.8, sofa);
+  rb(gInside, 0.8, 0.2, 0.78, 0.08, -0.15, 0.6, 0.8, cush);
+  rb(gInside, 0.96, 0.62, 0.24, 0.11, -0.15, 0.86, 1.18, sofa).rotation.x = 0.12;
+  rb(gInside, 0.22, 0.5, 0.92, 0.1, -0.6, 0.6, 0.8, sofa);
+  rb(gInside, 0.22, 0.5, 0.92, 0.1, 0.3, 0.6, 0.8, sofa);
   box(gInside, 2.0, 0.1, 1.2, 0.9, 0.88, -1.7, wood);
   for (const [x, z] of [[0.0, -2.25], [1.8, -2.25], [0.0, -1.15], [1.8, -1.15]] as const) box(gInside, 0.09, 0.78, 0.09, x, 0.55, z, woodD, false);
   for (const [x, z] of [[0.45, -2.5], [1.35, -2.5], [0.45, -0.9], [1.35, -0.9]] as const) box(gInside, 0.5, 0.45, 0.5, x, 0.48, z, lightF);

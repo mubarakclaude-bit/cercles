@@ -1,6 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
-import PartHero from '../components/PartHero.astro';
+import RingHero from '../components/RingHero.astro';
 import QuoteForm from '../components/QuoteForm.astro';
 import Icon from '../components/Icon.astro';
 import { SITE, waLink } from '../data/site';
@@ -27,19 +27,18 @@ const ways = [
   noFab
   schema={[contactPage, breadcrumbSchema([{ name: 'Home', path: '/' }, { name: 'Contact', path: '/contact/' }])]}
 >
-  <PartHero
-    pose={0}
+  <RingHero
+    compact
     eyebrow="Contact"
     title="Let's plan your project."
     lead="Tell us what you need. We visit your site in Kozhikode or anywhere in Kerala, understand the space and send one clear quotation."
     crumbs={[{ name: 'Contact' }]}
-    more="details"
   >
     <div class="btn-row">
       <a class="btn" href="#details">Request a quote <Icon name="arrow" /></a>
       <a class="btn btn--line" href={`tel:${SITE.phoneRaw}`}>Call {SITE.phone}</a>
     </div>
-  </PartHero>
+  </RingHero>
 
   <section class="section" id="details">
     <div class="container split">

@@ -1,10 +1,10 @@
 ---
 import Base from '../layouts/Base.astro';
-import PartHero from '../components/PartHero.astro';
+import RingHero from '../components/RingHero.astro';
+import CircleStory from '../components/CircleStory.astro';
 import Icon from '../components/Icon.astro';
 import HowWeWork from '../components/HowWeWork.astro';
 import Faq from '../components/Faq.astro';
-import { CATEGORIES, servicesIn } from '../data/site';
 import { breadcrumbSchema, faqSchema } from '../lib/schema';
 
 const faqs = [
@@ -20,36 +20,16 @@ const faqs = [
   path="/full-circle-projects/"
   schema={[faqSchema(faqs), breadcrumbSchema([{ name: 'Home', path: '/' }, { name: 'Full-Circle Projects', path: '/full-circle-projects/' }])]}
 >
-  <PartHero
-    pose={14}
-    orbit
+  <RingHero
     eyebrow="Full-Circle Projects"
     title="One plan across every trade."
     lead="A complete home transformation in Kozhikode and across Kerala: interiors, exteriors, utilities and outdoors, delivered by one accountable team."
     crumbs={[{ name: 'Full-Circle Projects' }]}
   >
     <div class="btn-row"><a class="btn" href="/contact/">Plan my project <Icon name="arrow" /></a></div>
-  </PartHero>
+  </RingHero>
 
-  <section class="section" id="details">
-    <div class="container">
-      <div class="section-head reveal">
-        <p class="eyebrow">What you can combine</p>
-        <h2 class="h2">Mix any of the 13 services.</h2>
-      </div>
-      <div class="grid grid--2">
-        {CATEGORIES.map((c, i) => (
-          <div class="panel reveal" style={`--d:${i % 2}`}>
-            <h3 class="h3">{c.name}</h3>
-            <p class="muted" style="font-size:0.9375rem">{c.blurb}</p>
-            <ul class="checklist" style="margin-top:8px">
-              {servicesIn(c.id).map((s) => <li><a href={`/services/${s.slug}/`}>{s.name}</a></li>)}
-            </ul>
-          </div>
-        ))}
-      </div>
-    </div>
-  </section>
+  <CircleStory />
 
   <HowWeWork />
   <Faq items={faqs} title="Full-Circle, explained." />

@@ -119,19 +119,71 @@ if (partView) {
   }
 }
 
-/* ---------- Services page: the home flies to the service you are looking at ---------- */
-const exploreView = document.querySelector<HTMLElement>('[data-explore]');
-if (exploreView) {
-  const canvas = exploreView.querySelector<HTMLCanvasElement>('canvas');
-  const items = [...document.querySelectorAll<HTMLElement>('.explore__item')];
-  const saver = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData;
-  if (canvas && !saver) {
-    const boot = () =>
-      import('../scene/explorer').then((m) => m.initExplorer({ view: exploreView, canvas, items, still: reduce })).catch(() => undefined);
-    const idle = (window as Window & { requestIdleCallback?: (cb: () => void, o?: { timeout: number }) => number }).requestIdleCallback;
-    const go = () => (idle ? idle(boot, { timeout: 1500 }) : setTimeout(boot, 300));
-    document.readyState === 'complete' ? go() : addEventListener('load', go, { once: true });
+/* ---------- Services orbit: point at a circle to see the service; it walks on its own until you do ---------- */
+const orbit = document.querySelector<HTMLElement>('[data-orbit-root]');
+if (orbit) {
+  const nodes = [...orbit.querySelectorAll<HTMLAnchorElement>('.orbit__node')];
+  const cat = orbit.querySelector<HTMLElement>('.orbit__cat')!;
+  const name = orbit.querySelector<HTMLElement>('.orbit__name')!;
+  const sum = orbit.querySelector<HTMLElement>('.orbit__sum')!;
+  const go = orbit.querySelector<HTMLAnchorElement>('.orbit__go')!;
+  let i = -1;
+  let user = false;
+  const show = (k: number) => {
+    i = k;
+    const n = nodes[k];
+    nodes.forEach((x) => x.toggleAttribute('data-active', x === n));
+    orbit.style.setProperty('--pop', getComputedStyle(n.parentElement!).getPropertyValue('--pop'));
+    cat.textContent = n.dataset.cat ?? '';
+    name.textContent = n.dataset.name ?? '';
+    sum.textContent = n.dataset.sum ?? '';
+    go.href = n.href;
+    go.firstChild!.textContent = 'Open ';
+  };
+  nodes.forEach((n, k) => {
+    n.addEventListener('pointerenter', () => ((user = true), show(k)));
+    n.addEventListener('focus', () => ((user = true), show(k)));
+  });
+  if (!reduce) {
+    let timer = 0;
+    const tick = () => {
+      if (!user && !document.hidden) show((i + 1) % nodes.length);
+      timer = window.setTimeout(tick, 2600);
+    };
+    new IntersectionObserver(([en]) => {
+      clearTimeout(timer);
+      if (en.isIntersecting) timer = window.setTimeout(tick, 1200);
+    }).observe(orbit);
+    orbit.addEventListener('pointerleave', () => (user = false));
   }
+}
+
+/* ---------- Scroll-linked pieces: the circle that closes, the statement that lights up ---------- */
+const scrollers = [...document.querySelectorAll<HTMLElement>('[data-cstory], [data-statement]')];
+if (scrollers.length) {
+  const update = () => {
+    for (const el of scrollers) {
+      const r = el.getBoundingClientRect();
+      const span = el.hasAttribute('data-cstory') ? r.height - innerHeight : r.height + innerHeight * 0.4;
+      const start = el.hasAttribute('data-cstory') ? -r.top : innerHeight * 0.85 - r.top;
+      const p = reduce ? 1 : Math.min(1, Math.max(0, start / (span || 1)));
+      el.style.setProperty('--p', p.toFixed(4));
+      if (el.hasAttribute('data-cstory')) {
+        const steps = el.querySelectorAll<HTMLElement>('.cstory__step');
+        const k = Math.min(steps.length - 1, Math.floor(p * steps.length * 0.999));
+        steps.forEach((s, j) => (s.dataset.on = String(j === k)));
+        el.dataset.step = String(k);
+      }
+    }
+  };
+  let t = false;
+  addEventListener('scroll', () => {
+    if (t) return;
+    t = true;
+    requestAnimationFrame(() => ((t = false), update()));
+  }, { passive: true });
+  addEventListener('resize', update);
+  update();
 }
 
 /* ---------- Process line fills as you read ---------- */

@@ -1,0 +1,42 @@
+---
+// A calm first view built on the brand's circles: rings that turn slowly, small orbiting points,
+// the Cercles mark at the centre. No 3D, so it loads instantly and feels different from the home tour.
+import Mark from './Mark.astro';
+interface Props {
+  eyebrow?: string;
+  title: string;
+  lead?: string;
+  crumbs: { name: string; href?: string }[];
+  compact?: boolean;
+}
+const { eyebrow, title, lead, crumbs, compact = false } = Astro.props;
+---
+
+<section class:list={['rhero', { 'rhero--compact': compact }]}>
+  <div class="container rhero__grid">
+    <div class="rhero__copy">
+      <nav class="crumbs" aria-label="Breadcrumb">
+        <ol>
+          <li><a href="/">Home</a></li>
+          {crumbs.map((c, i) => <li>{c.href && i < crumbs.length - 1 ? <a href={c.href}>{c.name}</a> : <span aria-current="page">{c.name}</span>}</li>)}
+        </ol>
+      </nav>
+      {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+      <h1 class="h1">{title}</h1>
+      {lead && <p class="lead">{lead}</p>}
+      <slot />
+    </div>
+    <div class="rhero__art" aria-hidden="true">
+      <svg viewBox="0 0 400 400" fill="none">
+        <circle class="rr rr--a" cx="200" cy="200" r="188" />
+        <circle class="rr rr--b" cx="200" cy="200" r="150" />
+        <circle class="rr rr--c" cx="200" cy="200" r="112" />
+        <g class="orb orb--1"><circle cx="200" cy="50" r="7" /></g>
+        <g class="orb orb--2"><circle cx="200" cy="88" r="5" /></g>
+        <g class="orb orb--3"><circle cx="200" cy="12" r="4" /></g>
+        <circle cx="200" cy="200" r="72" class="rr-core" />
+      </svg>
+      <Mark class="rhero__mark" />
+    </div>
+  </div>
+</section>

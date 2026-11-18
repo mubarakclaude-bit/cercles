@@ -1,7 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro';
 import Icon from '../../components/Icon.astro';
-import PartHero from '../../components/PartHero.astro';
+import RingHero from '../../components/RingHero.astro';
 import QuoteForm from '../../components/QuoteForm.astro';
 import Faq from '../../components/Faq.astro';
 import HowWeWork from '../../components/HowWeWork.astro';
@@ -32,12 +32,12 @@ const serviceNode = {
   path={path}
   schema={[serviceNode, faqSchema(l.faqs), breadcrumbSchema([{ name: 'Home', path: '/' }, { name: l.label, path }])]}
 >
-  <PartHero slug={l.pose} eyebrow="In Kozhikode" title={l.h1} lead={l.intro} crumbs={[{ name: l.label }]}>
+  <RingHero eyebrow="In Kozhikode" title={l.h1} lead={l.intro} crumbs={[{ name: l.label }]}>
     <div class="btn-row">
       <a class="btn" href="#quote">Get a free quote <Icon name="arrow" /></a>
       <a class="btn btn--line" href={`tel:${SITE.phoneRaw}`}>Call {SITE.phone}</a>
     </div>
-  </PartHero>
+  </RingHero>
 
   <section class="section" id="details">
     <div class="container split">

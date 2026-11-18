@@ -1,0 +1,47 @@
+---
+// Services as a circle: thirteen points around a ring, grouped by kind. Point at one and the
+// centre tells you what it is; the ring also walks through them on its own until you take over.
+import Icon from './Icon.astro';
+import { SERVICES, CATEGORIES } from '../data/site';
+import { POP } from '../scene/director';
+const R = 238;
+const n = SERVICES.length;
+const order = CATEGORIES.flatMap((c) => SERVICES.filter((s) => s.category === c.id));
+const nodes = order.map((s, i) => {
+  const a = -Math.PI / 2 + (i / n) * Math.PI * 2;
+  return { s, x: 300 + Math.cos(a) * R, y: 300 + Math.sin(a) * R, cat: CATEGORIES.find((c) => c.id === s.category)! };
+});
+---
+
+<div class="orbit" data-orbit-root>
+  <svg class="orbit__ring" viewBox="0 0 600 600" aria-hidden="true">
+    <circle cx="300" cy="300" r={R} class="orbit__track" />
+    <circle cx="300" cy="300" r={R - 44} class="orbit__inner" />
+    <circle cx="300" cy="300" r={R + 30} class="orbit__outer" />
+  </svg>
+  <ul class="orbit__nodes">
+    {
+      nodes.map(({ s, x, y, cat }, i) => (
+        <li style={`left:${(x / 600) * 100}%;top:${(y / 600) * 100}%;--pop:${POP[s.slug]}`}>
+          <a
+            class="orbit__node"
+            href={`/services/${s.slug}/`}
+            data-i={i}
+            data-name={s.name}
+            data-cat={cat.short}
+            data-sum={s.summary}
+            aria-label={s.name}
+          >
+            <span class="orbit__icon"><Icon name={s.icon} /></span>
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+  <div class="orbit__center" aria-live="polite">
+    <p class="eyebrow orbit__cat">13 services</p>
+    <p class="orbit__name">One team, every part of the home</p>
+    <p class="orbit__sum">Point at a circle to see each service.</p>
+    <a class="orbit__go" href="/contact/">Get a free quote <Icon name="arrow" /></a>
+  </div>
+</div>

@@ -12,6 +12,7 @@ const inChapter = (slug: string) => order.filter((s) => s && CHAPTER[s] === CHAP
 ---
 
 <div class="journey" id="journey" style={`--n:${POSES.length}`}>
+  <div class="journey__pin">
   <div class="journey__stage" aria-hidden="true">
     <canvas class="journey__canvas"></canvas>
     <div class="journey__fade"></div>
@@ -80,9 +81,9 @@ const inChapter = (slug: string) => order.filter((s) => s && CHAPTER[s] === CHAP
   </div>
 
   <div class="journey__pinlayer"><div class="journey__pins"></div></div>
-
-  <!-- scroll distance: the home stays pinned while this passes -->
-  <div class="journey__track" aria-hidden="true">
-    {POSES.map((_, k) => <span class="journey__snap" style={`--k:${k}`}></span>)}
   </div>
+
+  <!-- scroll distance: the home stays pinned while this passes, then lets go exactly at the end -->
+  <div class="journey__track" aria-hidden="true"></div>
+  {POSES.map((_, k) => <span class="journey__snap" aria-hidden="true" style={`--k:${k}`}></span>)}
 </div>

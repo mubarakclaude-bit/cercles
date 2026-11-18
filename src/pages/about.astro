@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
-import PartHero from '../components/PartHero.astro';
+import RingHero from '../components/RingHero.astro';
+import ScrollStatement from '../components/ScrollStatement.astro';
 import Icon from '../components/Icon.astro';
 import { SITE } from '../data/site';
 import { breadcrumbSchema } from '../lib/schema';
@@ -26,13 +27,18 @@ const serve = [
   path="/about/"
   schema={[breadcrumbSchema([{ name: 'Home', path: '/' }, { name: 'About', path: '/about/' }])]}
 >
-  <PartHero
-    slug="painting-texturing"
+  <RingHero
     eyebrow="About Cercles"
     title="Complete the circle of your home."
-    lead="A home is never finished in one place. The curtains need a painter, the painter needs an electrician, and somewhere in the middle, you are the one chasing everyone. Cercles, from Kozhikode, closes the circle."
+    lead="A one-stop home solutions company from Kozhikode. One team, one plan and one point of contact from the roof to the garden."
     crumbs={[{ name: 'About' }]}
   />
+
+  <ScrollStatement
+    eyebrow="Why we exist"
+    text="A home is never finished in one place. The curtains need a painter, the painter needs an electrician, the electrician needs a carpenter, and somewhere in the middle, you are the one chasing everyone. Cercles closes the circle."
+  />
+
 
 
   <section class="section" id="details">
