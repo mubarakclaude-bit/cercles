@@ -71,7 +71,7 @@ export const POSES: Pose[] = [
   { slug: 'landscaping', az: 48, el: 28, zoom: 1.5, t: [-7.4, 1.4, 1.6], spr: 0.6, fx: -0.24 },
   { slug: 'irrigation', az: 40, el: 30, zoom: 1.9, t: [-3.2, 0.6, 6.4], spr: 1, fx: 0.24 },
   // The finishing touch: everything you saw, now in colour
-  { slug: 'painting-texturing', az: 46, el: 33, zoom: 1.1, t: [0.5, 2.8, 0.8], spr: 0.25, paint: 1, ring: 0.5, fx: -0.24 },
+  { slug: 'painting-texturing', az: 46, el: 33, zoom: 0.86, t: [0.5, 2.8, 0.8], spr: 0.25, paint: 1, ring: 0.5, fx: -0.27 },
   // The circle closes
   { slug: '', az: 46 + 360, el: 36, zoom: 0.95, t: [0.5, 2.8, 0.8], spr: 0.2, ring: 1, paint: 1, fx: 0, fy: 0.16 },
 ];
@@ -144,7 +144,7 @@ export function eased(f: number) {
 }
 
 /** 0..1: how much pose i is "the current one" at eased position e. */
-export const weight = (e: number, i: number) => Math.max(0, 1 - Math.abs(e - i) * 1.7);
+export const weight = (e: number, i: number) => Math.max(0, 1 - Math.abs(e - i) * 2.4);
 
 /** Position of each service's pose in POSES. */
 export const POSE_INDEX: Record<string, number> = {};

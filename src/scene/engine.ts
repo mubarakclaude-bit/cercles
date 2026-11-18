@@ -15,6 +15,8 @@ import {
 import { build, type World } from './build';
 import { POSE_INDEX, weight, type State } from './director';
 import { loadNature } from './nature';
+import { mute } from './tone';
+import { Material, Mesh, MeshStandardMaterial } from 'three';
 
 export interface View {
   wide: boolean; // desktop layout: shift the home sideways to make room for text
@@ -36,6 +38,30 @@ export function createEngine(canvas: HTMLCanvasElement, mobile: boolean) {
   const scene = new Scene();
   const world: World = build();
   scene.add(world.root);
+
+  // Start calm: soften every colour, except the wiring, pipes, water and glow that only appear when needed.
+  const keep = new Set<Material>([world.haloMat, world.waterMat, world.wetMat, world.edgeMat]);
+  for (const f of [...world.fades.elec, ...world.fades.plumb]) keep.add(f.m);
+  const done = new Set<Material>();
+  for (const list of Object.values(world.tints)) {
+    for (const t of list) {
+      t.base = mute(t.base);
+      t.m.color.copy(t.base);
+      done.add(t.m);
+    }
+  }
+  world.root.traverse((o) => {
+    const mesh = o as Mesh;
+    if (!mesh.isMesh) return;
+    const mats = (Array.isArray(mesh.material) ? mesh.material : [mesh.material]) as Material[];
+    for (const m of mats) {
+      if (keep.has(m) || done.has(m) || !(m as MeshStandardMaterial).isMeshStandardMaterial) continue;
+      const sm = m as MeshStandardMaterial;
+      sm.color.copy(mute(sm.color));
+      if (sm.emissiveIntensity > 0) sm.emissive.copy(mute(sm.emissive, 0.6));
+      done.add(m);
+    }
+  });
 
   scene.add(new HemisphereLight(0xf7f9ff, 0x9aa4b8, 1.6));
   const sun = new DirectionalLight(0xfff3e2, 2.5);
@@ -94,7 +120,8 @@ export function createEngine(canvas: HTMLCanvasElement, mobile: boolean) {
 
   const w = (e: number, slug: string) => weight(e, POSE_INDEX[slug] ?? -9);
   const lastTint: Record<string, number> = {};
-  function applyState(s: State, e: number, time: number) {
+  const lastLen: Record<string, number> = {};
+  function applyState(s: State, e: number, time: number, popScale = 1) {
     const f = world.fades;
     const setFade = (list: typeof f.walls, k: number, minVisible = 0) => {
       for (const it of list) {
@@ -126,11 +153,12 @@ export function createEngine(canvas: HTMLCanvasElement, mobile: boolean) {
     for (const [key, list] of Object.entries(world.tints)) {
       let k: number;
       if (key === 'walls' || key === 'wing') k = s.paint;
-      else if (key === 'lawn') k = Math.max(w(e, 'landscaping') * 0.8, w(e, 'irrigation') * 0.8, s.paint);
-      else k = Math.max(w(e, key), key === 'painting-texturing' ? 0 : s.paint);
+      else if (key === 'lawn') k = Math.max(w(e, 'landscaping') * 0.8 * popScale, w(e, 'irrigation') * 0.8 * popScale, s.paint);
+      else k = Math.max(w(e, key) * popScale, key === 'painting-texturing' ? 0 : s.paint);
       k = Math.round(MathUtils.clamp(k, 0, 1) * 100) / 100;
-      if (lastTint[key] === k) continue;
+      if (lastTint[key] === k && lastLen[key] === list.length) continue;
       lastTint[key] = k;
+      lastLen[key] = list.length;
       for (const t of list) {
         t.m.color.copy(t.base).lerp(t.to, k);
         t.m.emissive.copy(t.to).multiplyScalar(0.18 * k);

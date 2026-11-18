@@ -1,0 +1,38 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHead from '../components/PageHead.astro';
+import { SITE } from '../data/site';
+import { breadcrumbSchema } from '../lib/schema';
+const updated = '18 November 2026';
+---
+
+<Base
+  title="Privacy Policy"
+  description="How Cercles handles your information: what we collect when you contact us, how we use website analytics, and how to reach us about your data."
+  path="/privacy/"
+  schema={[breadcrumbSchema([{ name: 'Home', path: '/' }, { name: 'Privacy', path: '/privacy/' }])]}
+>
+  <PageHead title="Privacy Policy" eyebrow="Legal" lead={`Last updated ${updated}.`} crumbs={[{ name: 'Privacy' }]} />
+  <section class="section" style="padding-top:clamp(40px,5vw,64px)">
+    <div class="container prose legal">
+      <h2 class="h3">Who we are</h2>
+      <p>Cercles (Cercles Full-Circle Living) is a home solutions business in Kozhikode, Kerala. You can reach us at <a href={`mailto:${SITE.email}`}>{SITE.email}</a> or {SITE.phone}.</p>
+
+      <h2 class="h3">What you send us</h2>
+      <p>This website does not store the details you type. The quote form opens WhatsApp on your own device with your message filled in, and nothing is sent until you press send in WhatsApp. When you call, message or email us, we use your name, number, location and project details only to reply, visit your site and prepare a quotation.</p>
+
+      <h2 class="h3">Website analytics</h2>
+      <p>To understand how people use the website and improve it, we may use Google Analytics and Microsoft Clarity. They collect information such as pages visited, device and browser type, approximate location (city level), and how the page is scrolled and clicked. They use cookies or similar technologies. We do not use them to identify you personally, and we do not sell any data.</p>
+      <p>You can block these with your browser settings or a content blocker, and Google offers an opt-out add-on for Google Analytics.</p>
+
+      <h2 class="h3">How long we keep information</h2>
+      <p>We keep enquiry and project details only as long as needed to serve you and to meet legal or accounting requirements.</p>
+
+      <h2 class="h3">Your choices</h2>
+      <p>You can ask us to see, correct or delete the personal information we hold about you by writing to <a href={`mailto:${SITE.email}`}>{SITE.email}</a>.</p>
+
+      <h2 class="h3">Changes</h2>
+      <p>If this policy changes, the new version will be posted on this page with a new date.</p>
+    </div>
+  </section>
+</Base>

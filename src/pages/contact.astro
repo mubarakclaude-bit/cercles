@@ -1,6 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
-import PageHead from '../components/PageHead.astro';
+import PartHero from '../components/PartHero.astro';
 import QuoteForm from '../components/QuoteForm.astro';
 import Icon from '../components/Icon.astro';
 import { SITE, waLink } from '../data/site';
@@ -21,19 +21,27 @@ const ways = [
 ---
 
 <Base
-  title="Contact Cercles: Free Quote and Site Visit"
-  description="Call or WhatsApp +91 75599 42708 for a free site visit and quotation. One team for interiors, electrical, plumbing, exteriors and gardens across Kerala."
+  title="Contact Cercles, Kozhikode: Free Site Visit"
+  description="Call or WhatsApp +91 75599 42708 or email cerclesindia@gmail.com for a free site visit and quotation in Kozhikode (Calicut) and across Kerala."
   path="/contact/"
   noFab
   schema={[contactPage, breadcrumbSchema([{ name: 'Home', path: '/' }, { name: 'Contact', path: '/contact/' }])]}
 >
-  <PageHead
-    title="Let's plan your project."
+  <PartHero
+    pose={0}
     eyebrow="Contact"
-    lead="Tell us what you need. We will visit the site, understand the space and send one clear quotation."
+    title="Let's plan your project."
+    lead="Tell us what you need. We visit your site in Kozhikode or anywhere in Kerala, understand the space and send one clear quotation."
     crumbs={[{ name: 'Contact' }]}
-  />
-  <section class="section">
+    more="details"
+  >
+    <div class="btn-row">
+      <a class="btn" href="#details">Request a quote <Icon name="arrow" /></a>
+      <a class="btn btn--line" href={`tel:${SITE.phoneRaw}`}>Call {SITE.phone}</a>
+    </div>
+  </PartHero>
+
+  <section class="section" id="details">
     <div class="container split">
       <div class="panel reveal">
         <h2 class="h3">Request a free quote</h2>

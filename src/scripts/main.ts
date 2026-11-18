@@ -26,6 +26,11 @@ function onScroll() {
 addEventListener('scroll', onScroll, { passive: true });
 onScroll();
 
+/* ---------- Footer: columns fold on phones ---------- */
+if (matchMedia('(max-width: 833px)').matches) {
+  document.querySelectorAll<HTMLDetailsElement>('.footer__col').forEach((d) => (d.open = false));
+}
+
 /* ---------- Mobile menu ---------- */
 const burger = document.getElementById('burger');
 const menu = document.getElementById('menu');
@@ -97,8 +102,32 @@ if (partView) {
   if (canvas && !saver) {
     const boot = () =>
       import('../scene/part')
-        .then((m) => m.initPart({ view: partView, canvas, slug: partView.dataset.part!, still: reduce }))
+        .then((m) =>
+          m.initPart({
+            view: partView,
+            canvas,
+            slug: partView.dataset.part ?? '',
+            pose: partView.dataset.pose ? Number(partView.dataset.pose) : undefined,
+            orbit: partView.dataset.orbit === '1',
+            still: reduce,
+          }),
+        )
         .catch(() => undefined);
+    const idle = (window as Window & { requestIdleCallback?: (cb: () => void, o?: { timeout: number }) => number }).requestIdleCallback;
+    const go = () => (idle ? idle(boot, { timeout: 1500 }) : setTimeout(boot, 300));
+    document.readyState === 'complete' ? go() : addEventListener('load', go, { once: true });
+  }
+}
+
+/* ---------- Services page: the home flies to the service you are looking at ---------- */
+const exploreView = document.querySelector<HTMLElement>('[data-explore]');
+if (exploreView) {
+  const canvas = exploreView.querySelector<HTMLCanvasElement>('canvas');
+  const items = [...document.querySelectorAll<HTMLElement>('.explore__item')];
+  const saver = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData;
+  if (canvas && !saver) {
+    const boot = () =>
+      import('../scene/explorer').then((m) => m.initExplorer({ view: exploreView, canvas, items, still: reduce })).catch(() => undefined);
     const idle = (window as Window & { requestIdleCallback?: (cb: () => void, o?: { timeout: number }) => number }).requestIdleCallback;
     const go = () => (idle ? idle(boot, { timeout: 1500 }) : setTimeout(boot, 300));
     document.readyState === 'complete' ? go() : addEventListener('load', go, { once: true });
@@ -131,6 +160,22 @@ if (process) {
   fill();
 }
 
+/* ---------- Lead tracking (only does anything when analytics are switched on) ---------- */
+type Tracker = { gtag?: (...a: unknown[]) => void; clarity?: (...a: unknown[]) => void };
+const track = (method: string, extra: Record<string, string> = {}) => {
+  const w = window as unknown as Tracker;
+  w.gtag?.('event', 'generate_lead', { method, page: location.pathname, ...extra });
+  w.clarity?.('event', `lead_${method}`);
+};
+document.addEventListener('click', (e) => {
+  const a = (e.target as HTMLElement).closest('a');
+  if (!a) return;
+  const h = a.getAttribute('href') ?? '';
+  if (h.startsWith('tel:')) track('call');
+  else if (h.includes('wa.me')) track('whatsapp');
+  else if (h.startsWith('mailto:')) track('email');
+});
+
 /* ---------- Quote form -> WhatsApp (no server, no cost) ---------- */
 document.querySelectorAll<HTMLFormElement>('form[data-whatsapp]').forEach((form) => {
   form.addEventListener('submit', (e) => {
@@ -145,6 +190,7 @@ document.querySelectorAll<HTMLFormElement>('form[data-whatsapp]').forEach((form)
       `Location: ${d.get('area') ?? ''}`,
       d.get('details') ? `Details: ${d.get('details')}` : '',
     ].filter(Boolean);
+    track('quote_form', { service: String(d.get('service') ?? '') });
     const num = form.dataset.whatsapp;
     open(`https://wa.me/${num}?text=${encodeURIComponent(lines.join('\n'))}`, '_blank', 'noopener');
     form.dispatchEvent(new CustomEvent('sent'));

@@ -1,6 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
-import PageHead from '../components/PageHead.astro';
+import PartHero from '../components/PartHero.astro';
 import Icon from '../components/Icon.astro';
 import HowWeWork from '../components/HowWeWork.astro';
 import Faq from '../components/Faq.astro';
@@ -15,21 +15,23 @@ const faqs = [
 ---
 
 <Base
-  title="Full-Circle Home Renovation & Fit-Out in Kerala"
-  description="One plan, one quotation and one schedule across every trade. Cercles Full-Circle projects cover interiors, electrical, plumbing, exteriors and landscaping."
+  title="Full-Circle Home Renovation in Kozhikode"
+  description="Complete home renovation and fit-out in Kozhikode (Calicut): one plan, one quotation and one schedule across interiors, wiring, plumbing, roof and garden."
   path="/full-circle-projects/"
   schema={[faqSchema(faqs), breadcrumbSchema([{ name: 'Home', path: '/' }, { name: 'Full-Circle Projects', path: '/full-circle-projects/' }])]}
 >
-  <PageHead
-    title="One plan across every trade."
+  <PartHero
+    pose={14}
+    orbit
     eyebrow="Full-Circle Projects"
-    lead="A complete, end-to-end home transformation covering interiors, exteriors, utilities and outdoors, delivered by one accountable team."
+    title="One plan across every trade."
+    lead="A complete home transformation in Kozhikode and across Kerala: interiors, exteriors, utilities and outdoors, delivered by one accountable team."
     crumbs={[{ name: 'Full-Circle Projects' }]}
   >
     <div class="btn-row"><a class="btn" href="/contact/">Plan my project <Icon name="arrow" /></a></div>
-  </PageHead>
+  </PartHero>
 
-  <section class="section">
+  <section class="section" id="details">
     <div class="container">
       <div class="section-head reveal">
         <p class="eyebrow">What you can combine</p>

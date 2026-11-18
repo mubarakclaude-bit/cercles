@@ -1,59 +1,64 @@
 ---
+// A quiet footer in the Apple manner: small type, light grey, columns that fold away on phones.
 import Logo from './Logo.astro';
-import Icon from './Icon.astro';
-import { SITE, SERVICES } from '../data/site';
+import { SITE, SERVICES, LANDINGS, waLink } from '../data/site';
 const year = new Date().getFullYear();
-const half = Math.ceil(SERVICES.length / 2);
 const addr = SITE.address;
+const cols = [
+  { title: 'Services', links: SERVICES.map((s) => ({ href: `/services/${s.slug}/`, label: s.label })) },
+  { title: 'Popular in Kozhikode', links: LANDINGS.map((l) => ({ href: `/kozhikode/${l.slug}/`, label: l.label })) },
+  {
+    title: 'Cercles',
+    links: [
+      { href: '/services/', label: 'All services' },
+      { href: '/full-circle-projects/', label: 'Full-Circle Projects' },
+      { href: '/about/', label: 'About' },
+      { href: '/contact/', label: 'Contact' },
+    ],
+  },
+];
 ---
 
-<footer class="footer on-dark">
+<footer class="footer">
   <div class="container">
-    <div class="footer__grid">
-      <div class="footer__brand">
-        <a class="logo" href="/" aria-label="Cercles, home"><Logo /></a>
-        <p>One-stop home solutions. Interiors, exteriors, electrical, plumbing and gardens from one accountable team.</p>
-      </div>
-
-      <div>
-        <p class="footer__h">Services</p>
-        <div class="footer__cols">
-          <ul>{SERVICES.slice(0, half).map((s) => <li><a href={`/services/${s.slug}/`}>{s.label}</a></li>)}</ul>
-          <ul>{SERVICES.slice(half).map((s) => <li><a href={`/services/${s.slug}/`}>{s.label}</a></li>)}</ul>
-        </div>
-      </div>
-
-      <div>
-        <p class="footer__h">Company</p>
+    <p class="footer__note">
+      Cercles is a one-stop home solutions company in Kozhikode (Calicut), Kerala. Interiors, curtains, electrical, plumbing, roofing, facades and gardens, from one accountable team. Free site visits across Kozhikode.
+    </p>
+    <div class="footer__cols">
+      {
+        cols.map((c) => (
+          <details class="footer__col" open>
+            <summary class="footer__h">{c.title}</summary>
+            <ul>
+              {c.links.map((l) => (
+                <li>
+                  <a href={l.href}>{l.label}</a>
+                </li>
+              ))}
+            </ul>
+          </details>
+        ))
+      }
+      <details class="footer__col" open>
+        <summary class="footer__h">Contact</summary>
         <ul>
-          <li><a href="/full-circle-projects/">Full-Circle Projects</a></li>
-          <li><a href="/about/">About</a></li>
-          <li><a href="/contact/">Contact</a></li>
+          <li><a href={`tel:${SITE.phoneRaw}`}>{SITE.phone}</a></li>
+          <li><a href={waLink('Hi Cercles, I would like a quotation.')} target="_blank" rel="noopener">WhatsApp</a></li>
+          <li><a href={`mailto:${SITE.email}`}>{SITE.email}</a></li>
+          <li><a href={SITE.instagram} target="_blank" rel="noopener me">Instagram</a></li>
+          <li class="footer__addr">
+            {addr ? <>{addr.street}, {addr.locality}, {addr.region} {addr.postalCode}</> : <>Kozhikode, Kerala, India</>}
+          </li>
         </ul>
-      </div>
-
-      <div>
-        <p class="footer__h">Contact</p>
-        <address>
-          <a href={`tel:${SITE.phoneRaw}`}>{SITE.phone}</a><br />
-          <a href={`mailto:${SITE.email}`}>{SITE.email}</a><br />
-          <a href={SITE.instagram} target="_blank" rel="noopener me">Instagram @cercles.in</a>
-          {
-            addr ? (
-              <p style="margin-top:12px">
-                {addr.street}<br />
-                {addr.locality}, {addr.region} {addr.postalCode}
-              </p>
-            ) : (
-              <p style="margin-top:12px">Kerala, India</p>
-            )
-          }
-        </address>
-      </div>
+      </details>
     </div>
     <div class="footer__bar">
-      <span>&copy; {year} Cercles. All rights reserved.</span>
-      <span>Roof to Garden. One Call.</span>
+      <a class="logo footer__logo" href="/" aria-label="Cercles, home"><Logo /></a>
+      <span>Copyright &copy; {year} Cercles. All rights reserved.</span>
+      <nav class="footer__legal" aria-label="Legal">
+        <a href="/privacy/">Privacy Policy</a>
+        <a href="/sitemap-index.xml">Site Map</a>
+      </nav>
     </div>
   </div>
 </footer>

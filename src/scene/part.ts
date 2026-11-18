@@ -6,14 +6,16 @@ interface Options {
   view: HTMLElement; // the container that holds the canvas
   canvas: HTMLCanvasElement;
   slug: string;
+  pose?: number;
+  orbit?: boolean;
   still: boolean;
 }
 
-export function initPart({ view, canvas, slug, still }: Options) {
+export function initPart({ view, canvas, slug, pose, orbit = false, still }: Options) {
   const mobile = matchMedia('(max-width: 899px)').matches;
   const eng = createEngine(canvas, mobile);
-  const idx = POSE_INDEX[slug] ?? 0;
-  const s = sample(idx);
+  const idx = pose ?? POSE_INDEX[slug] ?? 0;
+  const base = sample(idx);
 
   function resize() {
     eng.resize(view.clientWidth, view.clientHeight);
@@ -28,14 +30,16 @@ export function initPart({ view, canvas, slug, still }: Options) {
 
   function render(now: number) {
     const time = still ? 0 : (now - t0) / 1000;
+    const s = orbit ? { ...base, az: base.az + time * 7 } : base;
     const wide = view.clientWidth >= 900;
     eng.frame(s, time, {
       wide,
       fx: wide ? 0.26 : 0,
-      fy: wide ? 0 : 0.2,
+      fy: wide ? 0 : 0.27,
       baseH: wide ? 10.8 : 10,
       baseW: wide ? 14.6 : 12.6,
-      zoom: wide ? 1 + (s.zoom - 1) * 0.82 : Math.max(s.zoom, 1) * 0.92,
+      // on phones the house sits in the top half; shorter screens get a smaller house
+      zoom: wide ? 1 + (s.zoom - 1) * 0.82 : Math.max(s.zoom, 1) * (view.clientHeight < 760 ? 0.74 : 0.84),
     });
     eng.applyState(s, idx, time);
     eng.render();

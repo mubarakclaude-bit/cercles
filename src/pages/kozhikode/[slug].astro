@@ -1,0 +1,85 @@
+---
+import Base from '../../layouts/Base.astro';
+import Icon from '../../components/Icon.astro';
+import PartHero from '../../components/PartHero.astro';
+import QuoteForm from '../../components/QuoteForm.astro';
+import Faq from '../../components/Faq.astro';
+import HowWeWork from '../../components/HowWeWork.astro';
+import { LANDINGS, SERVICE_BY_SLUG, SITE } from '../../data/site';
+import { breadcrumbSchema, faqSchema } from '../../lib/schema';
+
+export function getStaticPaths() {
+  return LANDINGS.map((l) => ({ params: { slug: l.slug }, props: { l } }));
+}
+const { l } = Astro.props;
+const path = `/kozhikode/${l.slug}/`;
+const related = l.related.map((r) => SERVICE_BY_SLUG[r]).filter(Boolean);
+const serviceNode = {
+  '@type': 'Service',
+  '@id': `https://cercles.in${path}#service`,
+  name: l.h1,
+  serviceType: l.label,
+  description: l.description,
+  url: `https://cercles.in${path}`,
+  provider: { '@id': 'https://cercles.in/#organization' },
+  areaServed: { '@type': 'City', name: 'Kozhikode', alternateName: 'Calicut' },
+};
+---
+
+<Base
+  title={l.title}
+  description={l.description}
+  path={path}
+  schema={[serviceNode, faqSchema(l.faqs), breadcrumbSchema([{ name: 'Home', path: '/' }, { name: l.label, path }])]}
+>
+  <PartHero slug={l.pose} eyebrow="In Kozhikode" title={l.h1} lead={l.intro} crumbs={[{ name: l.label }]}>
+    <div class="btn-row">
+      <a class="btn" href="#quote">Get a free quote <Icon name="arrow" /></a>
+      <a class="btn btn--line" href={`tel:${SITE.phoneRaw}`}>Call {SITE.phone}</a>
+    </div>
+  </PartHero>
+
+  <section class="section" id="details">
+    <div class="container split">
+      <div style="display:grid;gap:clamp(40px,5vw,64px)">
+        <div class="reveal">
+          <h2 class="h2" style="margin-bottom:24px">What we do</h2>
+          <ul class="checklist">{l.offer.map((i) => <li>{i}</li>)}</ul>
+        </div>
+        <div class="note reveal">
+          <p class="eyebrow">Why it matters in Kozhikode</p>
+          <p>{l.local}</p>
+        </div>
+      </div>
+      <aside class="sticky">
+        <div class="panel reveal" id="quote">
+          <h2 class="h3">Get a free quote</h2>
+          <p class="muted" style="font-size:0.9375rem">Free site visit anywhere in Kozhikode.</p>
+          <QuoteForm service={l.related[0]} />
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <HowWeWork />
+  <Faq items={l.faqs} title="Your questions, answered." />
+
+  <section class="section section--tile">
+    <div class="container">
+      <div class="section-head reveal">
+        <p class="eyebrow">Related services</p>
+        <h2 class="h2">Done together, by one team.</h2>
+      </div>
+      <div class="grid grid--2">
+        {related.map((r, i) => (
+          <a class="card reveal" style={`--d:${i % 2}`} href={`/services/${r.slug}/`}>
+            <span class="card__icon"><Icon name={r.icon} /></span>
+            <h3 class="h3">{r.name}</h3>
+            <p>{r.summary}</p>
+            <span class="card__more">Learn more <Icon name="arrow" /></span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+</Base>

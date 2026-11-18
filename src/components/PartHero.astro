@@ -1,0 +1,51 @@
+---
+// A full-screen first view: the 3D home held still on one part (or turning slowly),
+// with the page title beside it. Used by service pages, Kozhikode pages, About, Full-Circle and Contact.
+import Icon from './Icon.astro';
+import Mark from './Mark.astro';
+import { POP } from '../scene/director';
+
+interface Props {
+  slug?: string; // which part of the home to show
+  pose?: number; // or a pose by number (0 = whole home, 14 = finished home)
+  orbit?: boolean; // turn slowly
+  eyebrow?: string;
+  title: string;
+  lead?: string;
+  facts?: string[];
+  crumbs: { name: string; href?: string }[];
+  more?: string; // id of the section the "scroll" hint points to
+}
+const { slug, pose, orbit = false, eyebrow, title, lead, facts = [], crumbs, more = 'details' } = Astro.props;
+const pop = (slug && POP[slug]) || '#396db5';
+---
+
+<section class="shero" style={`--pop:${pop}`}>
+  <div class="shero__view" data-part={slug ?? ''} data-pose={pose ?? ''} data-orbit={orbit ? '1' : ''} aria-hidden="true">
+    <Mark class="mark" />
+    <canvas></canvas>
+    <div class="shero__fade"></div>
+  </div>
+  <div class="container shero__inner">
+    <nav class="crumbs" aria-label="Breadcrumb">
+      <ol>
+        <li><a href="/">Home</a></li>
+        {
+          crumbs.map((c, i) => (
+            <li>{c.href && i < crumbs.length - 1 ? <a href={c.href}>{c.name}</a> : <span aria-current="page">{c.name}</span>}</li>
+          ))
+        }
+      </ol>
+    </nav>
+    <div class="shero__body">
+      <div class="shero__copy">
+        {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+        <h1>{title}</h1>
+        {lead && <p class="lead">{lead}</p>}
+        {facts.length > 0 && <ul class="shero__facts">{facts.map((f) => <li>{f}</li>)}</ul>}
+        <slot />
+      </div>
+    </div>
+    <a class="shero__more" href={`#${more}`}>Scroll <Icon name="arrow" /></a>
+  </div>
+</section>

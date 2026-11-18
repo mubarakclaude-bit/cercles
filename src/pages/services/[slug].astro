@@ -1,25 +1,26 @@
 ---
 import Base from '../../layouts/Base.astro';
 import Icon from '../../components/Icon.astro';
-import Mark from '../../components/Mark.astro';
+import PartHero from '../../components/PartHero.astro';
 import QuoteForm from '../../components/QuoteForm.astro';
 import Faq from '../../components/Faq.astro';
-import { SERVICES, SERVICE_BY_SLUG, CATEGORIES, SITE } from '../../data/site';
-import { POP } from '../../scene/director';
+import { SERVICES, SERVICE_BY_SLUG, CATEGORIES, SITE, SEO, LANDINGS } from '../../data/site';
 import { breadcrumbSchema, faqSchema, serviceSchema } from '../../lib/schema';
 
 export function getStaticPaths() {
   return SERVICES.map((s) => ({ params: { slug: s.slug }, props: { s } }));
 }
 const { s } = Astro.props;
+const seo = SEO[s.slug];
 const cat = CATEGORIES.find((c) => c.id === s.category)!;
 const related = s.related.map((r) => SERVICE_BY_SLUG[r]).filter(Boolean);
+const local = LANDINGS.filter((l) => l.related.includes(s.slug));
 const path = `/services/${s.slug}/`;
 ---
 
 <Base
-  title={`${s.name} in Kerala`}
-  description={s.description}
+  title={seo.title}
+  description={seo.description}
   path={path}
   schema={[
     serviceSchema(s),
@@ -31,55 +32,44 @@ const path = `/services/${s.slug}/`;
     ]),
   ]}
 >
-  <section class="shero" style={`--pop:${POP[s.slug]}`}>
-    <div class="shero__view" data-part={s.slug} aria-hidden="true">
-      <Mark class="mark" />
-      <canvas></canvas>
-      <div class="shero__fade"></div>
+  <PartHero slug={s.slug} eyebrow={cat.name} title={seo.h1} lead={s.intro} facts={s.idealFor} crumbs={[{ name: 'Services', href: '/services/' }, { name: s.name }]}>
+    <div class="btn-row">
+      <a class="btn" href="#quote">Get a free quote <Icon name="arrow" /></a>
+      <a class="btn btn--line" href={`tel:${SITE.phoneRaw}`}>Call {SITE.phone}</a>
     </div>
-    <div class="container shero__inner">
-      <nav class="crumbs" aria-label="Breadcrumb">
-        <ol>
-          <li><a href="/">Home</a></li>
-          <li><a href="/services/">Services</a></li>
-          <li><span aria-current="page">{s.name}</span></li>
-        </ol>
-      </nav>
-      <div class="shero__body">
-        <div class="shero__copy">
-          <p class="eyebrow">{cat.name}</p>
-          <h1>{s.title}</h1>
-          <p class="lead">{s.intro}</p>
-          <ul class="shero__facts">
-            {s.idealFor.map((i) => <li>{i}</li>)}
-          </ul>
-          <div class="btn-row">
-            <a class="btn" href="#quote">Get a free quote <Icon name="arrow" /></a>
-            <a class="btn btn--line" href={`tel:${SITE.phoneRaw}`}>Call {SITE.phone}</a>
-          </div>
-        </div>
-      </div>
-      <a class="shero__more" href="#details" style="align-self:flex-start;text-decoration:none">Details <Icon name="arrow" /></a>
-    </div>
-  </section>
+  </PartHero>
 
   <section class="section" id="details">
     <div class="container split">
       <div style="display:grid;gap:clamp(40px,5vw,64px)">
         <div class="reveal">
+          <p class="eyebrow" style="margin-bottom:12px">{s.name} in Kozhikode</p>
           <h2 class="h2" style="margin-bottom:24px">What is included</h2>
           <ul class="checklist">
             {s.includes.map((i) => <li>{i}</li>)}
           </ul>
         </div>
         <div class="note reveal">
-          <p class="eyebrow" style="color:var(--lime)">Built for Kerala</p>
+          <p class="eyebrow">Built for Kerala weather</p>
           <p>{s.keralaNote}</p>
         </div>
+        {
+          local.length > 0 && (
+            <div class="reveal">
+              <p class="eyebrow" style="margin-bottom:12px">Popular in Kozhikode</p>
+              <div class="chips">
+                {local.map((l) => (
+                  <a class="chip" href={`/kozhikode/${l.slug}/`}>{l.label}</a>
+                ))}
+              </div>
+            </div>
+          )
+        }
       </div>
       <aside class="sticky">
-        <div class="panel reveal" id="quote" style="background:var(--tile)">
+        <div class="panel reveal" id="quote">
           <h2 class="h3">Get a free quote</h2>
+          <p class="muted" style="font-size:0.9375rem">Free site visit anywhere in Kozhikode.</p>
           <QuoteForm service={s.slug} />
         </div>
       </aside>

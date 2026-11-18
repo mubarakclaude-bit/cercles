@@ -1,4 +1,4 @@
-// Single source of truth for the whole site: business facts, services, areas.
+// Single source of truth for the whole site: business facts, services, local pages, tracking.
 // Pages, navigation, sitemap and structured data all read from here.
 
 export const SITE = {
@@ -9,7 +9,7 @@ export const SITE = {
   phone: '+91 75599 42708',
   phoneRaw: '+917559942708',
   whatsapp: '917559942708',
-  email: 'connect@cercles.in',
+  email: 'cerclesindia@gmail.com',
   instagram: 'https://www.instagram.com/cercles.in/',
   // Fill these in when known. Structured data only includes what is set.
   address: null as null | {
@@ -23,7 +23,7 @@ export const SITE = {
   foundingYear: null as null | number,
   mapUrl: null as null | string,
   description:
-    'Cercles is a one-stop home solutions company in Kerala. Interiors, curtains, electrical, plumbing, roofing, facades, aluminium work, landscaping and irrigation under one quotation, one schedule and one accountable team.',
+    'Cercles is a one-stop home solutions company in Kozhikode (Calicut), Kerala. Interiors, curtains, electrical, plumbing, roofing, facades, aluminium work, landscaping and irrigation under one quotation, one schedule and one accountable team.',
 } as const;
 
 export type CategoryId = 'interiors' | 'utilities' | 'exteriors' | 'outdoors';
@@ -522,11 +522,15 @@ export const PROCESS = [
 export const HOME_FAQS = [
   {
     q: 'What does Cercles do?',
-    a: 'Cercles is a one-stop home solutions company in Kerala. We design, build and finish every part of a home, inside and out: curtains, sofas, interiors, furniture, painting, electrical, plumbing, roofing, ACP facades, aluminium work, rainwater gutters, landscaping and irrigation.',
+    a: 'Cercles is a one-stop home solutions company based in Kozhikode (Calicut). We design, build and finish every part of a home, inside and out: curtains, sofas, interiors, furniture, painting, electrical, plumbing, roofing, ACP facades, aluminium work, rainwater gutters, landscaping and irrigation.',
   },
   {
     q: 'Do I have to book the whole home, or can I book a single service?',
     a: 'Either. Every service can be booked on its own, or combined into one complete Full-Circle project with one quotation and one schedule.',
+  },
+  {
+    q: 'Do you work outside Kozhikode?',
+    a: 'Yes. We are based in Kozhikode and take on projects across Kerala. Tell us where your site is and we will plan the visit.',
   },
   {
     q: 'How does the quotation work?',
@@ -544,3 +548,238 @@ export const HOME_FAQS = [
 
 export const waLink = (text: string) =>
   `https://wa.me/${SITE.whatsapp}?text=${encodeURIComponent(text)}`;
+
+/* ---------------------------------------------------------------------------------------------
+   Search: what each service page is called in Google, and its main heading.
+   Kozhikode first (with Calicut, the name many people still search for), Kerala second.
+   --------------------------------------------------------------------------------------------- */
+export const SEO: Record<string, { title: string; h1: string; description: string }> = {
+  curtains: {
+    title: 'Curtains & Blinds in Kozhikode (Calicut)',
+    h1: 'Curtains and motorised curtains in Kozhikode',
+    description: 'Made-to-measure curtains, Roman blinds and motorised curtains in Kozhikode (Calicut) and across Kerala. Free site measurement and one clear quote.',
+  },
+  'sofa-making': {
+    title: 'Custom Sofa Makers in Kozhikode',
+    h1: 'Custom sofas, made for your room in Kozhikode',
+    description: 'Custom sofa makers in Kozhikode (Calicut): L-shape, sectional and recliner sofas built to your room, plus re-upholstery. Free site visit and quote.',
+  },
+  'interior-works': {
+    title: 'Interior Designers in Kozhikode, Kerala',
+    h1: 'Interior design and complete fit-outs in Kozhikode',
+    description: 'Interior designers in Kozhikode (Calicut) for complete home fit-outs: false ceilings, kitchens, wardrobes and finishing, under one quotation.',
+  },
+  'furniture-works': {
+    title: 'Custom Furniture & Wardrobes in Kozhikode',
+    h1: 'Made-to-measure furniture and wardrobes in Kozhikode',
+    description: 'Made-to-measure furniture in Kozhikode (Calicut): wardrobes, TV units, beds, dining and storage, built to your space with humidity-ready finishes.',
+  },
+  'painting-texturing': {
+    title: 'Painting Contractors in Kozhikode',
+    h1: 'Painting and texture finishes in Kozhikode',
+    description: 'Painting contractors in Kozhikode (Calicut) for interior, exterior and texture painting, with damp treatment and proper surface preparation.',
+  },
+  electrical: {
+    title: 'Electrical Contractors in Kozhikode',
+    h1: 'Electrical work and lighting design in Kozhikode',
+    description: 'Electrical contractors in Kozhikode (Calicut): house wiring, lighting design, DB and safety upgrades, and smart lighting for homes and shops.',
+  },
+  plumbing: {
+    title: 'Plumbing Services in Kozhikode',
+    h1: 'Plumbing for homes in Kozhikode',
+    description: 'Plumbing services in Kozhikode (Calicut): bathroom and kitchen plumbing, leak repair, tank and supply planning, all tested before walls close.',
+  },
+  roofing: {
+    title: 'Roofing & Waterproofing in Kozhikode',
+    h1: 'Roofing and waterproofing in Kozhikode',
+    description: 'Roofing and waterproofing contractors in Kozhikode (Calicut): new roofs, roof repairs, terrace waterproofing and drainage built for the monsoon.',
+  },
+  'acp-facade': {
+    title: 'ACP Cladding & Facade Work in Kozhikode',
+    h1: 'ACP cladding and facades in Kozhikode',
+    description: 'ACP cladding and facade work in Kozhikode (Calicut) for homes, shops and offices: design, sub-frame, panel fitting and weather sealing.',
+  },
+  'aluminium-fabrication': {
+    title: 'Aluminium Fabrication in Kozhikode',
+    h1: 'Aluminium windows, partitions and railings in Kozhikode',
+    description: 'Aluminium fabrication in Kozhikode (Calicut): sliding windows, partitions, railings and custom metalwork that never rust, measured and fitted.',
+  },
+  'aluminium-gutters': {
+    title: 'Aluminium Rain Gutters in Kozhikode',
+    h1: 'Aluminium rainwater gutters in Kozhikode',
+    description: 'Aluminium rainwater gutters in Kozhikode (Calicut), sized for heavy monsoon rain, to protect walls and foundations with clean, rust-free drainage.',
+  },
+  landscaping: {
+    title: 'Landscaping Company in Kozhikode',
+    h1: 'Landscaping and garden design in Kozhikode',
+    description: 'Landscaping company in Kozhikode (Calicut): garden design, lawns, planting, paving, walkways and pergolas, designed and built end to end.',
+  },
+  irrigation: {
+    title: 'Drip & Sprinkler Irrigation in Kozhikode',
+    h1: 'Drip and sprinkler irrigation in Kozhikode',
+    description: 'Drip and sprinkler irrigation in Kozhikode (Calicut): automated systems with timers that water gardens and lawns on schedule, zone by zone.',
+  },
+};
+
+/* ---------------------------------------------------------------------------------------------
+   Local pages for things people in Kozhikode search for that sit inside our services.
+   Reached from the footer ("Popular in Kozhikode"), so they add reach without adding clutter.
+   --------------------------------------------------------------------------------------------- */
+export interface Landing {
+  slug: string;
+  title: string; // Google title (brand is added after it)
+  h1: string;
+  description: string;
+  label: string; // short name for the footer
+  pose: string; // which part of the 3D home to show
+  intro: string;
+  offer: string[];
+  local: string;
+  faqs: { q: string; a: string }[];
+  related: string[]; // service slugs
+}
+
+export const LANDINGS: Landing[] = [
+  {
+    slug: 'home-renovation',
+    title: 'Home Renovation in Kozhikode (Calicut)',
+    h1: 'Home renovation in Kozhikode, planned as one project',
+    label: 'Home renovation',
+    description: 'Home renovation in Kozhikode (Calicut) with one team for every trade: interiors, wiring, plumbing, roofing, painting and garden, under one quotation.',
+    pose: 'painting-texturing',
+    intro:
+      'Renovating a house usually means finding a carpenter, an electrician, a plumber, a painter and a roofer, then making them work together. Cercles runs the whole renovation as one project in Kozhikode and across Kerala, with one quotation, one schedule and one project lead.',
+    offer: [
+      'Site visit and a full survey of the house',
+      'One combined scope, timeline and quotation',
+      'Interiors, furniture, curtains and painting',
+      'Rewiring, lighting and plumbing upgrades',
+      'Roof repairs, waterproofing and gutters',
+      'Garden, paving and irrigation to finish',
+    ],
+    local:
+      'Many homes in Kozhikode were built before modern wiring loads, open kitchens and terrace use became normal. A renovation is the moment to fix damp, upgrade wiring and plan drainage for the monsoon, not only to change the look.',
+    faqs: [
+      { q: 'Can you renovate one floor or a few rooms only?', a: 'Yes. A renovation can be a whole house or a single part of it. You get one focused quotation for exactly that scope.' },
+      { q: 'Will one person coordinate all the trades?', a: 'Yes. Every Full-Circle project has one project lead who plans the order of work and is your single point of contact.' },
+      { q: 'Do you handle old homes with leaks or damp?', a: 'Yes. We find the cause first, then fix roofs, waterproofing and drainage before any finishing work, so the new interior lasts.' },
+    ],
+    related: ['interior-works', 'electrical', 'roofing', 'painting-texturing'],
+  },
+  {
+    slug: 'modular-kitchen',
+    title: 'Modular Kitchens in Kozhikode',
+    h1: 'Modular kitchens in Kozhikode, built to your space',
+    label: 'Modular kitchens',
+    description: 'Modular kitchens in Kozhikode (Calicut): layout, cabinets, storage, worktops, lighting and plumbing planned together and fitted by one team.',
+    pose: 'interior-works',
+    intro:
+      'A kitchen is cabinets, plumbing, wiring, lighting and ventilation that all have to line up. Cercles designs and fits modular kitchens in Kozhikode as part of the interior, so the sink, sockets and lights are exactly where the cabinets need them.',
+    offer: [
+      'Kitchen layout to suit how you cook',
+      'Base and wall cabinets, tall units and storage',
+      'Worktops, shutters and hardware options',
+      'Sink, tap and water supply planned with the cabinets',
+      'Sockets, appliance points and under-cabinet lighting',
+      'Installation and finishing on site',
+    ],
+    local:
+      'Kerala kitchens deal with steam, heat and humidity every day. We choose boards, edge sealing and finishes that resist moisture, and plan ventilation so the kitchen stays fresh.',
+    faqs: [
+      { q: 'Can the kitchen be planned with the rest of the interior?', a: 'Yes, and it works best that way. The kitchen is quoted with the interior so the plumbing, wiring and finishes match.' },
+      { q: 'Do you also do the plumbing and electrical points?', a: 'Yes. Our electrical and plumbing teams place every point to match the cabinet design.' },
+      { q: 'Can I replace an old kitchen without renovating the house?', a: 'Yes. A kitchen can be booked on its own with one focused quotation.' },
+    ],
+    related: ['interior-works', 'furniture-works', 'plumbing', 'electrical'],
+  },
+  {
+    slug: 'false-ceiling',
+    title: 'False Ceiling & Gypsum Work in Kozhikode',
+    h1: 'False ceilings and gypsum work in Kozhikode',
+    label: 'False ceiling',
+    description: 'False ceiling and gypsum ceiling work in Kozhikode (Calicut), with lighting planned in, clean joints and moisture-aware materials for Kerala homes.',
+    pose: 'interior-works',
+    intro:
+      'A false ceiling hides wiring, shapes the light in a room and gives it a finished look. Cercles designs and installs false ceilings in Kozhikode as part of the interior, with the lighting and wiring planned at the same time.',
+    offer: [
+      'Ceiling design for each room',
+      'Gypsum and other ceiling systems',
+      'Cove lighting, downlights and fan points planned in',
+      'Wiring routed inside the ceiling',
+      'Clean joints, putty and paint finish',
+      'Quality check before handover',
+    ],
+    local:
+      'Humidity and roof leaks are the main threats to a false ceiling in Kerala. We check the slab and roof for leaks first and choose materials suited to the room, so the ceiling does not stain or sag.',
+    faqs: [
+      { q: 'Can the lighting be designed with the ceiling?', a: 'Yes. Ceiling and lighting are planned together so every light, fan point and switch lands in the right place.' },
+      { q: 'Is a false ceiling a problem in the monsoon?', a: 'Not when the slab above is dry. We check for leaks and fix waterproofing before the ceiling goes up.' },
+      { q: 'Can you do one room only?', a: 'Yes. A single room is as welcome as a full house.' },
+    ],
+    related: ['interior-works', 'electrical', 'painting-texturing', 'roofing'],
+  },
+  {
+    slug: 'waterproofing',
+    title: 'Waterproofing Contractors in Kozhikode',
+    h1: 'Waterproofing in Kozhikode, before the monsoon',
+    label: 'Waterproofing',
+    description: 'Waterproofing contractors in Kozhikode (Calicut) for terraces, roofs, bathrooms and walls: leak diagnosis first, then lasting treatment.',
+    pose: 'roofing',
+    intro:
+      'A leak in one place often starts somewhere else. Cercles traces the cause first, then waterproofs terraces, roofs, bathrooms and walls in Kozhikode with drainage and joints treated properly, so the problem does not come back next monsoon.',
+    offer: [
+      'Leak and damp inspection',
+      'Terrace and roof slab waterproofing',
+      'Bathroom and wet-area waterproofing',
+      'Wall damp treatment before painting',
+      'Drainage, slope and joint correction',
+      'Rainwater gutters where needed',
+    ],
+    local:
+      'Kozhikode gets intense rain for months at a time and salty, humid air from the sea. Most leaks start at joints, junctions and drain points, so that is where we look first.',
+    faqs: [
+      { q: 'When is the best time to waterproof?', a: 'Before the monsoon. Book a site visit early so the work is not rushed.' },
+      { q: 'Can you find where a leak is really coming from?', a: 'That is always the first step. We inspect the roof, joints and drainage before suggesting any treatment.' },
+      { q: 'Do you repaint after fixing damp?', a: 'Yes. Painting is one of our services, so the wall can be treated and finished by one team.' },
+    ],
+    related: ['roofing', 'aluminium-gutters', 'painting-texturing', 'plumbing'],
+  },
+  {
+    slug: 'home-automation',
+    title: 'Home Automation in Kozhikode',
+    h1: 'Home automation in Kozhikode, built into the home',
+    label: 'Home automation',
+    description: 'Home automation in Kozhikode (Calicut): motorised curtains, smart lighting and automated irrigation, planned with the wiring and interiors.',
+    pose: 'electrical',
+    intro:
+      'Automation works best when it is planned with the wiring, not added later. Cercles builds smart features into homes in Kozhikode as part of the electrical and interior work: curtains that open on a schedule, lighting scenes and gardens that water themselves.',
+    offer: [
+      'Motorised and automated curtains',
+      'Smart lighting and lighting scenes',
+      'Automated garden irrigation with timers',
+      'Wiring and points planned for automation',
+      'Control from a phone, remote or schedule',
+      'Set-up and handover walkthrough',
+    ],
+    local:
+      'Power cuts and voltage changes are part of life in Kerala. We plan protection and sensible fallbacks so smart features stay reliable, and every automated item still works manually.',
+    faqs: [
+      { q: 'Can automation be added to an existing home?', a: 'Often yes. Curtains, lighting and irrigation can usually be automated with limited changes. A site visit tells us what is practical.' },
+      { q: 'Does it need special wiring?', a: 'Some features do. That is why we plan automation with the electrical work.' },
+      { q: 'Can I still use switches and curtains by hand?', a: 'Yes. Everything we automate can also be used manually.' },
+    ],
+    related: ['electrical', 'curtains', 'irrigation', 'interior-works'],
+  },
+];
+export const LANDING_BY_SLUG = Object.fromEntries(LANDINGS.map((l) => [l.slug, l])) as Record<string, Landing>;
+
+/* ---------------------------------------------------------------------------------------------
+   Tracking. Set these as build settings (GitHub repository variables), never in the code.
+   Nothing is loaded while they are empty.
+   --------------------------------------------------------------------------------------------- */
+export const TRACKING = {
+  ga4: (import.meta.env.PUBLIC_GA4_ID as string | undefined) ?? '',
+  clarity: (import.meta.env.PUBLIC_CLARITY_ID as string | undefined) ?? '',
+  googleVerification: (import.meta.env.PUBLIC_GSC_VERIFICATION as string | undefined) ?? '',
+  bingVerification: (import.meta.env.PUBLIC_BING_VERIFICATION as string | undefined) ?? '',
+};

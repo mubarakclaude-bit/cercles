@@ -324,7 +324,6 @@ ol {
   height: 32px;
   width: auto;
 }
-.footer .logo,
 .menu .logo {
   --logo-mark: var(--lime);
   --logo-word: #fff;
@@ -1032,82 +1031,138 @@ a.chip:hover {
   color: var(--muted);
 }
 
-/* ---------- Footer ---------- */
+/* ---------- Footer: quiet, small, light (Apple manner) ---------- */
 .footer {
-  background: var(--ink);
-  color: rgb(255 255 255 / 0.72);
-  padding-top: clamp(56px, 7vw, 88px);
-  font-size: 0.9375rem;
+  background: #f5f5f7;
+  color: #6e6e73;
+  font-size: 0.75rem;
+  line-height: 1.5;
+  padding-top: 20px;
+  border-top: 1px solid rgb(0 0 0 / 0.04);
 }
-.footer__grid {
+.footer__note {
+  padding-bottom: 16px;
+  border-bottom: 1px solid #d2d2d7;
+  max-width: none;
+}
+.footer__cols {
   display: grid;
-  gap: 40px 32px;
-  padding-bottom: 48px;
+  padding: 4px 0 8px;
 }
-.footer__brand {
-  display: grid;
-  gap: 16px;
-  align-content: start;
-  max-width: 22rem;
-}
-.footer__brand .logo svg {
-  height: 26px;
+.footer__col {
+  border-bottom: 1px solid #d2d2d7;
 }
 .footer__h {
-  margin: 0 0 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
   font-size: 0.75rem;
   font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: #fff;
+  color: #1d1d1f;
+  letter-spacing: 0;
+  text-transform: none;
+  list-style: none;
+  cursor: pointer;
+}
+.footer__h::-webkit-details-marker {
+  display: none;
+}
+.footer__h::after {
+  content: '';
+  width: 7px;
+  height: 7px;
+  margin-right: 4px;
+  border-right: 1.2px solid #6e6e73;
+  border-bottom: 1.2px solid #6e6e73;
+  transform: rotate(45deg) translateY(-2px);
+  transition: transform 0.3s var(--ease);
+}
+.footer__col[open] .footer__h::after {
+  transform: rotate(225deg) translateY(-2px);
 }
 .footer ul {
   display: grid;
   gap: 2px;
+  padding: 0 0 14px 12px;
 }
 .footer a {
-  display: inline-block;
-  padding-block: 5px;
-  color: rgb(255 255 255 / 0.72);
+  color: #424245;
   text-decoration: none;
-  transition: color 0.3s;
+  padding-block: 3px;
+  display: inline-block;
 }
 .footer a:hover {
-  color: var(--lime);
+  color: #1d1d1f;
+  text-decoration: underline;
 }
-.footer address {
-  font-style: normal;
-  line-height: 1.6;
-}
-.footer__cols {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0 24px;
+.footer__addr {
+  margin-top: 6px;
+  color: #6e6e73;
 }
 .footer__bar {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
-  gap: 8px 24px;
-  padding-block: 22px;
-  border-top: 1px solid var(--line-dark);
-  font-size: 0.8125rem;
-  color: rgb(255 255 255 / 0.55);
+  align-items: center;
+  gap: 10px 18px;
+  padding: 16px 0 22px;
+  color: #6e6e73;
 }
-@media (min-width: 560px) {
-  .footer__grid {
+.footer__logo {
+  --logo-mark: #1d1d1f;
+  --logo-word: #1d1d1f;
+}
+.footer__logo svg {
+  height: 20px;
+}
+.footer__legal {
+  display: flex;
+  gap: 0;
+}
+.footer__legal a {
+  padding: 0 10px;
+  border-left: 1px solid #d2d2d7;
+}
+.footer__legal a:first-child {
+  border-left: 0;
+  padding-left: 0;
+}
+@media (max-width: 833px) {
+  /* room for the floating WhatsApp button */
+  .footer__bar {
+    padding-bottom: 92px;
+  }
+}
+@media (min-width: 834px) {
+  .footer {
+    padding-top: 18px;
+  }
+  .footer__cols {
+    grid-template-columns: 1.6fr 1.2fr 1fr 1.2fr;
+    gap: 24px;
+    padding: 22px 0 30px;
+    border-bottom: 1px solid #d2d2d7;
+  }
+  .footer__col {
+    border: 0;
+  }
+  .footer__h {
+    padding: 0 0 10px;
+    cursor: default;
+    pointer-events: none;
+  }
+  .footer__h::after {
+    display: none;
+  }
+  .footer ul {
+    padding: 0;
+  }
+  .footer__col:first-child ul {
     grid-template-columns: 1fr 1fr;
+    column-gap: 20px;
   }
-  .footer__brand {
-    grid-column: 1 / -1;
-  }
-}
-@media (min-width: 960px) {
-  .footer__grid {
-    grid-template-columns: 1.3fr 1.5fr 0.9fr 1fr;
-  }
-  .footer__brand {
-    grid-column: auto;
+  .footer__legal {
+    margin-left: auto;
   }
 }
 
@@ -1185,7 +1240,7 @@ html.js .reveal.in {
    Text rises in, holds still so it can be read, then lifts away as the next arrives.
    ===================================================================== */
 .journey {
-  --step: 120svh; /* scroll distance per service */
+  --step: 100svh; /* scroll distance per service */
   position: relative;
   background: #fff;
 }
@@ -1233,7 +1288,21 @@ html.js .reveal.in {
   inset: 0;
 }
 .journey__track {
+  position: relative;
   height: calc((var(--n) - 1) * var(--step) + 140svh);
+}
+/* Gentle stops: when you stop scrolling near a part of the house, the page settles on it.
+   Proximity snapping only, so fast scrolling and the rest of the page are never held back. */
+:root:has(.journey) {
+  scroll-snap-type: y proximity;
+}
+.journey__snap {
+  position: absolute;
+  left: 0;
+  width: 1px;
+  height: 1px;
+  top: calc(var(--k) * var(--step) + var(--header-h) + 16px);
+  scroll-snap-align: start;
 }
 
 .j-step {
@@ -1380,6 +1449,18 @@ html.js .reveal.in {
   }
 }
 
+@media (max-width: 899px) and (max-height: 740px) {
+  .j-points {
+    display: none;
+  }
+  .j-title {
+    font-size: 1.6rem;
+  }
+  .j-card--hero .lead {
+    font-size: 1rem;
+  }
+}
+
 /* the closing chapter is centred, on every screen */
 .j-step--end {
   justify-content: center;
@@ -1515,7 +1596,7 @@ html:not(.js) .j-points li:nth-child(n + 3),
 
 @media (min-width: 900px) {
   .journey {
-    --step: 130svh;
+    --step: 110svh;
   }
   .journey__fade {
     display: none;
@@ -1619,8 +1700,8 @@ html:not(.js) .j-points li:nth-child(n + 3),
 .shero__fade {
   position: absolute;
   inset: auto 0 0 0;
-  height: 58%;
-  background: linear-gradient(to top, #fff 42%, rgb(255 255 255 / 0));
+  height: 66%;
+  background: linear-gradient(to top, #fff 52%, rgb(255 255 255 / 0));
   pointer-events: none;
 }
 .shero__inner {
@@ -1727,6 +1808,18 @@ html:not(.js) .j-points li:nth-child(n + 3),
     margin-top: auto;
   }
 }
+@media (max-width: 899px) and (max-height: 760px) {
+  .shero__facts {
+    display: none;
+  }
+  .shero__copy h1 {
+    font-size: 1.85rem;
+  }
+  .shero__copy .lead {
+    -webkit-line-clamp: 3;
+    font-size: 1rem;
+  }
+}
 
 /* ---------- Print ---------- */
 @media print {
@@ -1755,5 +1848,173 @@ html:not(.js) .j-points li:nth-child(n + 3),
     opacity: 1 !important;
     transform: none !important;
     filter: none !important;
+  }
+}
+
+/* ---------- Services explorer ---------- */
+.explore {
+  position: relative;
+  display: grid;
+}
+.explore__view {
+  position: sticky;
+  top: var(--header-h);
+  z-index: 2; /* the list scrolls underneath the house on phones */
+  height: 42svh;
+  background:
+    radial-gradient(70% 70% at 50% 45%, #fff, rgb(255 255 255 / 0) 70%),
+    linear-gradient(180deg, #f7f8fb, #eef2f7);
+}
+.explore__sticky {
+  position: absolute;
+  inset: 0;
+}
+.explore__sticky canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: opacity 1.2s var(--ease);
+}
+.explore__sticky.is-live canvas {
+  opacity: 1;
+}
+.explore__sticky .mark {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 30%;
+  max-width: 220px;
+  color: var(--blue);
+  opacity: 0.1;
+}
+.explore__sticky.is-live .mark {
+  opacity: 0;
+}
+.explore__list {
+  position: relative;
+  z-index: 1;
+  background: #fff;
+  padding: 28px var(--gutter) 72px;
+}
+.explore__head {
+  display: grid;
+  gap: 14px;
+  margin-bottom: 36px;
+}
+.explore__head .h1 {
+  font-size: clamp(2.1rem, 8vw, 3.25rem);
+}
+.explore__group + .explore__group {
+  margin-top: 36px;
+}
+.explore__cat {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--line);
+}
+.explore__item {
+  display: grid;
+  grid-template-columns: 12px 1fr 18px;
+  align-items: center;
+  gap: 16px;
+  padding: 18px 4px;
+  border-bottom: 1px solid var(--line);
+  text-decoration: none;
+  transition:
+    background 0.4s,
+    padding 0.4s var(--ease);
+}
+.explore__dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #d7dbe2;
+  transition:
+    background 0.4s,
+    transform 0.4s var(--ease);
+}
+.explore__text {
+  display: grid;
+  gap: 3px;
+}
+.explore__text strong {
+  font-size: 1.0625rem;
+  font-weight: 600;
+  letter-spacing: -0.012em;
+}
+.explore__text span {
+  color: var(--muted);
+  font-size: 0.9375rem;
+  line-height: 1.45;
+}
+.explore__item svg {
+  width: 16px;
+  height: 16px;
+  color: var(--muted);
+  transition: transform 0.4s var(--ease);
+}
+.explore__item[data-active] .explore__dot,
+.explore__item:hover .explore__dot {
+  background: var(--pop);
+  transform: scale(1.3);
+}
+.explore__item[data-active] strong {
+  color: color-mix(in srgb, var(--pop) 55%, #000);
+}
+.explore__item:hover svg {
+  transform: translateX(4px);
+  color: var(--ink);
+}
+@media (min-width: 900px) {
+  .explore {
+    grid-template-columns: 1.15fr 0.85fr;
+  }
+  .explore__view {
+    top: 0;
+    height: 100svh;
+    order: 0;
+  }
+  .explore__list {
+    padding: calc(var(--header-h) + 48px) max(var(--gutter), calc((100vw - var(--max)) / 2)) 120px 48px;
+  }
+  .explore__head {
+    margin-bottom: 48px;
+  }
+  .explore__head .h1 {
+    font-size: clamp(2.4rem, 3.4vw, 3.25rem);
+  }
+}
+
+/* ---------- Legal pages ---------- */
+.legal {
+  max-width: 44rem;
+}
+.legal h2 {
+  margin: 36px 0 10px;
+}
+.legal h2:first-child {
+  margin-top: 0;
+}
+.legal p {
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+/* ---------- Hero scroll hint ---------- */
+.shero__more {
+  align-self: flex-start;
+  text-decoration: none;
+}
+
+@media (max-width: 899px) {
+  /* breadcrumbs stay in the page data for Google, but do not sit on the house on phones */
+  .shero .crumbs {
+    visibility: hidden;
   }
 }

@@ -4,7 +4,7 @@ import interLatin from '@fontsource-variable/inter/files/inter-latin-opsz-normal
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import Icon from '../components/Icon.astro';
-import { SITE, waLink } from '../data/site';
+import { SITE, TRACKING, waLink } from '../data/site';
 import { graph, organizationSchema, websiteSchema } from '../lib/schema';
 
 interface Props {
@@ -36,12 +36,18 @@ const ld = graph(organizationSchema(), websiteSchema(), ...schema);
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
+    <link rel="alternate" hreflang="en-IN" href={canonical} />
+    <link rel="alternate" hreflang="x-default" href={canonical} />
     <meta name="robots" content={noindex ? 'noindex, nofollow' : 'index, follow, max-image-preview:large, max-snippet:-1'} />
-    <meta name="theme-color" content="#0c0d2e" />
+    <meta name="theme-color" content="#ffffff" />
     <meta name="color-scheme" content="light" />
     <meta name="format-detection" content="telephone=no" />
     <meta name="geo.region" content="IN-KL" />
-    <meta name="geo.placename" content="Kozhikode" />
+    <meta name="geo.placename" content="Kozhikode, Kerala" />
+    {SITE.geo && <meta name="geo.position" content={`${SITE.geo.lat};${SITE.geo.lng}`} />}
+    {SITE.geo && <meta name="ICBM" content={`${SITE.geo.lat}, ${SITE.geo.lng}`} />}
+    {TRACKING.googleVerification && <meta name="google-site-verification" content={TRACKING.googleVerification} />}
+    {TRACKING.bingVerification && <meta name="msvalidate.01" content={TRACKING.bingVerification} />}
 
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
@@ -69,6 +75,38 @@ const ld = graph(organizationSchema(), websiteSchema(), ...schema);
       document.documentElement.classList.add('js');
     </script>
     <script type="application/ld+json" is:inline set:html={JSON.stringify(ld)} />
+    {
+      (TRACKING.ga4 || TRACKING.clarity) && (
+        <script is:inline define:vars={{ ga: TRACKING.ga4, clarity: TRACKING.clarity }}>
+          // Analytics load after the page has finished, so they never slow down the first view.
+          (function () {
+            function load() {
+              if (ga) {
+                window.dataLayer = window.dataLayer || [];
+                window.gtag = function () {
+                  window.dataLayer.push(arguments);
+                };
+                window.gtag('js', new Date());
+                window.gtag('config', ga);
+                var s = document.createElement('script');
+                s.async = true;
+                s.src = 'https://www.googletagmanager.com/gtag/js?id=' + ga;
+                document.head.appendChild(s);
+              }
+              if (clarity) {
+                (function (c, l, a, r, i, t, y) {
+                  c[a] = c[a] || function () { (c[a].q = c[a].q || []).push(arguments); };
+                  t = l.createElement(r); t.async = 1; t.src = 'https://www.clarity.ms/tag/' + i;
+                  y = l.getElementsByTagName(r)[0]; y.parentNode.insertBefore(t, y);
+                })(window, document, 'clarity', 'script', clarity);
+              }
+            }
+            if (document.readyState === 'complete') setTimeout(load, 1500);
+            else addEventListener('load', function () { setTimeout(load, 1500); });
+          })();
+        </script>
+      )
+    }
   </head>
   <body>
     <a class="skip" href="#main">Skip to content</a>

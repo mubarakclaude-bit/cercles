@@ -39,7 +39,10 @@ export function initJourney({ wrap, canvas, still }: Options) {
   }
 
   const tmp = new Vector3();
+  let textRect: DOMRect | null = null;
   function placePins(e: number) {
+    const cur = steps[Math.round(e)];
+    textRect = cur ? (cur.querySelector('.j-card') as HTMLElement).getBoundingClientRect() : null;
     POSES.forEach((p, i) => {
       const el = pinFor[i];
       if (!el) return;
@@ -57,8 +60,24 @@ export function initJourney({ wrap, canvas, still }: Options) {
       tmp.project(cam);
       const x = (tmp.x * 0.5 + 0.5) * W;
       const y = (-tmp.y * 0.5 + 0.5) * H;
+      // keep pins off the text: on phones the lower half is for text, on wide screens the text block
+      const r = textRect;
+      // the pin's label reaches out to one side, so test the whole pill, not just the dot
+      const pw = el.offsetWidth || 160;
+      const left = x > W * 0.52;
+      const x0 = left ? x - pw : x - 12;
+      const x1 = left ? x + 12 : x + pw;
+      const overText = W < 900 ? y > H * 0.5 : !!r && x1 > r.left - 24 && x0 < r.right + 24 && y > r.top - 30 && y < r.bottom + 30;
+      if (overText) {
+        if (el.dataset.on !== '0') {
+          el.dataset.on = '0';
+          el.style.opacity = '0';
+          el.tabIndex = -1;
+        }
+        return;
+      }
       el.dataset.on = '1';
-      el.classList.toggle('left', x > W * 0.52);
+      el.classList.toggle('left', left);
       el.style.opacity = String(Math.min(1, wt * 1.5));
       el.style.transform = `translate3d(${x.toFixed(1)}px, ${y.toFixed(1)}px, 0)`;
     });
@@ -120,7 +139,7 @@ export function initJourney({ wrap, canvas, still }: Options) {
     const time = still ? 0 : (now - t0) / 1000;
     if (still) cur_f = target_f;
     else {
-      cur_f += (target_f - cur_f) * (1 - Math.exp(-dt * 8));
+      cur_f += (target_f - cur_f) * (1 - Math.exp(-dt * 10));
       if (Math.abs(target_f - cur_f) < 0.0004) cur_f = target_f;
     }
     const s = sample(cur_f);
@@ -128,7 +147,8 @@ export function initJourney({ wrap, canvas, still }: Options) {
     const wide = W >= 900;
     eng.frame(s, time, {
       wide,
-      fx: wide ? s.fx : 0,
+      // on narrower wide screens the text takes a bigger share, so move the house further aside
+      fx: wide ? s.fx * (1 + Math.max(0, 1440 - W) / 1440) : 0,
       fy: wide ? s.fy : s.zoom < 1.05 ? 0.27 : 0.2,
       baseH: wide ? 10.8 : 10,
       baseW: wide ? 14.6 : 12.6,
@@ -158,9 +178,12 @@ export function initJourney({ wrap, canvas, still }: Options) {
     }
   }
 
+  let skip = false;
   function loop(now: number) {
     if (!running) return;
-    render(now);
+    const settled = Math.abs(target_f - cur_f) < 0.0004;
+    skip = settled ? !skip : false;
+    if (!skip) render(now);
     requestAnimationFrame(loop);
   }
   const start = () => {

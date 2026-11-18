@@ -28,3 +28,15 @@ Static, SEO-first site for Cercles (cercles.in). Built with Astro, no UI framewo
 ## Test copy (GitHub Pages)
 
 Every push to `main` builds a test copy with `npm run build:demo` and publishes it with GitHub Pages (`.github/workflows/pages.yml`). The test copy lives under the repository's sub-path, is marked noindex, and has its own `robots.txt` that blocks search engines. The real site is built with plain `npm run build` and is not hosted yet.
+
+## Tracking (Google Analytics, Search Console, Microsoft Clarity, Bing)
+
+Nothing is loaded until an ID is set. Add these as repository variables
+(GitHub: Settings > Secrets and variables > Actions > Variables):
+
+- `GA4_ID`: Google Analytics measurement ID, like `G-XXXXXXXXXX`
+- `CLARITY_ID`: Microsoft Clarity project ID
+- `GSC_VERIFICATION`: Google Search Console "HTML tag" content value
+- `BING_VERIFICATION`: Bing Webmaster Tools "meta tag" content value
+
+Calls, WhatsApp taps, email taps and quote-form sends are reported as `generate_lead` events.

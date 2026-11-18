@@ -1,4 +1,9 @@
-import { SITE, SERVICES, type Service } from '../data/site';
+import { SITE, SERVICES, SEO, type Service } from '../data/site';
+
+const AREA = [
+  { '@type': 'City', name: 'Kozhikode', alternateName: 'Calicut' },
+  { '@type': 'State', name: 'Kerala' },
+];
 
 const abs = (path: string) => new URL(path, SITE.url).href;
 const ORG_ID = `${SITE.url}/#organization`;
@@ -19,7 +24,7 @@ export function organizationSchema() {
     telephone: SITE.phoneRaw,
     email: SITE.email,
     sameAs: [SITE.instagram],
-    areaServed: { '@type': 'AdministrativeArea', name: 'Kerala' },
+    areaServed: AREA,
     knowsAbout: SERVICES.map((s) => s.name),
     contactPoint: [
       {
@@ -97,10 +102,10 @@ export function serviceSchema(s: Service) {
     '@id': abs(`/services/${s.slug}/`) + '#service',
     name: s.name,
     serviceType: s.name,
-    description: s.description,
+    description: SEO[s.slug]?.description ?? s.description,
     url: abs(`/services/${s.slug}/`),
     provider: { '@id': ORG_ID },
-    areaServed: { '@type': 'AdministrativeArea', name: 'Kerala' },
+    areaServed: AREA,
   };
 }
 

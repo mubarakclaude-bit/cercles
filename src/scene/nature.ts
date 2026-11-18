@@ -5,6 +5,7 @@
 import { Box3, Color, Group, MathUtils, Mesh, MeshStandardMaterial, Object3D, Vector3 } from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import type { World } from './build';
+import { mute } from './tone';
 
 const FILES = ['common_tree_1', 'common_tree_2', 'palm_tree_1', 'bush_2', 'bush_4', 'bush_5', 'flower_1', 'flower_2', 'plant_2'] as const;
 type Name = (typeof FILES)[number];
@@ -41,6 +42,7 @@ export async function loadNature(world: World, baseUrl: string) {
     if (!m) {
       const p = PALETTE[name] ?? { color: '#7db85a' };
       m = new MeshStandardMaterial({ color: p.color, roughness: 0.9, metalness: 0, flatShading: true });
+      m.color.copy(mute(m.color));
       mats.set(name, m);
       if (p.pop) (world.tintsRef.landscaping ||= []).push({ m, base: m.color.clone(), to: new Color(p.pop) });
     }

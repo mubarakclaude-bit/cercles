@@ -1,6 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
-import PageHead from '../components/PageHead.astro';
+import PartHero from '../components/PartHero.astro';
 import Icon from '../components/Icon.astro';
 import { SITE } from '../data/site';
 import { breadcrumbSchema } from '../lib/schema';
@@ -21,24 +21,26 @@ const serve = [
 ---
 
 <Base
-  title="About Cercles: One-Stop Home Solutions"
-  description="Cercles is a one-stop home solutions company. One team, one plan and one point of contact from roof to garden."
+  title="About Cercles: Home Solutions in Kozhikode"
+  description="Cercles is a one-stop home solutions company in Kozhikode (Calicut), Kerala. One team, one plan and one point of contact from roof to garden."
   path="/about/"
   schema={[breadcrumbSchema([{ name: 'Home', path: '/' }, { name: 'About', path: '/about/' }])]}
 >
-  <PageHead
-    title="Complete the circle of your home."
+  <PartHero
+    slug="painting-texturing"
     eyebrow="About Cercles"
-    lead="A home is never finished in one place. The curtains need a painter, the painter needs an electrician, the electrician needs a carpenter, and somewhere in the middle, you are the one chasing everyone. Cercles closes the circle."
+    title="Complete the circle of your home."
+    lead="A home is never finished in one place. The curtains need a painter, the painter needs an electrician, and somewhere in the middle, you are the one chasing everyone. Cercles, from Kozhikode, closes the circle."
     crumbs={[{ name: 'About' }]}
   />
 
-  <section class="section">
+
+  <section class="section" id="details">
     <div class="container split">
       <div class="prose reveal">
         <h2 class="h2" style="margin-bottom:20px">What we do</h2>
         <p class="lead" style="max-width:none">
-          Cercles is a one-stop home solutions company. We design, build and finish every part of a home, inside and out, and deliver it either as a complete project or as a single service. One quotation. One schedule. One standard of quality.
+          Cercles is a one-stop home solutions company based in Kozhikode (Calicut). We design, build and finish every part of a home, inside and out, and deliver it either as a complete project or as a single service. One quotation. One schedule. One standard of quality.
         </p>
         <p class="muted">
           Our service brand is <strong>{SITE.brand}</strong>: a complete, end-to-end home transformation service covering interiors, exteriors, utilities and outdoors, delivered by one accountable team.
