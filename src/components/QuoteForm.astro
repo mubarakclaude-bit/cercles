@@ -6,7 +6,7 @@ interface Props {
 const { service = '' } = Astro.props;
 ---
 
-<form class="form" data-whatsapp={SITE.whatsapp} novalidate>
+<form class="form" data-quote data-key={SITE.web3formsKey} data-whatsapp={SITE.whatsapp} novalidate>
   <div class="form__row">
     <div class="field">
       <label for="q-name">Your name</label>
@@ -35,9 +35,12 @@ const { service = '' } = Astro.props;
     <label for="q-details">Tell us a little about it <span class="hint">(optional)</span></label>
     <textarea id="q-details" name="details" rows="4"></textarea>
   </div>
+  <!-- Spam trap: people never see or tick this. -->
+  <input type="checkbox" name="botcheck" class="form__trap" tabindex="-1" autocomplete="off" aria-hidden="true" />
   <div class="btn-row">
-    <button class="btn" type="submit">Send on WhatsApp</button>
-    <a class="btn btn--line" href={`tel:${SITE.phoneRaw}`}>Call {SITE.phone}</a>
+    <button class="btn" type="submit" data-send>Send enquiry</button>
+    <button class="btn btn--line" type="button" data-wa>Send on WhatsApp</button>
   </div>
-  <p class="hint">Pressing send opens WhatsApp with your details filled in. Nothing is stored on this website.</p>
+  <p class="form__status" role="status" aria-live="polite" hidden></p>
+  <p class="hint">We reply within one working day, usually by phone. Prefer to talk now? Call <a href={`tel:${SITE.phoneRaw}`}>{SITE.phone}</a>.</p>
 </form>

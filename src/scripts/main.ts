@@ -228,24 +228,68 @@ document.addEventListener('click', (e) => {
   else if (h.startsWith('mailto:')) track('email');
 });
 
-/* ---------- Quote form -> WhatsApp (no server, no cost) ---------- */
-document.querySelectorAll<HTMLFormElement>('form[data-whatsapp]').forEach((form) => {
-  form.addEventListener('submit', (e) => {
-    e.preventDefault();
-    if (!form.reportValidity()) return;
-    const d = new FormData(form);
-    const lines = [
+/* ---------- Quote form: emailed through Web3Forms (free), or sent on WhatsApp ---------- */
+document.querySelectorAll<HTMLFormElement>('form[data-quote]').forEach((form) => {
+  const status = form.querySelector<HTMLElement>('.form__status')!;
+  const send = form.querySelector<HTMLButtonElement>('[data-send]')!;
+  const val = (k: string) => String(new FormData(form).get(k) ?? '').trim();
+  const say = (msg: string, kind: 'ok' | 'err' | 'wait') => {
+    status.hidden = false;
+    status.textContent = msg;
+    status.dataset.kind = kind;
+  };
+  const waText = () =>
+    [
       'Hi Cercles, I would like a quotation.',
-      `Name: ${d.get('name') ?? ''}`,
-      `Phone: ${d.get('phone') ?? ''}`,
-      `Service: ${d.get('service') ?? ''}`,
-      `Location: ${d.get('area') ?? ''}`,
-      d.get('details') ? `Details: ${d.get('details')}` : '',
-    ].filter(Boolean);
-    track('quote_form', { service: String(d.get('service') ?? '') });
-    const num = form.dataset.whatsapp;
-    open(`https://wa.me/${num}?text=${encodeURIComponent(lines.join('\n'))}`, '_blank', 'noopener');
-    form.dispatchEvent(new CustomEvent('sent'));
+      `Name: ${val('name')}`,
+      `Phone: ${val('phone')}`,
+      `Service: ${val('service')}`,
+      val('area') ? `Location: ${val('area')}` : '',
+      val('details') ? `Details: ${val('details')}` : '',
+    ]
+      .filter(Boolean)
+      .join('\n');
+  const openWa = () => open(`https://wa.me/${form.dataset.whatsapp}?text=${encodeURIComponent(waText())}`, '_blank', 'noopener');
+
+  form.querySelector('[data-wa]')?.addEventListener('click', () => {
+    if (!form.reportValidity()) return;
+    track('quote_whatsapp', { service: val('service') });
+    openWa();
+  });
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (!form.reportValidity() || send.disabled) return;
+    if ((form.elements.namedItem('botcheck') as HTMLInputElement | null)?.checked) return;
+    send.disabled = true;
+    say('Sending…', 'wait');
+    try {
+      const res = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({
+          access_key: form.dataset.key,
+          subject: `New enquiry: ${val('service')} – ${val('name')}`,
+          from_name: 'Cercles website',
+          name: val('name'),
+          phone: val('phone'),
+          service: val('service'),
+          location: val('area') || 'Not given',
+          details: val('details') || 'None',
+          page: location.href,
+          botcheck: false,
+        }),
+      });
+      const out = (await res.json().catch(() => ({}))) as { success?: boolean };
+      if (!res.ok || !out.success) throw new Error('failed');
+      track('quote_form', { service: val('service') });
+      form.reset();
+      say(`Thank you. Your enquiry has reached Cercles. We will call you within one working day.`, 'ok');
+    } catch {
+      say('Sorry, that did not go through. Please try again, or use “Send on WhatsApp”.', 'err');
+    } finally {
+      send.disabled = false;
+    }
   });
 });
 

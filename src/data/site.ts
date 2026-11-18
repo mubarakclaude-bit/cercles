@@ -10,6 +10,8 @@ export const SITE = {
   phoneRaw: '+917559942708',
   whatsapp: '917559942708',
   email: 'cerclesindia@gmail.com',
+  // Web3Forms public access key: quote-form enquiries are emailed to the address above. Public by design.
+  web3formsKey: '5c85222f-fee7-4e4e-897b-721818cfc990',
   instagram: 'https://www.instagram.com/cercles.in/',
   // Fill these in when known. Structured data only includes what is set.
   address: null as null | {

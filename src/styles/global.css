@@ -1030,6 +1030,34 @@ a.chip:hover {
   font-size: 0.8125rem;
   color: var(--muted);
 }
+.hint a {
+  color: var(--blue);
+}
+.form__trap {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+.form__status {
+  padding: 14px 16px;
+  border-radius: var(--r-sm);
+  font-size: 0.9375rem;
+  background: rgb(14 19 37 / 0.04);
+}
+.form__status[data-kind='ok'] {
+  background: rgb(212 229 160 / 0.45);
+  color: #2c3a10;
+}
+.form__status[data-kind='err'] {
+  background: rgb(220 60 60 / 0.08);
+  color: #9b1c1c;
+}
+.btn:disabled {
+  opacity: 0.6;
+  cursor: progress;
+}
 
 /* ---------- Footer: quiet, small, light (Apple manner) ---------- */
 .footer {
