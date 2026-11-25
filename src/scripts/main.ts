@@ -73,6 +73,26 @@ if (reveals.length) {
   }
 }
 
+/* Devices with no real graphics chip (software drawing) cannot run the 3D smoothly: they get the
+   plain page instead. Checked once with a throwaway canvas, before any 3D code is downloaded. */
+let softGL: boolean | undefined;
+const softwareGL = () => {
+  if (softGL !== undefined) return softGL;
+  try {
+    // "only if it would be fast": without a graphics chip the browser says no at once, instead of
+    // spending seconds starting slow software drawing
+    const gl = document.createElement('canvas').getContext('webgl', { failIfMajorPerformanceCaveat: true });
+    if (!gl) return (softGL = true);
+    const dbg = gl.getExtension('WEBGL_debug_renderer_info');
+    const name = String(dbg ? gl.getParameter(dbg.UNMASKED_RENDERER_WEBGL) : gl.getParameter(gl.RENDERER));
+    gl.getExtension('WEBGL_lose_context')?.loseContext();
+    softGL = /swiftshader|llvmpipe|softpipe|software|basic render|mesa offscreen/i.test(name);
+  } catch {
+    softGL = true;
+  }
+  return softGL;
+};
+
 /* ---------- The 3D home that travels with the page (loaded after first paint) ---------- */
 const journey = document.querySelector<HTMLElement>('.journey');
 if (journey) {
@@ -82,7 +102,7 @@ if (journey) {
     journey.classList.add('journey--flat');
     journey.querySelector('.journey__pins')?.replaceChildren();
   };
-  if (!canvas || saver) {
+  if (!canvas || saver || softwareGL()) {
     flat();
   } else {
     const boot = () =>
@@ -100,7 +120,7 @@ const partView = document.querySelector<HTMLElement>('.shero__view[data-part]');
 if (partView) {
   const canvas = partView.querySelector<HTMLCanvasElement>('canvas');
   const saver = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData;
-  if (canvas && !saver) {
+  if (canvas && !saver && !softwareGL()) {
     const boot = () =>
       import('../scene/part')
         .then((m) =>

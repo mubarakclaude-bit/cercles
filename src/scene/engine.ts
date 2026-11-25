@@ -35,6 +35,20 @@ export function createEngine(canvas: HTMLCanvasElement, mobile: boolean) {
   renderer.shadowMap.type = PCFShadowMap;
   let dprCap = mobile ? 1.5 : 2;
 
+  // No real graphics chip (software drawing, as in Google's speed test and some cheap phones):
+  // start in the light mode straight away.
+  let lite = false;
+  try {
+    const gl = renderer.getContext();
+    const dbg = gl.getExtension('WEBGL_debug_renderer_info');
+    const name = String(dbg ? gl.getParameter(dbg.UNMASKED_RENDERER_WEBGL) : gl.getParameter(gl.RENDERER));
+    lite = /swiftshader|llvmpipe|softpipe|software|basic render|mesa offscreen/i.test(name);
+  } catch {
+    /* keep full quality */
+  }
+  // something changed that needs a fresh frame (for example the tree models finished loading)
+  let onDirty: () => void = () => undefined;
+
   const scene = new Scene();
   const world: World = build();
   scene.add(world.root);
@@ -84,7 +98,9 @@ export function createEngine(canvas: HTMLCanvasElement, mobile: boolean) {
   scene.add(fill);
 
   // swap in the real tree models once they have loaded (the hand-built ones stay if anything fails)
-  loadNature(world, import.meta.env.BASE_URL).catch(() => undefined);
+  loadNature(world, import.meta.env.BASE_URL)
+    .then(() => onDirty())
+    .catch(() => undefined);
 
   const cam = new OrthographicCamera(-10, 10, 10, -10, 0.1, 240);
   const target = new Vector3();
@@ -213,6 +229,25 @@ export function createEngine(canvas: HTMLCanvasElement, mobile: boolean) {
     world.stage.position.y = Math.sin(time * 0.8) * 0.1;
   }
 
+  /** Light mode: no shadows and 1x resolution. Returns false when already light. */
+  function goLite() {
+    if (lite && !renderer.shadowMap.enabled) return false;
+    lite = true;
+    dprCap = 1;
+    renderer.shadowMap.enabled = false;
+    sun.castShadow = false;
+    scene.traverse((o) => {
+      const m = (o as Mesh).material as Material | Material[] | undefined;
+      if (m) (Array.isArray(m) ? m : [m]).forEach((x) => (x.needsUpdate = true));
+    });
+    resize(W, H);
+    return true;
+  }
+  if (lite) {
+    lite = false;
+    goLite();
+  }
+
   return {
     world,
     cam,
@@ -224,10 +259,17 @@ export function createEngine(canvas: HTMLCanvasElement, mobile: boolean) {
     size: () => ({ W, H }),
     /** Drop resolution one notch when the device is struggling. Returns false when it cannot go lower. */
     lowerQuality() {
-      if (dprCap <= 1) return false;
+      if (dprCap <= 1) return goLite();
       dprCap = Math.max(1, dprCap - 0.5);
       resize(W, H);
       return true;
+    },
+    /** true when the light mode is on (no shadows, lower resolution, no idle motion) */
+    get lite() {
+      return lite;
+    },
+    set onDirty(fn: () => void) {
+      onDirty = fn;
     },
     dispose() {
       world.dispose();

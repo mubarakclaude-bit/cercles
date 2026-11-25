@@ -100,6 +100,7 @@ export function initJourney({ wrap, canvas, still }: Options) {
   let cur_f = 0;
   function readScroll() {
     target_f = MathUtils.clamp((scrollY - trackTop) / stepPx, 0, N - 1);
+    wake();
   }
   addEventListener('scroll', readScroll, { passive: true });
 
@@ -133,14 +134,15 @@ export function initJourney({ wrap, canvas, still }: Options) {
   let last = performance.now();
   let frames = 0;
   let slow = 0;
-  const t0 = last;
+  let clock = 0; // animation time; only runs while drawing, so nothing jumps after a rest
   let firstFrame = true;
   let curStep = -1;
 
   function render(now: number) {
     const dt = Math.min(0.1, (now - last) / 1000);
     last = now;
-    const time = still ? 0 : (now - t0) / 1000;
+    clock += dt;
+    const time = still ? 0 : clock;
     if (still) cur_f = target_f;
     else {
       cur_f += (target_f - cur_f) * (1 - Math.exp(-dt * 10));
@@ -182,10 +184,20 @@ export function initJourney({ wrap, canvas, still }: Options) {
     }
   }
 
+  // Draw only while something moves. Once the house has been still for a few seconds (at once in
+  // the light mode) the last frame stays on screen and nothing is redrawn until the next scroll.
   let skip = false;
+  let lastMove = performance.now();
+  const restAfter = () => (eng.lite ? 300 : 4000);
   function loop(now: number) {
     if (!running) return;
     const settled = Math.abs(target_f - cur_f) < 0.0004;
+    if (!settled) lastMove = now;
+    if (settled && now - lastMove > restAfter()) {
+      render(now);
+      running = false;
+      return;
+    }
     skip = settled ? !skip : false;
     if (!skip) render(now);
     requestAnimationFrame(loop);
@@ -194,8 +206,13 @@ export function initJourney({ wrap, canvas, still }: Options) {
     if (running || still) return;
     running = true;
     last = performance.now();
+    lastMove = last;
     requestAnimationFrame(loop);
   };
+  function wake() {
+    if (!running && visible && !document.hidden) start();
+  }
+  eng.onDirty = () => (still ? render(performance.now()) : wake());
   const stop = () => {
     running = false;
   };
