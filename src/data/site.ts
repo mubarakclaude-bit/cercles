@@ -14,7 +14,14 @@ export const SITE = {
   web3formsKey: '5c85222f-fee7-4e4e-897b-721818cfc990',
   instagram: 'https://www.instagram.com/cercles.in/',
   // Fill these in when known. Structured data only includes what is set.
-  address: null as null | {
+  // Same address as the Google Business Profile (keep the two identical).
+  address: {
+    street: 'Gujarati Street',
+    locality: 'Kozhikode',
+    region: 'Kerala',
+    postalCode: '673001',
+    country: 'IN',
+  } as null | {
     street: string;
     locality: string;
     region: string;
