@@ -1325,10 +1325,14 @@ html.js .reveal.in {
 .journey__track {
   height: calc((var(--n) - 1) * var(--step) + 40svh);
 }
-/* Gentle stops: when you stop scrolling near a part of the house, the page settles on it.
-   Proximity snapping only, so fast scrolling and the rest of the page are never held back. */
+/* Stepping is done in JavaScript (src/scene/stepper.ts: one gesture = one part). CSS snapping is
+   only the fallback for when the 3D tour does not start, and is switched off once it does,
+   so the two never fight. */
 :root:has(.journey) {
   scroll-snap-type: y proximity;
+}
+:root:has(.journey.is-live) {
+  scroll-snap-type: none;
 }
 .journey__snap {
   position: absolute;

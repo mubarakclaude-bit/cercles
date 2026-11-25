@@ -1,3 +1,4 @@
+import { initStepper } from '../scene/stepper';
 // Small, dependency-free behaviour layer. Everything degrades gracefully without it.
 const doc = document.documentElement;
 const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -184,6 +185,21 @@ if (scrollers.length) {
   }, { passive: true });
   addEventListener('resize', update);
   update();
+
+  // the circle story moves one step per scroll, like the home tour
+  for (const el of scrollers) {
+    if (!el.hasAttribute('data-cstory')) continue;
+    const n = el.querySelectorAll('.cstory__step').length;
+    initStepper({
+      reduce,
+      geom: () => {
+        const r = el.getBoundingClientRect();
+        const step = Math.max(1, (r.height - innerHeight) / n);
+        // each step is held around the middle of its share of the scroll
+        return { start: r.top + scrollY + step * 0.5, step, n };
+      },
+    });
+  }
 }
 
 /* ---------- Process line fills as you read ---------- */

@@ -2,6 +2,7 @@
 import { MathUtils, Vector3 } from 'three';
 import { createEngine } from './engine';
 import { eased, POP, POSES, sample, weight } from './director';
+import { initStepper } from './stepper';
 
 interface Options {
   wrap: HTMLElement; // the whole journey section (house + the page content it travels with)
@@ -101,6 +102,9 @@ export function initJourney({ wrap, canvas, still }: Options) {
     target_f = MathUtils.clamp((scrollY - trackTop) / stepPx, 0, N - 1);
   }
   addEventListener('scroll', readScroll, { passive: true });
+
+  // one scroll gesture moves exactly one part of the house
+  const stepper = initStepper({ geom: () => ({ start: trackTop, step: stepPx, n: N }), reduce: still });
 
   // Text for each part: rises in from below, holds still, lifts away as the next one arrives.
   // The fade windows never overlap, so two blocks of text are never on screen together.
@@ -233,6 +237,7 @@ export function initJourney({ wrap, canvas, still }: Options) {
   return {
     destroy() {
       stop();
+      stepper.destroy();
       ro.disconnect();
       eng.dispose();
     },
