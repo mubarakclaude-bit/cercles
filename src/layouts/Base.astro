@@ -21,7 +21,8 @@ interface Props {
 
 const { title, description, schema = [], noindex: noindexProp = false, ogImage = '/og.png', noFab = false } = Astro.props;
 // Test copies are never indexed by search engines.
-const noindex = noindexProp || import.meta.env.PUBLIC_DEMO === '1';
+const demo = import.meta.env.PUBLIC_DEMO === '1';
+const noindex = noindexProp || demo;
 const path = Astro.props.path ?? Astro.url.pathname;
 const canonical = new URL(path, SITE.url).href;
 const fullTitle = title.includes(SITE.name) ? title : `${title} | ${SITE.name}`;
@@ -76,7 +77,8 @@ const ld = graph(organizationSchema(), websiteSchema(), ...schema);
     </script>
     <script type="application/ld+json" is:inline set:html={JSON.stringify(ld)} />
     {
-      (TRACKING.ga4 || TRACKING.clarity) && (
+      // the GitHub test copy never sends visits, so the numbers only count the real site
+      !demo && (TRACKING.ga4 || TRACKING.clarity) && (
         <script is:inline define:vars={{ ga: TRACKING.ga4, clarity: TRACKING.clarity }}>
           // Analytics load after the page has finished, so they never slow down the first view.
           (function () {
