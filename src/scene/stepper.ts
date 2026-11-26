@@ -42,7 +42,10 @@ export function initStepper({ geom, reduce }: Opts) {
     return k;
   }
 
-  const ease = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
+  // Glide length per part (owner asked for a slower, calmer move on 2026-11-26). Change here to tune.
+  const GLIDE_MS = 1500;
+  // soft start and soft landing
+  const ease = (t: number) => -(Math.cos(Math.PI * t) - 1) / 2;
   function glideTo(k: number) {
     const g = geom();
     goal = k;
@@ -55,7 +58,7 @@ export function initStepper({ geom, reduce }: Opts) {
       return;
     }
     const dist = Math.abs(to - from);
-    const dur = Math.min(1000, 620 + dist * 0.12);
+    const dur = Math.min(GLIDE_MS * 1.5, GLIDE_MS * Math.max(0.6, Math.sqrt(dist / geom().step)));
     const t0 = performance.now();
     animEnd = t0 + dur;
     html.classList.add('is-gliding');

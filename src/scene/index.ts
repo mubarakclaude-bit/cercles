@@ -145,7 +145,8 @@ export function initJourney({ wrap, canvas, still }: Options) {
     const time = still ? 0 : clock;
     if (still) cur_f = target_f;
     else {
-      cur_f += (target_f - cur_f) * (1 - Math.exp(-dt * 10));
+      // the camera trails the page a little, so the house drifts into place rather than snapping
+      cur_f += (target_f - cur_f) * (1 - Math.exp(-dt * 6));
       if (Math.abs(target_f - cur_f) < 0.0004) cur_f = target_f;
     }
     const s = sample(cur_f);
