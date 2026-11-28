@@ -1,0 +1,29 @@
+---
+// Longer reading content: a heading, a few paragraphs and an optional list per section.
+import { anchor } from '../lib/anchor';
+// Used by guides and by the curtain pages, where depth is what ranks.
+export interface Section {
+  h: string;
+  p?: string[];
+  list?: string[];
+  after?: string[];
+}
+interface Props {
+  items: Section[];
+  id?: string;
+}
+const { items, id } = Astro.props;
+---
+
+<div class="read" id={id}>
+  {
+    items.map((s) => (
+      <section class="read__sec" id={anchor(s.h)}>
+        <h2 class="h3">{s.h}</h2>
+        {s.p?.map((t) => <p set:html={t} />)}
+        {s.list && <ul class="read__list">{s.list.map((t) => <li set:html={t} />)}</ul>}
+        {s.after?.map((t) => <p set:html={t} />)}
+      </section>
+    ))
+  }
+</div>

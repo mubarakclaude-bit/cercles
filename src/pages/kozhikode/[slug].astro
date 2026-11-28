@@ -5,6 +5,8 @@ import RingHero from '../../components/RingHero.astro';
 import QuoteForm from '../../components/QuoteForm.astro';
 import Faq from '../../components/Faq.astro';
 import HowWeWork from '../../components/HowWeWork.astro';
+import Sections from '../../components/Sections.astro';
+import { GUIDES } from '../../data/guides';
 import { LANDINGS, SERVICE_BY_SLUG, SITE } from '../../data/site';
 import { breadcrumbSchema, faqSchema } from '../../lib/schema';
 
@@ -14,6 +16,8 @@ export function getStaticPaths() {
 const { l } = Astro.props;
 const path = `/kozhikode/${l.slug}/`;
 const related = l.related.map((r) => SERVICE_BY_SLUG[r]).filter(Boolean);
+const siblings = LANDINGS.filter((x) => x.slug !== l.slug && x.related[0] === l.related[0]);
+const guides = GUIDES.filter((g) => g.service === l.related[0]);
 const serviceNode = {
   '@type': 'Service',
   '@id': `https://cercles.in${path}#service`,
@@ -50,6 +54,19 @@ const serviceNode = {
           <p class="eyebrow">Why it matters in Kozhikode</p>
           <p>{l.local}</p>
         </div>
+        {
+          siblings.length > 0 && (
+            <div class="reveal">
+              <p class="eyebrow" style="margin-bottom:12px">Also in Kozhikode</p>
+              <div class="chips">
+                <a class="chip" href={`/services/${l.related[0]}/`}>{SERVICE_BY_SLUG[l.related[0]].name}</a>
+                {siblings.map((x) => (
+                  <a class="chip" href={`/kozhikode/${x.slug}/`}>{x.label}</a>
+                ))}
+              </div>
+            </div>
+          )
+        }
       </div>
       <aside class="sticky">
         <div class="panel reveal" id="quote">
@@ -60,6 +77,24 @@ const serviceNode = {
       </aside>
     </div>
   </section>
+
+  {
+    (l.sections || guides.length > 0) && (
+      <section class="section" style="padding-top:0">
+        <div class="container" style="display:grid;gap:clamp(32px,4vw,48px)">
+          {l.sections && <Sections items={l.sections} />}
+          {guides.map((g) => (
+            <a class="card reveal" style="max-width:44rem" href={`/guides/${g.slug}/`}>
+              <p class="eyebrow">Guide</p>
+              <h3 class="h3">{g.h1}</h3>
+              <p>{g.description}</p>
+              <span class="card__more">Read the guide <Icon name="arrow" /></span>
+            </a>
+          ))}
+        </div>
+      </section>
+    )
+  }
 
   <HowWeWork />
   <Faq items={l.faqs} title="Your questions, answered." />

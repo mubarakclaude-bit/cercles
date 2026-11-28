@@ -1,0 +1,88 @@
+---
+import Base from '../../layouts/Base.astro';
+import Icon from '../../components/Icon.astro';
+import PageHead from '../../components/PageHead.astro';
+import Sections from '../../components/Sections.astro';
+import QuoteForm from '../../components/QuoteForm.astro';
+import Faq from '../../components/Faq.astro';
+import { GUIDES } from '../../data/guides';
+import { SERVICE_BY_SLUG, SITE, waLink } from '../../data/site';
+import { anchor } from '../../lib/anchor';
+import { articleSchema, breadcrumbSchema, faqSchema } from '../../lib/schema';
+
+export function getStaticPaths() {
+  return GUIDES.map((g) => ({ params: { slug: g.slug }, props: { g } }));
+}
+const { g } = Astro.props;
+const path = `/guides/${g.slug}/`;
+const service = SERVICE_BY_SLUG[g.service];
+const nice = (d: string) => new Date(d + 'T00:00:00Z').toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
+---
+
+<Base
+  title={g.title}
+  description={g.description}
+  path={path}
+  schema={[
+    articleSchema({ path, headline: g.h1, description: g.description, published: g.published, updated: g.updated }),
+    faqSchema(g.faqs),
+    breadcrumbSchema([
+      { name: 'Home', path: '/' },
+      { name: 'Guides', path: '/guides/' },
+      { name: g.label, path },
+    ]),
+  ]}
+>
+  <PageHead eyebrow="Guide" title={g.h1} crumbs={[{ name: 'Guides', href: '/guides/' }, { name: g.label }]}>
+    <p class="byline">By the Cercles team, Kozhikode · Updated {nice(g.updated)}</p>
+  </PageHead>
+
+  <section class="section" style="padding-top:clamp(40px,5vw,64px)">
+    <div class="container split">
+      <div style="display:grid;gap:clamp(32px,4vw,48px)">
+        <p class="answer"><strong>The short answer</strong>{g.answer}</p>
+        <nav class="toc" aria-label="In this guide">
+          <p class="eyebrow" style="margin-bottom:10px">In this guide</p>
+          <ol>
+            {g.sections.map((s) => <li><a href={`#${anchor(s.h)}`}>{s.h}</a></li>)}
+            <li><a href="#faq-title">Questions people ask</a></li>
+          </ol>
+        </nav>
+        <Sections items={g.sections} />
+        <div class="note">
+          <p class="eyebrow">Get it measured</p>
+          <p>
+            Free site visit anywhere in Kozhikode (Calicut). We measure every window, bring samples and give you one clear quotation.
+            Call <a href={`tel:${SITE.phoneRaw}`} style="color:inherit">{SITE.phone}</a> or <a href={waLink(`Hi Cercles, I read your ${g.label.toLowerCase()} and would like a site visit.`)} target="_blank" rel="noopener" style="color:inherit">message us on WhatsApp</a>.
+          </p>
+        </div>
+        <div>
+          <p class="eyebrow" style="margin-bottom:12px">Read next</p>
+          <div class="chips">
+            {g.links.map((x) => <a class="chip" href={x.href}>{x.label}</a>)}
+          </div>
+        </div>
+      </div>
+      <aside class="sticky">
+        <div class="panel" id="quote">
+          <h2 class="h3">Get a free quote</h2>
+          <p class="muted" style="font-size:0.9375rem">{service.name}, measured at your home.</p>
+          <QuoteForm service={g.service} />
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <Faq items={g.faqs} title="Questions people ask" />
+
+  <section class="section section--tile">
+    <div class="container">
+      <a class="card" style="max-width:44rem" href={`/services/${service.slug}/`}>
+        <span class="card__icon"><Icon name={service.icon} /></span>
+        <h3 class="h3">{service.name} in Kozhikode</h3>
+        <p>{service.summary}</p>
+        <span class="card__more">See the service <Icon name="arrow" /></span>
+      </a>
+    </div>
+  </section>
+</Base>

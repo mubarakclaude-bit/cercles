@@ -1,5 +1,6 @@
 // Single source of truth for the whole site: business facts, services, local pages, tracking.
 // Pages, navigation, sitemap and structured data all read from here.
+import { CURTAIN_LANDINGS, type Section } from './curtains';
 
 export const SITE = {
   name: 'Cercles',
@@ -89,6 +90,8 @@ export interface Service {
   /** Slugs of services commonly combined with this one */
   related: string[];
   icon: string;
+  /** Longer reading content under the details */
+  sections?: Section[];
 }
 
 export const SERVICES: Service[] = [
@@ -106,7 +109,8 @@ export const SERVICES: Service[] = [
     includes: [
       'Site visit and accurate window measurement',
       'Pleated, ripple fold, eyelet and Roman styles',
-      'Day, sheer and blackout layers',
+      'Day, sheer, lined and blackout layers',
+      'Roller, zebra, vertical and wooden blinds',
       'Motorised and automated curtain tracks',
       'Rods, tracks and brackets matched to the wall and load',
       'Installation, finishing and a final check',
@@ -124,12 +128,55 @@ export const SERVICES: Service[] = [
         a: 'Yes. Motorised curtains can be controlled from a phone or remote and set on a schedule. They can also be planned together with lighting so the whole room works as one system.',
       },
       {
+        q: 'Do you make blinds as well as curtains?',
+        a: 'Yes. Roller, zebra, Roman, vertical and wooden blinds, measured and fitted by the same team. Many homes use blinds in the kitchen and study and curtains in the living room and bedrooms.',
+      },
+      {
+        q: 'Which curtain fabric is best for Kerala weather?',
+        a: 'Polyester and polyester blends handle monsoon humidity, resist fading and are easy to wash. For sunny west-facing windows we suggest adding a lining. We bring fabric samples to the site visit.',
+      },
+      {
+        q: 'Can you add blackout to my bedroom curtains?',
+        a: 'Yes, with blackout fabric, a blackout lining, or a second blackout layer behind a sheer on a double track.',
+      },
+      {
+        q: 'Do you fit curtains in offices and shops?',
+        a: 'Yes. We supply and fit curtains and blinds for offices, clinics, shops and showrooms in Kozhikode, and can fit them outside working hours.',
+      },
+      {
         q: 'Can I book curtains on their own, without a full project?',
         a: 'Yes. Every Cercles service can be booked individually or combined into one complete project.',
       },
     ],
     related: ['interior-works', 'electrical', 'painting-texturing'],
     icon: 'curtain',
+    sections: [
+      {
+        h: 'Curtain styles we make',
+        list: [
+          '<strong>Pleated</strong>: neat stitched folds, a classic tailored look for most rooms.',
+          '<strong>Ripple fold</strong>: soft, even waves on a special track, the modern choice for villas and apartments.',
+          '<strong>Eyelet</strong>: rings at the top that slide on a rod, simple and easy to wash.',
+          '<strong>Roman</strong>: fabric that folds up in layers, the look of a curtain in the space of a blind.',
+        ],
+        after: [
+          'Most rooms work best with two layers on a double track: a sheer in front for soft daylight and privacy, and a main or <a href="/kozhikode/blackout-curtains/">blackout curtain</a> behind it for the night.',
+        ],
+      },
+      {
+        h: 'Blinds, motorised curtains and offices',
+        p: [
+          'Where curtains would get in the way, <a href="/kozhikode/window-blinds/">window blinds</a> are neater: roller, zebra, Roman, vertical and wooden. Heavy or tall curtains can run on a <a href="/kozhikode/motorised-curtains/">motorised track</a> controlled from a remote, your phone or a schedule. For workplaces we fit <a href="/kozhikode/office-blinds/">office blinds and curtains</a> planned around your working hours.',
+        ],
+      },
+      {
+        h: 'How a curtain job works',
+        p: [
+          'We visit your home anywhere in Kozhikode, measure every window, check where the track can go and bring fabric samples. You get one clear quotation for every window. Once you approve, the curtains are stitched to size and our team comes back to fix the tracks, hang the curtains and check every window with you.',
+          'Not sure what you need? Read our <a href="/guides/curtains-and-blinds-kerala/">guide to curtains and blinds for Kerala homes</a>.',
+        ],
+      },
+    ],
   },
   {
     slug: 'sofa-making',
@@ -565,7 +612,7 @@ export const waLink = (text: string) =>
 export const SEO: Record<string, { title: string; h1: string; description: string }> = {
   curtains: {
     title: 'Curtains & Blinds in Kozhikode (Calicut)',
-    h1: 'Curtains and motorised curtains in Kozhikode',
+    h1: 'Curtains and blinds in Kozhikode, made to measure',
     description: 'Made-to-measure curtains, Roman blinds and motorised curtains in Kozhikode (Calicut) and across Kerala. Free site measurement and one clear quote.',
   },
   'sofa-making': {
@@ -646,6 +693,7 @@ export interface Landing {
   local: string;
   faqs: { q: string; a: string }[];
   related: string[]; // service slugs
+  sections?: Section[];
 }
 
 export const LANDINGS: Landing[] = [
@@ -779,6 +827,7 @@ export const LANDINGS: Landing[] = [
     ],
     related: ['electrical', 'curtains', 'irrigation', 'interior-works'],
   },
+  ...CURTAIN_LANDINGS,
 ];
 export const LANDING_BY_SLUG = Object.fromEntries(LANDINGS.map((l) => [l.slug, l])) as Record<string, Landing>;
 

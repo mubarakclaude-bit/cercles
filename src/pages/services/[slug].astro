@@ -4,6 +4,8 @@ import Icon from '../../components/Icon.astro';
 import PartHero from '../../components/PartHero.astro';
 import QuoteForm from '../../components/QuoteForm.astro';
 import Faq from '../../components/Faq.astro';
+import Sections from '../../components/Sections.astro';
+import { guidesFor } from '../../data/guides';
 import { SERVICES, SERVICE_BY_SLUG, CATEGORIES, SITE, SEO, LANDINGS } from '../../data/site';
 import { breadcrumbSchema, faqSchema, serviceSchema } from '../../lib/schema';
 
@@ -16,6 +18,7 @@ const cat = CATEGORIES.find((c) => c.id === s.category)!;
 const related = s.related.map((r) => SERVICE_BY_SLUG[r]).filter(Boolean);
 const local = LANDINGS.filter((l) => l.related.includes(s.slug));
 const path = `/services/${s.slug}/`;
+const guides = guidesFor(s.slug);
 ---
 
 <Base
@@ -75,6 +78,24 @@ const path = `/services/${s.slug}/`;
       </aside>
     </div>
   </section>
+
+  {
+    (s.sections || guides.length > 0) && (
+      <section class="section" style="padding-top:0">
+        <div class="container" style="display:grid;gap:clamp(32px,4vw,48px)">
+          {s.sections && <Sections items={s.sections} />}
+          {guides.map((g) => (
+            <a class="card reveal" style="max-width:44rem" href={`/guides/${g.slug}/`}>
+              <p class="eyebrow">Guide</p>
+              <h3 class="h3">{g.h1}</h3>
+              <p>{g.description}</p>
+              <span class="card__more">Read the guide <Icon name="arrow" /></span>
+            </a>
+          ))}
+        </div>
+      </section>
+    )
+  }
 
   <Faq items={s.faqs} title={`${s.name}: your questions`} />
 

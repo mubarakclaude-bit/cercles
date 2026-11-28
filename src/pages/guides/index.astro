@@ -1,0 +1,39 @@
+---
+import Base from '../../layouts/Base.astro';
+import Icon from '../../components/Icon.astro';
+import PageHead from '../../components/PageHead.astro';
+import { GUIDES } from '../../data/guides';
+import { breadcrumbSchema } from '../../lib/schema';
+---
+
+<Base
+  title="Home Guides for Kerala"
+  description="Plain guides from Cercles, Kozhikode: how to choose curtains, blinds and more for a Kerala home, with advice for the sun, monsoon and humidity."
+  path="/guides/"
+  schema={[breadcrumbSchema([{ name: 'Home', path: '/' }, { name: 'Guides', path: '/guides/' }])]}
+>
+  <PageHead eyebrow="Guides" title="Home guides for Kerala" lead="Straight answers to the questions people ask before they call us." crumbs={[{ name: 'Guides' }]} />
+  <section class="section" style="padding-top:clamp(40px,5vw,64px)">
+    <div class="container grid grid--2">
+      {GUIDES.map((g) => (
+        <a class="card" href={`/guides/${g.slug}/`}>
+          <p class="eyebrow">Guide</p>
+          <h2 class="h3">{g.h1}</h2>
+          <p>{g.description}</p>
+          <span class="card__more">Read the guide <Icon name="arrow" /></span>
+        </a>
+      ))}
+    </div>
+    <div class="container read" style="margin-top:clamp(40px,5vw,64px)">
+      <section class="read__sec">
+        <h2 class="h3">Curtains and blinds in Kozhikode</h2>
+        <p>Choosing curtains is easy to get wrong: the wrong fabric fades in the Kerala sun, steel rods rust in the sea air and curtains measured to the window frame look thin. Our guide explains styles, fabrics, blackout, blinds, motors and measuring in plain words.</p>
+        <p>For a specific need, see <a href="/kozhikode/window-blinds/">window blinds</a>, <a href="/kozhikode/blackout-curtains/">blackout curtains</a>, <a href="/kozhikode/motorised-curtains/">motorised curtains</a>, <a href="/kozhikode/office-blinds/">office blinds</a> or our <a href="/services/curtains/">curtain works</a> page. Every job starts with a free site visit anywhere in Kozhikode (Calicut).</p>
+      </section>
+      <section class="read__sec">
+        <h2 class="h3">More guides coming</h2>
+        <p>Next up: false ceilings and roof waterproofing before the monsoon. Have a question you would like answered? Call or WhatsApp us on +91 75599 42708.</p>
+      </section>
+    </div>
+  </section>
+</Base>

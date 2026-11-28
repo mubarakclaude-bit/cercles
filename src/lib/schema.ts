@@ -110,3 +110,21 @@ export function serviceSchema(s: Service) {
 }
 
 export const graph = (...nodes: unknown[]) => ({ '@context': 'https://schema.org', '@graph': nodes });
+
+export function articleSchema(a: { path: string; headline: string; description: string; published: string; updated: string }) {
+  return {
+    '@type': 'Article',
+    '@id': abs(a.path) + '#article',
+    headline: a.headline,
+    description: a.description,
+    url: abs(a.path),
+    mainEntityOfPage: abs(a.path),
+    image: abs('/og.png'),
+    datePublished: a.published,
+    dateModified: a.updated,
+    inLanguage: 'en-IN',
+    author: { '@id': ORG_ID },
+    publisher: { '@id': ORG_ID },
+    about: { '@type': 'Thing', name: a.headline },
+  };
+}

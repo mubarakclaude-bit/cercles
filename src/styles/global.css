@@ -2470,3 +2470,76 @@ html:not(.js) .cstory__step {
 html:not(.js) .statement__text span {
   opacity: 1;
 }
+
+/* ---------- Long reading (guides, curtain pages) ---------- */
+.read {
+  display: grid;
+  gap: clamp(32px, 4vw, 48px);
+  max-width: 44rem;
+}
+.read__sec h2 {
+  margin-bottom: 12px;
+}
+.read__sec p,
+.read__list li {
+  color: var(--muted);
+  line-height: 1.7;
+}
+.read__sec p + p,
+.read__list + p {
+  margin-top: 0.9em;
+}
+.read__sec p + .read__list {
+  margin-top: 0.9em;
+}
+.read__sec strong {
+  color: var(--ink);
+  font-weight: 600;
+}
+.read__sec a {
+  color: var(--blue-700);
+  text-underline-offset: 3px;
+}
+.read__list {
+  display: grid;
+  gap: 10px;
+  padding-left: 1.2em;
+  list-style: disc;
+}
+.read__list li::marker {
+  color: var(--blue);
+}
+.answer {
+  max-width: 44rem;
+  padding: 22px 24px;
+  border-radius: var(--r-md);
+  background: var(--blue-50);
+  line-height: 1.65;
+}
+.answer strong {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--blue-700);
+  font-size: 0.8125rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.toc {
+  max-width: 44rem;
+}
+.toc ol {
+  display: grid;
+  gap: 6px;
+  padding-left: 1.2em;
+  list-style: decimal;
+  color: var(--muted);
+}
+.toc a {
+  color: var(--blue-700);
+  text-underline-offset: 3px;
+}
+.byline {
+  margin-top: 16px;
+  color: var(--muted);
+  font-size: 0.875rem;
+}
