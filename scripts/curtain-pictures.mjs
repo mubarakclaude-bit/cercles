@@ -1,4 +1,10 @@
-// Saves a picture of each curtain model into public/curtains/. Needs a temporary page src/pages/render-curtains.astro that puts createLab() on window.__lab (see git history, commit after e2e55b9), then: astro build, astro preview, node scripts/curtain-pictures.mjs public/curtains '[["ripple",0.35],...]'
+// Saves a picture of each curtain model into public/curtains/ (<id>.webp 800x600 and <id>-s.webp 480x360).
+// 1. Add a temporary page src/pages/render-curtains.astro:
+//      <canvas id="c" style="width:800px;height:600px"></canvas>
+//      <script>import { createLab } from '../scene/curtains3d'; (window as any).__lab = createLab(document.getElementById('c') as HTMLCanvasElement, { pixelRatio: 1 });</script>
+// 2. npx astro build && npx astro preview --port 4321 --host 127.0.0.1
+// 3. node scripts/curtain-pictures.mjs public/curtains '[["ripple",0.35],["roman",0.55]]'  (how open each one is: see `pic` in src/data/curtainTypes.ts)
+// 4. Delete the temporary page.
 import { spawn } from 'node:child_process';
 import { mkdtempSync, writeFileSync, mkdirSync } from 'node:fs';
 import { tmpdir } from 'node:os';
