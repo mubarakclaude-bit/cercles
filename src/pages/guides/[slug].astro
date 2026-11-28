@@ -3,6 +3,7 @@ import Base from '../../layouts/Base.astro';
 import Icon from '../../components/Icon.astro';
 import PageHead from '../../components/PageHead.astro';
 import Sections from '../../components/Sections.astro';
+import CurtainLab from '../../components/CurtainLab.astro';
 import QuoteForm from '../../components/QuoteForm.astro';
 import Faq from '../../components/Faq.astro';
 import { GUIDES } from '../../data/guides';
@@ -41,6 +42,7 @@ const nice = (d: string) => new Date(d + 'T00:00:00Z').toLocaleDateString('en-IN
     <div class="container split">
       <div style="display:grid;gap:clamp(32px,4vw,48px)">
         <p class="answer"><strong>The short answer</strong>{g.answer}</p>
+        {g.lab && <CurtainLab types={g.lab} title="Try every style in 3D" />}
         <nav class="toc" aria-label="In this guide">
           <p class="eyebrow" style="margin-bottom:10px">In this guide</p>
           <ol>
@@ -48,7 +50,7 @@ const nice = (d: string) => new Date(d + 'T00:00:00Z').toLocaleDateString('en-IN
             <li><a href="#faq-title">Questions people ask</a></li>
           </ol>
         </nav>
-        <Sections items={g.sections} />
+        <Sections items={g.sections} tryable={g.lab} />
         <div class="note">
           <p class="eyebrow">Get it measured</p>
           <p>

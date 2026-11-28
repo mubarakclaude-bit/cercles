@@ -6,6 +6,7 @@ import QuoteForm from '../../components/QuoteForm.astro';
 import Faq from '../../components/Faq.astro';
 import HowWeWork from '../../components/HowWeWork.astro';
 import Sections from '../../components/Sections.astro';
+import CurtainLab from '../../components/CurtainLab.astro';
 import { GUIDES } from '../../data/guides';
 import { LANDINGS, SERVICE_BY_SLUG, SITE } from '../../data/site';
 import { breadcrumbSchema, faqSchema } from '../../lib/schema';
@@ -79,10 +80,11 @@ const serviceNode = {
   </section>
 
   {
-    (l.sections || guides.length > 0) && (
+    (l.sections || l.lab || guides.length > 0) && (
       <section class="section" style="padding-top:0">
         <div class="container" style="display:grid;gap:clamp(32px,4vw,48px)">
-          {l.sections && <Sections items={l.sections} />}
+          {l.lab && <CurtainLab types={l.lab} />}
+          {l.sections && <Sections items={l.sections} tryable={l.lab} />}
           {guides.map((g) => (
             <a class="card reveal" style="max-width:44rem" href={`/guides/${g.slug}/`}>
               <p class="eyebrow">Guide</p>

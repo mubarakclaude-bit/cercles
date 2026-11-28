@@ -1,0 +1,40 @@
+---
+// "Try it in 3D": one small 3D room; pick a style, then open and close it.
+// The 3D part loads only when this box comes near the screen, and only on devices with a graphics chip.
+// Until then (or without 3D) the picture of the chosen style is shown, and the choices still swap it.
+import { TYPE_BY_ID } from '../data/curtainTypes';
+interface Props {
+  types: string[];
+  title?: string;
+  id?: string;
+}
+const { types, title = 'Try it in 3D', id = 'try' } = Astro.props;
+const list = types.map((t) => TYPE_BY_ID[t]).filter(Boolean);
+const first = list[0];
+---
+
+<section class="lab" data-lab id={id} aria-label={title}>
+  <div class="lab__head">
+    <p class="eyebrow">{title}</p>
+    <p class="lab__lead">Pick a style, then open and close it. Drag sideways to look around.</p>
+  </div>
+  <div class="lab__stage">
+    <img class="lab__poster" src={`/curtains/${first.id}.webp`} alt={`${first.name} in a room`} width="800" height="600" loading="lazy" decoding="async" />
+    <canvas class="lab__canvas" aria-hidden="true"></canvas>
+    <span class="lab__badge">3D</span>
+  </div>
+  <div class="lab__chips" role="tablist" aria-label="Styles">
+    {
+      list.map((t, i) => (
+        <button type="button" role="tab" class="lab__chip" aria-selected={i === 0 ? 'true' : 'false'} data-type={t.id} data-name={t.name} data-desc={t.desc} data-how={t.how} data-pic={t.pic}>
+          {t.name}
+        </button>
+      ))
+    }
+  </div>
+  <div class="lab__ctrl">
+    <button type="button" class="btn lab__toggle" data-open="0">Open</button>
+    <input class="lab__range" type="range" min="0" max="100" value={Math.round(first.pic * 100)} aria-label="How open" />
+  </div>
+  <p class="lab__desc"><strong>{first.name}.</strong> <span>{first.desc} {first.how}</span></p>
+</section>

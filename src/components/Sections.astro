@@ -2,13 +2,16 @@
 // Longer reading content: a heading, a few paragraphs and an optional list per section.
 import { anchor } from '../lib/anchor';
 import Art from './Art.astro';
+import { hasPic } from '../data/curtainTypes';
 // Used by guides and by the curtain pages, where depth is what ranks.
 import type { Section } from '../data/curtains';
 interface Props {
   items: Section[];
   id?: string;
+  /** styles available in this page's 3D box: those cards open it */
+  tryable?: string[];
 }
-const { items, id } = Astro.props;
+const { items, id, tryable = [] } = Astro.props;
 ---
 
 <div class="read" id={id}>
@@ -21,12 +24,17 @@ const { items, id } = Astro.props;
         {s.cards && (
           <div class="looks">
             {s.cards.map((c) => {
-              const Tag = c.href ? 'a' : 'div';
+              const tries = !c.href && tryable.includes(c.art);
+              const Tag = c.href ? 'a' : tries ? 'button' : 'div';
+              const photo = hasPic(c.art);
               return (
-                <Tag class="look" href={c.href}>
-                  <div class="look__pic"><Art name={c.art} /></div>
+                <Tag class="look" href={c.href} type={tries ? 'button' : undefined} data-try={tries ? c.art : undefined}>
+                  <div class:list={['look__pic', { 'look__pic--photo': photo }]}>
+                    {photo ? <img src={`/curtains/${c.art}-s.webp`} alt={`${c.t} in a room`} width="480" height="360" loading="lazy" decoding="async" /> : <Art name={c.art} />}
+                  </div>
                   <h3>{c.t}</h3>
                   <p>{c.d}</p>
+                  {tries && <span class="look__try">Try it in 3D ↑</span>}
                 </Tag>
               );
             })}

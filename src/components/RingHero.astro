@@ -3,6 +3,7 @@
 // the Cercles mark at the centre. No 3D, so it loads instantly and feels different from the home tour.
 import Mark from './Mark.astro';
 import Art from './Art.astro';
+import { hasPic } from '../data/curtainTypes';
 interface Props {
   eyebrow?: string;
   title: string;
@@ -38,7 +39,7 @@ const { eyebrow, title, lead, crumbs, compact = false, art } = Astro.props;
         <g class="orb orb--3"><circle cx="200" cy="12" r="4" /></g>
         <circle cx="200" cy="200" r="72" class="rr-core" />
       </svg>
-      {art ? <div class="rhero__pic"><Art name={art} /></div> : <Mark class="rhero__mark" />}
+      {art ? (hasPic(art) ? <div class="rhero__pic rhero__pic--photo"><img src={`/curtains/${art}.webp`} alt="" width="800" height="600" fetchpriority="high" /></div> : <div class="rhero__pic"><Art name={art} /></div>) : <Mark class="rhero__mark" />}
     </div>
   </div>
 </section>

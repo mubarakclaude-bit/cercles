@@ -19,6 +19,7 @@ export const CURTAIN_LANDINGS = [
   {
     slug: 'window-blinds',
     art: 'zebra',
+    lab: ['roller', 'zebra', 'roman', 'vertical', 'venetian'],
     title: 'Window Blinds in Kozhikode (Calicut)',
     h1: 'Window blinds in Kozhikode, measured and fitted',
     label: 'Window blinds',
@@ -75,6 +76,7 @@ export const CURTAIN_LANDINGS = [
   {
     slug: 'motorised-curtains',
     art: 'motorised',
+    lab: ['motorised', 'roller', 'roman'],
     title: 'Motorised Curtains & Blinds in Kozhikode',
     h1: 'Motorised curtains and blinds in Kozhikode',
     label: 'Motorised curtains',
@@ -135,6 +137,7 @@ export const CURTAIN_LANDINGS = [
   {
     slug: 'blackout-curtains',
     art: 'blackout',
+    lab: ['blackout', 'layers', 'roller'],
     title: 'Blackout Curtains in Kozhikode',
     h1: 'Blackout curtains in Kozhikode, for darker, cooler rooms',
     label: 'Blackout curtains',
@@ -196,7 +199,8 @@ export const CURTAIN_LANDINGS = [
   },
   {
     slug: 'office-blinds',
-    art: 'office',
+    art: 'vertical',
+    lab: ['roller', 'vertical', 'zebra', 'venetian'],
     title: 'Office Blinds & Curtains in Kozhikode',
     h1: 'Office blinds and curtains in Kozhikode',
     label: 'Office blinds',

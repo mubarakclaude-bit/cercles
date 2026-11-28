@@ -330,3 +330,73 @@ document.querySelectorAll<HTMLFormElement>('form[data-quote]').forEach((form) =>
 });
 
 void doc;
+
+/* ---------- Curtain pages: "Try it in 3D" (loaded only when it comes near the screen) ---------- */
+document.querySelectorAll<HTMLElement>('[data-lab]').forEach((box) => {
+  const chips = [...box.querySelectorAll<HTMLButtonElement>('.lab__chip')];
+  const poster = box.querySelector<HTMLImageElement>('.lab__poster')!;
+  const canvas = box.querySelector<HTMLCanvasElement>('.lab__canvas')!;
+  const toggle = box.querySelector<HTMLButtonElement>('.lab__toggle')!;
+  const range = box.querySelector<HTMLInputElement>('.lab__range')!;
+  const desc = box.querySelector<HTMLElement>('.lab__desc')!;
+  type LabApi = import('../scene/curtains3d').Lab;
+  let lab: LabApi | null = null;
+  let current = chips[0];
+
+  const label = (o: number) => {
+    // the button follows where it is heading, the slider follows where it is now
+    toggle.textContent = (lab ? lab.open : o) < 0.5 ? 'Open' : 'Close';
+    range.value = String(Math.round(o * 100));
+  };
+  const choose = (chip: HTMLButtonElement) => {
+    current = chip;
+    chips.forEach((c) => c.setAttribute('aria-selected', c === chip ? 'true' : 'false'));
+    chip.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+    desc.innerHTML = `<strong>${chip.dataset.name}.</strong> <span>${chip.dataset.desc} ${lab ? chip.dataset.how : ''}</span>`;
+    const pic = Number(chip.dataset.pic ?? 0.3);
+    if (lab) lab.setType(chip.dataset.type as never, pic);
+    else poster.src = `/curtains/${chip.dataset.type}.webp`;
+    poster.alt = `${chip.dataset.name} in a room`;
+    label(pic);
+  };
+  chips.forEach((c) => c.addEventListener('click', () => choose(c)));
+  toggle.addEventListener('click', () => {
+    if (!lab) return;
+    const to = lab.open < 0.5 ? 1 : 0;
+    lab.setOpen(to, !reduce);
+    toggle.textContent = to ? 'Close' : 'Open';
+  });
+  range.addEventListener('input', () => lab?.setOpen(Number(range.value) / 100, false));
+
+  // cards elsewhere on the page can open a style here
+  document.querySelectorAll<HTMLElement>(`[data-try]`).forEach((card) =>
+    card.addEventListener('click', () => {
+      const chip = chips.find((c) => c.dataset.type === card.dataset.try);
+      if (!chip) return;
+      choose(chip);
+      box.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'center' });
+    }),
+  );
+
+  const saver = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData;
+  if (saver || softwareGL()) {
+    box.classList.add('lab--still');
+    return;
+  }
+  const io = new IntersectionObserver(
+    (es) => {
+      if (!es.some((e) => e.isIntersecting)) return;
+      io.disconnect();
+      import('../scene/curtains3d')
+        .then((m) => {
+          lab = m.createLab(canvas, { onChange: (s) => label(s.open), pixelRatio: matchMedia('(max-width: 700px)').matches ? 1.5 : 2 });
+          lab.setType(current.dataset.type as never, Number(current.dataset.pic ?? 0.3));
+          box.classList.add('lab--live');
+          choose(current);
+        })
+        .catch(() => box.classList.add('lab--still'));
+    },
+    { rootMargin: '400px 0px' },
+  );
+  io.observe(box);
+});

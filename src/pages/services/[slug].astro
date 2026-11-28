@@ -5,6 +5,7 @@ import PartHero from '../../components/PartHero.astro';
 import QuoteForm from '../../components/QuoteForm.astro';
 import Faq from '../../components/Faq.astro';
 import Sections from '../../components/Sections.astro';
+import CurtainLab from '../../components/CurtainLab.astro';
 import { guidesFor } from '../../data/guides';
 import { SERVICES, SERVICE_BY_SLUG, CATEGORIES, SITE, SEO, LANDINGS } from '../../data/site';
 import { breadcrumbSchema, faqSchema, serviceSchema } from '../../lib/schema';
@@ -80,10 +81,11 @@ const guides = guidesFor(s.slug);
   </section>
 
   {
-    (s.sections || guides.length > 0) && (
+    (s.sections || s.lab || guides.length > 0) && (
       <section class="section" style="padding-top:0">
         <div class="container" style="display:grid;gap:clamp(32px,4vw,48px)">
-          {s.sections && <Sections items={s.sections} />}
+          {s.lab && <CurtainLab types={s.lab} />}
+          {s.sections && <Sections items={s.sections} tryable={s.lab} />}
           {guides.map((g) => (
             <a class="card reveal" style="max-width:44rem" href={`/guides/${g.slug}/`}>
               <p class="eyebrow">Guide</p>

@@ -92,6 +92,7 @@ export interface Service {
   icon: string;
   /** Longer reading content under the details */
   sections?: Section[];
+  lab?: string[];
 }
 
 export const SERVICES: Service[] = [
@@ -150,6 +151,7 @@ export const SERVICES: Service[] = [
     ],
     related: ['interior-works', 'electrical', 'painting-texturing'],
     icon: 'curtain',
+    lab: ['ripple', 'pleated', 'eyelet', 'roman', 'roller', 'zebra', 'vertical', 'venetian', 'blackout', 'layers', 'motorised'],
     sections: [
       {
         h: 'Curtain styles we make',
@@ -697,7 +699,8 @@ export interface Landing {
   faqs: { q: string; a: string }[];
   related: string[]; // service slugs
   sections?: Section[];
-  art?: string; // drawing in the first view
+  art?: string; // picture in the first view
+  lab?: string[]; // styles in the 3D try-it box
 }
 
 export const LANDINGS: Landing[] = [

@@ -2684,3 +2684,149 @@ a.look h3::after {
     padding: 8px 10px 4px;
   }
 }
+
+/* ---------- Try it in 3D ---------- */
+.lab {
+  display: grid;
+  gap: 14px;
+  max-width: 44rem;
+  padding: clamp(16px, 3vw, 24px);
+  border-radius: var(--r-lg);
+  background: var(--tile);
+}
+.lab__head {
+  display: grid;
+  gap: 4px;
+}
+.lab__lead {
+  color: var(--muted);
+  font-size: 0.9375rem;
+}
+.lab__stage {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border-radius: var(--r-md);
+  background: #f1ede6;
+}
+.lab__poster,
+.lab__canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.lab__canvas {
+  opacity: 0;
+  touch-action: pan-y;
+  cursor: grab;
+  transition: opacity 0.4s var(--ease);
+}
+.lab--live .lab__canvas {
+  opacity: 1;
+}
+.lab__badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  padding: 4px 10px;
+  border-radius: var(--r-pill);
+  background: rgb(255 255 255 / 0.85);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--ink);
+}
+.lab--still .lab__badge,
+.lab--still .lab__ctrl {
+  display: none;
+}
+.lab__chips {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  margin-inline: -4px;
+  padding: 2px 4px;
+}
+.lab__chips::-webkit-scrollbar {
+  display: none;
+}
+.lab__chip {
+  flex: none;
+  min-height: 40px;
+  padding: 0 16px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-pill);
+  background: #fff;
+  color: var(--ink);
+  font: inherit;
+  font-size: 0.9375rem;
+  white-space: nowrap;
+  cursor: pointer;
+}
+.lab__chip[aria-selected='true'] {
+  border-color: var(--ink);
+  background: var(--ink);
+  color: #fff;
+}
+.lab__ctrl {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.lab__toggle {
+  flex: none;
+  min-width: 112px;
+}
+.lab__range {
+  flex: 1;
+  accent-color: var(--blue);
+  height: 44px;
+}
+.lab__desc {
+  color: var(--muted);
+  font-size: 0.9375rem;
+  line-height: 1.55;
+}
+.lab__desc strong {
+  color: var(--ink);
+}
+.look__pic img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: 10px;
+}
+.look__pic--photo {
+  padding: 0 !important;
+  overflow: hidden;
+}
+button.look {
+  border: 0;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.look__try {
+  margin-top: 2px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--blue-700);
+}
+.rhero__pic--photo {
+  width: 74%;
+  aspect-ratio: 1;
+  padding: 0;
+  overflow: hidden;
+  border: 6px solid #fff;
+}
+.rhero__pic--photo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}

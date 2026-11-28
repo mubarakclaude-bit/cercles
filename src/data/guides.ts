@@ -15,6 +15,7 @@ export interface Guide {
   sections: Section[];
   faqs: { q: string; a: string }[];
   links: { href: string; label: string }[]; // pages in the same cluster
+  lab?: string[];
 }
 
 export const GUIDES: Guide[] = [
@@ -26,6 +27,7 @@ export const GUIDES: Guide[] = [
     description:
       'Curtain styles, fabrics, blinds, blackout, motorised tracks and measuring, explained for Kerala’s sun, monsoon and humidity. A plain guide from Cercles, Kozhikode.',
     service: 'curtains',
+    lab: ['ripple', 'pleated', 'eyelet', 'roman', 'roller', 'zebra', 'vertical', 'venetian', 'blackout', 'layers', 'motorised'],
     published: '2026-11-28',
     updated: '2026-11-28',
     answer:
