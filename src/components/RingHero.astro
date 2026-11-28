@@ -2,14 +2,16 @@
 // A calm first view built on the brand's circles: rings that turn slowly, small orbiting points,
 // the Cercles mark at the centre. No 3D, so it loads instantly and feels different from the home tour.
 import Mark from './Mark.astro';
+import Art from './Art.astro';
 interface Props {
   eyebrow?: string;
   title: string;
   lead?: string;
   crumbs: { name: string; href?: string }[];
   compact?: boolean;
+  art?: string; // a line drawing in the centre instead of the mark
 }
-const { eyebrow, title, lead, crumbs, compact = false } = Astro.props;
+const { eyebrow, title, lead, crumbs, compact = false, art } = Astro.props;
 ---
 
 <section class:list={['rhero', { 'rhero--compact': compact }]}>
@@ -36,7 +38,7 @@ const { eyebrow, title, lead, crumbs, compact = false } = Astro.props;
         <g class="orb orb--3"><circle cx="200" cy="12" r="4" /></g>
         <circle cx="200" cy="200" r="72" class="rr-core" />
       </svg>
-      <Mark class="rhero__mark" />
+      {art ? <div class="rhero__pic"><Art name={art} /></div> : <Mark class="rhero__mark" />}
     </div>
   </div>
 </section>

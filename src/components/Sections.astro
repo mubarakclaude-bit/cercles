@@ -1,13 +1,9 @@
 ---
 // Longer reading content: a heading, a few paragraphs and an optional list per section.
 import { anchor } from '../lib/anchor';
+import Art from './Art.astro';
 // Used by guides and by the curtain pages, where depth is what ranks.
-export interface Section {
-  h: string;
-  p?: string[];
-  list?: string[];
-  after?: string[];
-}
+import type { Section } from '../data/curtains';
 interface Props {
   items: Section[];
   id?: string;
@@ -22,6 +18,26 @@ const { items, id } = Astro.props;
         <h2 class="h3">{s.h}</h2>
         {s.p?.map((t) => <p set:html={t} />)}
         {s.list && <ul class="read__list">{s.list.map((t) => <li set:html={t} />)}</ul>}
+        {s.cards && (
+          <div class="looks">
+            {s.cards.map((c) => {
+              const Tag = c.href ? 'a' : 'div';
+              return (
+                <Tag class="look" href={c.href}>
+                  <div class="look__pic"><Art name={c.art} /></div>
+                  <h3>{c.t}</h3>
+                  <p>{c.d}</p>
+                </Tag>
+              );
+            })}
+          </div>
+        )}
+        {s.figure && (
+          <figure class:list={['fig', { 'fig--small': s.figure.small }]}>
+            <Art name={s.figure.art} label={s.figure.caption} />
+            <figcaption>{s.figure.caption}</figcaption>
+          </figure>
+        )}
         {s.after?.map((t) => <p set:html={t} />)}
       </section>
     ))

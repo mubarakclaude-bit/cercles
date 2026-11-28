@@ -153,20 +153,23 @@ export const SERVICES: Service[] = [
     sections: [
       {
         h: 'Curtain styles we make',
-        list: [
-          '<strong>Pleated</strong>: neat stitched folds, a classic tailored look for most rooms.',
-          '<strong>Ripple fold</strong>: soft, even waves on a special track, the modern choice for villas and apartments.',
-          '<strong>Eyelet</strong>: rings at the top that slide on a rod, simple and easy to wash.',
-          '<strong>Roman</strong>: fabric that folds up in layers, the look of a curtain in the space of a blind.',
+        cards: [
+          { art: 'pleated', t: 'Pleated', d: 'Neat stitched folds. A classic, tailored look for most rooms.' },
+          { art: 'ripple', t: 'Ripple fold', d: 'Soft, even waves on a track. The modern choice for villas.' },
+          { art: 'eyelet', t: 'Eyelet', d: 'Rings that slide on a rod. Simple and easy to wash.' },
+          { art: 'roman', t: 'Roman', d: 'Folds up in layers. A curtain’s look in a blind’s space.' },
         ],
         after: [
           'Most rooms work best with two layers on a double track: a sheer in front for soft daylight and privacy, and a main or <a href="/kozhikode/blackout-curtains/">blackout curtain</a> behind it for the night.',
         ],
       },
       {
-        h: 'Blinds, motorised curtains and offices',
-        p: [
-          'Where curtains would get in the way, <a href="/kozhikode/window-blinds/">window blinds</a> are neater: roller, zebra, Roman, vertical and wooden. Heavy or tall curtains can run on a <a href="/kozhikode/motorised-curtains/">motorised track</a> controlled from a remote, your phone or a schedule. For workplaces we fit <a href="/kozhikode/office-blinds/">office blinds and curtains</a> planned around your working hours.',
+        h: 'Blinds, blackout, motors and offices',
+        cards: [
+          { art: 'zebra', t: 'Window blinds', d: 'Roller, zebra, Roman, vertical and wooden.', href: '/kozhikode/window-blinds/' },
+          { art: 'blackout', t: 'Blackout curtains', d: 'Dark, cool bedrooms and TV rooms.', href: '/kozhikode/blackout-curtains/' },
+          { art: 'motorised', t: 'Motorised curtains', d: 'Remote, phone or schedule.', href: '/kozhikode/motorised-curtains/' },
+          { art: 'office', t: 'Office blinds', d: 'Fitted around your working hours.', href: '/kozhikode/office-blinds/' },
         ],
       },
       {
@@ -694,6 +697,7 @@ export interface Landing {
   faqs: { q: string; a: string }[];
   related: string[]; // service slugs
   sections?: Section[];
+  art?: string; // drawing in the first view
 }
 
 export const LANDINGS: Landing[] = [

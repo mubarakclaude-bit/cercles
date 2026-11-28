@@ -1,0 +1,11 @@
+---
+import { ART, artBox } from '../lib/art';
+interface Props {
+  name: string;
+  class?: string;
+  label?: string;
+}
+const { name, class: cls, label } = Astro.props;
+---
+
+<svg class:list={['art', cls]} viewBox={artBox(name)} role={label ? 'img' : undefined} aria-label={label} aria-hidden={label ? undefined : 'true'} set:html={ART[name] ?? ''} />

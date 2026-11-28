@@ -6,6 +6,10 @@ export interface Section {
   h: string;
   p?: string[];
   list?: string[];
+  /** drawing cards: art name from src/lib/art.ts, title, one line, optional link */
+  cards?: { art: string; t: string; d: string; href?: string }[];
+  /** one larger drawing with a caption */
+  figure?: { art: string; caption: string; small?: boolean };
   after?: string[];
 }
 
@@ -14,6 +18,7 @@ const GUIDE = '/guides/curtains-and-blinds-kerala/';
 export const CURTAIN_LANDINGS = [
   {
     slug: 'window-blinds',
+    art: 'zebra',
     title: 'Window Blinds in Kozhikode (Calicut)',
     h1: 'Window blinds in Kozhikode, measured and fitted',
     label: 'Window blinds',
@@ -35,12 +40,12 @@ export const CURTAIN_LANDINGS = [
     sections: [
       {
         h: 'Which blind suits which room',
-        list: [
-          '<strong>Roller blinds</strong>: one smooth panel that rolls up. Simple, clean and easy to wipe, good for kitchens, study rooms and offices.',
-          '<strong>Zebra blinds</strong>: alternating sheer and solid stripes, so you can let in soft light or close for privacy with one cord. A popular choice for living rooms and bedrooms.',
-          '<strong>Roman blinds</strong>: fabric that folds up in soft layers. They look like curtains but take less space, so they suit bay windows and smaller rooms.',
-          '<strong>Vertical blinds</strong>: tall slats that turn and slide to one side. Practical for wide windows, sliding doors and offices.',
-          '<strong>Wooden and venetian-style blinds</strong>: horizontal slats that tilt to control light. A warm, finished look for studies and living rooms; we suggest finishes that handle humidity.',
+        cards: [
+          { art: 'roller', t: 'Roller', d: 'One smooth panel that rolls up. Easy to wipe; kitchens, studies, offices.' },
+          { art: 'zebra', t: 'Zebra', d: 'Sheer and solid stripes: soft light or privacy with one cord.' },
+          { art: 'roman', t: 'Roman', d: 'Fabric that folds up in layers. The look of a curtain, the space of a blind.' },
+          { art: 'vertical', t: 'Vertical', d: 'Tall slats that turn and slide. Wide windows and sliding doors.' },
+          { art: 'venetian', t: 'Wooden', d: 'Slats that tilt to control light. A warm look, in humidity-ready finishes.' },
         ],
       },
       {
@@ -69,6 +74,7 @@ export const CURTAIN_LANDINGS = [
   },
   {
     slug: 'motorised-curtains',
+    art: 'motorised',
     title: 'Motorised Curtains & Blinds in Kozhikode',
     h1: 'Motorised curtains and blinds in Kozhikode',
     label: 'Motorised curtains',
@@ -110,6 +116,11 @@ export const CURTAIN_LANDINGS = [
         p: [
           'Each window gets a track sized for the weight of its curtains, a motor at one end, and a way to control it: a remote, a wall switch, a phone app, or all three. We hang the curtains, set the open and closed positions and test it with you before we leave.',
         ],
+        cards: [
+          { art: 'ripple', t: 'Motorised curtains', d: 'Ripple fold or pleated curtains on a motorised track.' },
+          { art: 'roller', t: 'Motorised blinds', d: 'Roller, zebra and Roman blinds that rise and fall on a motor.' },
+          { art: 'motorised', t: 'Phone, remote, schedule', d: 'Open at sunrise, close in the afternoon sun, or tap your phone.' },
+        ],
       },
     ] as Section[],
     faqs: [
@@ -123,6 +134,7 @@ export const CURTAIN_LANDINGS = [
   },
   {
     slug: 'blackout-curtains',
+    art: 'blackout',
     title: 'Blackout Curtains in Kozhikode',
     h1: 'Blackout curtains in Kozhikode, for darker, cooler rooms',
     label: 'Blackout curtains',
@@ -148,12 +160,17 @@ export const CURTAIN_LANDINGS = [
           '<strong>Blackout fabric</strong> has the light-blocking layer woven or coated into it. It is one layer, simple and effective.',
           '<strong>Blackout lining</strong> is stitched behind the fabric you like, so you can choose any colour or texture for the room and still get a dark room. Lining also protects the main fabric from sun fading.',
         ],
+        cards: [
+          { art: 'blackout', t: 'Blackout', d: 'Dark, lined fabric for sleep, screens and heat.' },
+          { art: 'layers', t: 'Sheer + blackout', d: 'Soft daylight in front, full dark behind, on a double track.' },
+        ],
       },
       {
         h: 'Stopping light at the edges',
         p: [
           'Even the best fabric lets light in if the curtain is too narrow or hung too low. We place the track above the window and wider than it, give the curtain enough fullness to overlap in the middle, and set the length close to the floor. For the darkest rooms, a ceiling track or a pelmet stops light spilling over the top.',
         ],
+        figure: { art: 'measure', caption: 'Track wider and higher than the window, curtain close to the floor: no light leaks.' },
       },
       {
         h: 'Which rooms need blackout',
@@ -179,6 +196,7 @@ export const CURTAIN_LANDINGS = [
   },
   {
     slug: 'office-blinds',
+    art: 'office',
     title: 'Office Blinds & Curtains in Kozhikode',
     h1: 'Office blinds and curtains in Kozhikode',
     label: 'Office blinds',
@@ -200,11 +218,11 @@ export const CURTAIN_LANDINGS = [
     sections: [
       {
         h: 'What works in a workplace',
-        list: [
-          '<strong>Roller blinds</strong> keep a clean, uniform look across many windows and cut screen glare.',
-          '<strong>Vertical blinds</strong> handle wide glass and partitions, and the slats turn to let in light without a view inside.',
-          '<strong>Zebra blinds</strong> give reception areas and cabins a softer, modern look.',
-          '<strong>Blackout blinds</strong> make projectors and screens easy to see in meeting rooms.',
+        cards: [
+          { art: 'roller', t: 'Roller', d: 'A clean, uniform look across many windows; cuts screen glare.' },
+          { art: 'vertical', t: 'Vertical', d: 'Wide glass and partitions; slats turn for light without a view in.' },
+          { art: 'zebra', t: 'Zebra', d: 'A softer, modern look for reception areas and cabins.' },
+          { art: 'blackout', t: 'Blackout', d: 'Meeting rooms where projectors and screens must be clear.' },
         ],
       },
       {

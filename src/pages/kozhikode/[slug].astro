@@ -36,7 +36,7 @@ const serviceNode = {
   path={path}
   schema={[serviceNode, faqSchema(l.faqs), breadcrumbSchema([{ name: 'Home', path: '/' }, { name: l.label, path }])]}
 >
-  <RingHero eyebrow="In Kozhikode" title={l.h1} lead={l.intro} crumbs={[{ name: l.label }]}>
+  <RingHero eyebrow="In Kozhikode" art={l.art} title={l.h1} lead={l.intro} crumbs={[{ name: l.label }]}>
     <div class="btn-row">
       <a class="btn" href="#quote">Get a free quote <Icon name="arrow" /></a>
       <a class="btn btn--line" href={`tel:${SITE.phoneRaw}`}>Call {SITE.phone}</a>
